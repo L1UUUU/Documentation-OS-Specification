@@ -1,6 +1,6 @@
 # DOS-4005 — Documentation Testing
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Operations
 

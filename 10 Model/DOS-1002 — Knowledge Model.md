@@ -1,6 +1,6 @@
 # DOS-1002 — Knowledge Model
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Model
 

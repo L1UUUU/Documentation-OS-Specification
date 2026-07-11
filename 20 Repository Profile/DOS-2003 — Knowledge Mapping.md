@@ -1,6 +1,6 @@
 # DOS-2003 — Knowledge Mapping
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Repository Profile
 

@@ -1,6 +1,6 @@
 # DOS-2004 — Runtime Mapping
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Repository Profile
 
@@ -49,9 +49,11 @@ Every Runtime artifact should contribute directly to implementation.
 
 ## RM-2 Runtime Is Disposable
 
-Runtime should disappear naturally after Work completion.
+Active Runtime SHALL leave the active execution context after Work completion.
 
-Long-lived Runtime indicates incomplete lifecycle management.
+It may then be archived as immutable history, discarded, or transformed into Knowledge.
+
+Long-lived active Runtime indicates incomplete lifecycle management.
 
 ------
 
@@ -175,12 +177,12 @@ Examples include:
 - discarded implementation ideas;
 - temporary references.
 
-Temporary Notes should either:
+Temporary Notes should leave the active execution context with the Work, either:
 
-- disappear;
-- or produce Knowledge.
+- archived or discarded;
+- or promoted into Knowledge.
 
-They should not accumulate indefinitely.
+They should not accumulate indefinitely in the active context.
 
 ------
 
@@ -244,7 +246,7 @@ Lifecycle specifications define behavior.
 
 Inbox is not part of Runtime.
 
-Inbox belongs to the Knowledge domain.
+Inbox is Staging Information, not a Knowledge Category and not Runtime.
 
 Inbox stores unresolved repository observations.
 

@@ -256,20 +256,23 @@ Repository
 │
 ├── Source Code
 │
-├── Knowledge
-│      ├── Architecture
-│      ├── ADR
-│      ├── Standards
-│      └── Inbox
+├── Managed Information
+│   ├── Knowledge
+│   │   ├── Architecture
+│   │   ├── ADR
+│   │   └── Standards
+│   └── Runtime
+│       ├── Work
+│       ├── Planning
+│       ├── Execution
+│       └── Notes
 │
-├── Runtime
-│      ├── Work
-│      ├── Planning
-│      ├── Execution
-│      └── Notes
+├── Staging Information
+│   └── Inbox
 │
-├── AGENTS.md
-├── CLAUDE.md
+├── Repository Guidance
+│   ├── AGENTS.md
+│   └── CLAUDE.md
 │
 └── Documentation Engine
 ```

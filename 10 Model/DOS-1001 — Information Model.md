@@ -1,6 +1,6 @@
 # DOS-1001 — Information Model
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Model
 
@@ -83,7 +83,7 @@ Lifecycle behavior is part of the information model rather than an implementatio
 
 # Top-Level Domains
 
-Documentation OS organizes all repository information into two top-level categories: Managed Information and Repository Guidance.
+Documentation OS organizes all repository information into three top-level categories: Managed Information, Staging Information, and Repository Guidance.
 
 ```text
 Repository Information
@@ -91,6 +91,8 @@ Repository Information
 ├── Managed Information
 │   ├── Knowledge
 │   └── Runtime
+├── Staging Information
+│   └── Inbox
 └── Repository Guidance
     └── Agent Entry Document
 ```
@@ -99,9 +101,9 @@ Managed Information is divided into two mutually exclusive domains: Knowledge an
 
 Every managed information artifact SHALL belong to exactly one of these two domains.
 
-Repository Guidance holds control artifacts that are not Managed Information and belong to neither domain.
+Staging Information and Repository Guidance are not Managed Information and belong to neither domain.
 
-Repository Guidance is defined separately below.
+Staging Information and Repository Guidance are defined separately below.
 
 ------
 
@@ -162,6 +164,28 @@ The Agent Entry Document is the normative Repository Guidance artifact.
 It is defined further in:
 
 DOS-5001 — Agent Entry.
+
+------
+
+# Staging Information
+
+Staging Information holds unresolved observations that have not yet been promoted into Knowledge or discarded.
+
+Staging Information is not Managed Information.
+
+It belongs to neither the Knowledge domain nor the Runtime domain.
+
+Staging artifacts are intentionally lightweight.
+
+They do not possess stable identity, do not participate in lifecycle transitions, and do not carry ownership obligations.
+
+Each staging item is expected to be promoted into a Knowledge Category or discarded.
+
+The Inbox is the normative Staging Information artifact.
+
+It is defined further in:
+
+DOS-2003 — Knowledge Mapping.
 
 ------
 
@@ -229,7 +253,7 @@ Lifecycle specifications define the operational behavior separately.
 
 # Information Identity
 
-Every information artifact SHALL possess a stable identity.
+Every managed information artifact SHALL possess a stable identity.
 
 Identity is independent of:
 
@@ -266,7 +290,7 @@ DOS-1005 — Relationship Model.
 
 # Information Ownership
 
-Every information artifact SHALL possess lifecycle ownership.
+Every managed information artifact SHALL possess lifecycle ownership.
 
 Ownership determines:
 
@@ -305,6 +329,7 @@ A Documentation OS implementation SHALL satisfy the following requirements.
 - Every managed information artifact belongs to exactly one domain (Knowledge or Runtime).
 - The Knowledge and Runtime domains remain conceptually independent.
 - Repository Guidance artifacts are not Managed Information.
+- Staging Information artifacts are not Managed Information and carry no identity, lifecycle, or ownership obligations.
 - Repository layout shall not define semantics.
 - Information identity remains stable across profiles.
 - Profiles preserve model semantics.
@@ -342,9 +367,10 @@ These concerns are addressed by later specifications.
 
 The Information Model defines the conceptual structure of all repository information.
 
-It organizes repository information into two top-level categories:
+It organizes repository information into three top-level categories:
 
 - Managed Information — the Knowledge and Runtime domains
+- Staging Information — the Inbox
 - Repository Guidance — the Agent Entry Document
 
 Every subsequent Documentation OS specification builds upon this abstraction.

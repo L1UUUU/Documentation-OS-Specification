@@ -1,6 +1,6 @@
 # DOS-0003 — Core Principles
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Foundation
 
@@ -175,15 +175,17 @@ Manual synchronization of deterministic information SHOULD be eliminated.
 
 ------
 
-# Principle 8 — Human Knowledge Is Authoritative
+# Principle 8 — Authored Knowledge Is Authoritative
 
-Human-authored knowledge SHALL remain authoritative.
+Authored knowledge SHALL remain authoritative.
 
-Generated content SHALL NEVER overwrite human-authored content.
+Knowledge may be authored by humans or AI agents; once accepted through review it is authoritative Authored Knowledge regardless of its origin.
+
+Generated content SHALL NEVER overwrite authored content.
 
 Documentation OS distinguishes three categories:
 
-- Human Knowledge
+- Authored Knowledge
 - Generated Content
 - Managed Regions
 

@@ -1,6 +1,6 @@
 # DOS-2001 — Single Repository Profile
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Repository Profile
 
@@ -125,7 +125,8 @@ Contains:
 - Architecture
 - ADR
 - Standards
-- Inbox
+
+The `docs/inbox/` subdirectory holds Staging Information (the Inbox), not Knowledge.
 
 Knowledge stored here persists across implementation activities.
 
@@ -144,7 +145,9 @@ Typical examples include:
 - execution notes
 - temporary planning artifacts
 
-The contents of `.scratch/` exist only while Work remains active.
+The active contents of `.scratch/` exist while Work remains active.
+
+Archived Runtime is preserved beneath `.scratch/archive/`.
 
 ------
 
@@ -158,6 +161,12 @@ Managed Information domains:
 | --------- | ------------------- |
 | Knowledge | docs/               |
 | Runtime   | .scratch/           |
+
+Staging Information:
+
+| Concept | Repository Location |
+| ------- | ------------------- |
+| Inbox   | docs/inbox/         |
 
 Repository Guidance:
 

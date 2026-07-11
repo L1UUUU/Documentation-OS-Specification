@@ -1,6 +1,6 @@
 # DOS-3005 — Ownership
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Lifecycle
 
@@ -139,8 +139,9 @@ Examples include:
 | Architecture | Current system structure |
 | ADR          | Design rationale         |
 | Standards    | Engineering conventions  |
-| Inbox        | Unresolved observations  |
 | Runtime Work | Active implementation    |
+
+Inbox items are Staging Information, not managed artifacts; they carry no ownership until promoted into a managed Artifact.
 
 ------
 

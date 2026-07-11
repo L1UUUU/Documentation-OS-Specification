@@ -1,6 +1,6 @@
 # DOS-5002 — Reading Strategy
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Runtime
 
@@ -154,12 +154,13 @@ This stage answers:
 
 Agents identify the Knowledge directly related to the task.
 
-Typical categories include:
+Typical Knowledge categories include:
 
 - Architecture;
 - ADR;
-- Standards;
-- Inbox.
+- Standards.
+
+Agents may also consult the Inbox staging area for unresolved concerns relevant to the task.
 
 Agents should avoid reading unrelated Knowledge.
 

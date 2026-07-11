@@ -1,6 +1,6 @@
 # DOS-0004 — Terminology
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Foundation
 
@@ -451,10 +451,11 @@ Examples include:
 - Architecture documents;
 - ADRs;
 - Standards;
-- Inbox observations;
 - Runtime artifacts.
 
 Artifacts possess identity and lifecycle.
+
+Staging content such as Inbox items is not an Artifact; it is lightweight Staging Information defined separately.
 
 ------
 
@@ -513,6 +514,10 @@ Lifecycle progression is explicit.
 A staging area defined by the Single Repository Profile, not a normative Knowledge Category.
 
 Inbox holds unresolved repository observations that have not yet been classified into Architecture, ADR, or Standards.
+
+Inbox items are Staging Information, not Artifacts.
+
+They do not possess stable identity, do not participate in lifecycle transitions, and do not carry ownership obligations.
 
 Inbox items are expected to be promoted into a Knowledge Category or discarded.
 

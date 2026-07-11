@@ -1,6 +1,6 @@
 # DOS-5001 — Agent Entry
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Runtime
 
@@ -111,7 +111,7 @@ The recommended synchronization mechanism is a symbolic link (`CLAUDE.md` → `A
 
 Because symbolic links are not reliably preserved across all platforms and version-control clients, content-equivalence SHALL NOT depend solely on link behavior.
 
-Documentation Engines SHOULD verify equivalence through Validation.
+Documentation Engines SHALL verify equivalence through Validation.
 
 ------
 
@@ -181,7 +181,11 @@ Agents should avoid implementation before establishing this understanding.
 
 # Local Agent Guidance
 
-Repository subdirectories may define local Agent Entry files (`AGENTS.md`, optionally mirrored by a local `CLAUDE.md`).
+Repository subdirectories may define local Agent Entry files.
+
+Where a subdirectory defines a local Agent Entry file, it SHALL provide both `AGENTS.md` and a content-equivalent `CLAUDE.md` mirror.
+
+Local `AGENTS.md` and `CLAUDE.md` SHALL remain content-equivalent under the same rule that governs the repository root.
 
 Local guidance supplements repository guidance.
 

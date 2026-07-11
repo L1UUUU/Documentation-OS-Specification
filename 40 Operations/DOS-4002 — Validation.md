@@ -1,6 +1,6 @@
 # DOS-4002 — Validation
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Operations
 
@@ -192,7 +192,8 @@ Examples include:
 
 - required entry points exist;
 - reserved directories are present;
-- required repository guidance files exist.
+- required repository guidance files exist;
+- Agent Entry mirrors (`AGENTS.md`, `CLAUDE.md`) remain content-equivalent at every scope that requires a mirror.
 
 Repository Profiles define profile-specific requirements.
 

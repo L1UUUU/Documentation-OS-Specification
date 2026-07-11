@@ -1,6 +1,6 @@
 # DOS-1005 — Relationship Model
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Model
 

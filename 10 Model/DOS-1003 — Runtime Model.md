@@ -1,6 +1,6 @@
 # DOS-1003 — Runtime Model
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Model
 

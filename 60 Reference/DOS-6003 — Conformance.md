@@ -1,6 +1,6 @@
 # DOS-6003 — Conformance
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Reference
 

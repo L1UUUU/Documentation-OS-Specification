@@ -1,6 +1,6 @@
 # DOS-3001 — Document Lifecycle
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Lifecycle
 
@@ -40,8 +40,9 @@ This specification applies to all managed documentation artifacts, including:
 - Architecture
 - ADR
 - Standards
-- Inbox items
 - Runtime artifacts
+
+Inbox items are Staging Information, not managed artifacts; they do not participate in the Document Lifecycle.
 
 Repository-generated artifacts participate only in the portions of the lifecycle applicable to generated content.
 

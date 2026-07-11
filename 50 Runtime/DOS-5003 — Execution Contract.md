@@ -1,6 +1,6 @@
 # DOS-5003 — Execution Contract
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Runtime
 

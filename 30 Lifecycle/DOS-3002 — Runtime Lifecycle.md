@@ -1,6 +1,6 @@
 # DOS-3002 — Runtime Lifecycle
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Lifecycle
 

@@ -1,6 +1,6 @@
 # DOS-5004 — Documentation Engine
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Runtime
 

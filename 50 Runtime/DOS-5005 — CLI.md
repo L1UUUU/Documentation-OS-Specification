@@ -1,6 +1,6 @@
 # DOS-5005 — CLI
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Runtime
 

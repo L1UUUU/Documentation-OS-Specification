@@ -49,6 +49,7 @@ repository/
 │
 ├── docs/
 │   ├── AGENTS.md
+│   ├── CLAUDE.md
 │   │
 │   ├── architecture/
 │   ├── adr/
@@ -61,6 +62,7 @@ repository/
 │
 ├── .scratch/
 │   ├── AGENTS.md
+│   ├── CLAUDE.md
 │   │
 │   ├── WORK-0001/
 │   ├── WORK-0002/
@@ -85,13 +87,15 @@ Repository
 
 ├── Source Code
 
-├── Knowledge
+├── Managed Information
+│   ├── Knowledge
+│   └── Runtime
 
-├── Runtime
+├── Staging Information
 
-├── Documentation Engine
+├── Repository Guidance
 
-└── Agent Guidance
+└── Documentation Engine
 ```
 
 These layers are conceptual.
@@ -115,12 +119,16 @@ docs/
 
 ├── standards/
 
-├── inbox/
+├── inbox/   (Staging Information, not Knowledge)
 
 ├── indexes/
 
 └── templates/
 ```
+
+The three directories architecture/, adr/, and standards/ hold Knowledge.
+
+The inbox/ directory holds Staging Information rather than Knowledge.
 
 Knowledge evolves continuously.
 
@@ -159,22 +167,20 @@ A Runtime Work may resemble the following structure.
 ```text
 WORK-0007/
 
-├── README.md
+├── work.yaml
 
 ├── requirements/
 
-├── planning/
+├── plan/
 
-├── execution/
+├── tasks/
 
-├── research/
-
-├── implementation/
-
-├── verification/
-
-└── summary.md
+└── notes/
 ```
+
+These directories reflect the conceptual Work responsibilities defined in DOS-2004 — Clarified Requirements, Implementation Plan, Execution Tasks, Temporary Notes.
+
+`work.yaml` carries the Work identifier, status, and relationships (see DOS-2005).
 
 Actual repository implementations may introduce additional directories.
 
@@ -200,13 +206,15 @@ Repository
 
 ├── docs/
 
-│     └── AGENTS.md
+│     ├── AGENTS.md
+│     └── CLAUDE.md (mirror)
 
 │
 
 └── .scratch/
 
-      └── AGENTS.md
+      ├── AGENTS.md
+      └── CLAUDE.md (mirror)
 ```
 
 Each Agent Entry file narrows repository context.

@@ -1,6 +1,6 @@
 # DOS-2005 — Repository Conventions
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Repository Profile
 
@@ -122,22 +122,40 @@ The normative prefixes are:
 
 Inbox observations do not require a stable identifier; they may use lightweight local names until promoted into a Category.
 
+PRDs, Issues, and other Runtime artifacts that belong to a Work inherit the Work identifier rather than receiving their own prefix; they are addressed as files within `.scratch/WORK-NNNN/`.
+
+Because a Work maps to a directory rather than a single document, its canonical metadata resides in:
+
+```text
+.scratch/WORK-NNNN/work.yaml
+```
+
+This file carries the Work identifier, status, and relationship declarations defined below.
+
 ------
 
 # Identifier Resolution
 
 The Single Repository Profile resolves an identifier to a repository path by prefix:
 
-| Identifier | Path                        |
-| ---------- | --------------------------- |
-| ARCH-0003  | docs/architecture/0003-*.md |
-| ADR-0007   | docs/adr/0007-*.md          |
-| STD-0012   | docs/standards/0012-*.md    |
-| WORK-0015  | .scratch/WORK-0015/         |
+| Identifier | Path                             |
+| ---------- | -------------------------------- |
+| ARCH-0003  | docs/architecture/0003-*.md      |
+| ADR-0007   | docs/adr/0007-*.md               |
+| STD-0012   | docs/standards/0012-*.md         |
+| WORK-0015  | .scratch/WORK-0015/work.yaml     |
 
-The numeric segment forms the leading segment of the filename.
+For documents, the numeric segment forms the leading segment of the filename.
 
 The remaining filename segment is human-readable and non-normative.
+
+For Works, the identifier resolves to the `work.yaml` metadata file inside the Work directory.
+
+When a Work is archived, its identifier resolves beneath the archive root instead:
+
+| Identifier             | Path                                   |
+| ---------------------- | -------------------------------------- |
+| WORK-0015 (archived)   | .scratch/archive/WORK-0015/work.yaml   |
 
 Long-lived references SHALL target identifiers rather than filenames.
 
@@ -163,9 +181,29 @@ relationships:
 
 `status` is the artifact lifecycle state.
 
+Valid status values are:
+
+- `created`
+- `active`
+- `updated`
+- `validated`
+- `archived`
+- `retired`
+
+Works follow the Runtime Lifecycle states defined in DOS-3002.
+
 `relationships` is a list of `{ type, target }` entries, where `target` references another identifier.
 
-Relationship types are defined by DOS-1005 — Relationship Model.
+Valid relationship types are:
+
+- `references`
+- `depends-on`
+- `implements`
+- `produces`
+- `affects`
+- `supersedes`
+
+Relationship type semantics are defined by DOS-1005 — Relationship Model.
 
 Reverse references and navigation indexes MAY be generated from these declarations by Documentation Operations.
 

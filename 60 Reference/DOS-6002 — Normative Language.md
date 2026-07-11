@@ -1,6 +1,6 @@
 # DOS-6002 — Normative Language
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Reference
 
@@ -147,21 +147,15 @@ The following vocabulary is used consistently throughout Documentation OS.
 
 ## Specification
 
-The complete Documentation OS standard.
+Defined normatively in DOS-0004 — Terminology.
 
-The Specification consists of all normative chapters together with supporting references.
+DOS-0004 is the single source of truth for core terminology; this section references rather than redefines it.
 
 ------
 
 ## Implementation
 
-A software system implementing one or more Documentation OS specifications.
-
-Examples include:
-
-- Documentation Engines;
-- CLI implementations;
-- Repository Profile implementations.
+Defined normatively in DOS-0004 — Terminology.
 
 ------
 
@@ -200,30 +194,19 @@ Determinism is one of the core principles of Documentation OS.
 
 ## Managed Artifact
 
-A documentation artifact governed by Documentation OS.
-
-Managed Artifacts participate in:
-
-- lifecycle;
-- identity;
-- validation;
-- ownership.
+Defined as "Artifact" in DOS-0004 — Terminology.
 
 ------
 
 ## Generated Artifact
 
-An Artifact produced by Documentation Operations rather than direct human authorship.
-
-Generated Artifacts remain reproducible.
+Defined as "Generated Content" in DOS-0004 — Terminology.
 
 ------
 
 ## Managed Region
 
-A section of a document reserved for deterministic modification by Documentation Operations.
-
-Content outside Managed Regions remains under human or AI authorship.
+Defined normatively in DOS-0004 — Terminology.
 
 ------
 
@@ -259,7 +242,9 @@ When interpreting Documentation OS specifications:
 
 1. Normative keywords override descriptive wording.
 2. Terminology definitions override informal language.
-3. Lower-level specifications shall not contradict higher-level specifications.
+3. Higher-level specifications SHALL NOT redefine concepts defined at lower levels; lower-level specifications SHALL NOT contradict higher-level normative requirements.
+
+   These two clauses govern different concerns. Redefinition governs where a concept is authoritatively defined: lower layers own their concepts and higher layers build upon them without redefining them. Contradiction governs compliance priority: lower-layer specifications must obey the normative requirements that higher layers establish upon those concepts.
 4. Repository Profiles shall preserve conceptual semantics.
 5. Implementations shall preserve externally observable behavior even if internal implementations differ.
 

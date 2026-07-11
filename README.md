@@ -1,7 +1,7 @@
 # Documentation OS Specification
 
 **Version:** 1.0
-**Status:** Stable
+**Status:** Draft
 **Specification Series:** DOS (Documentation Operating System)
 
 ------
@@ -188,7 +188,7 @@ Runtime
 
 Each layer builds upon the previous one.
 
-Higher layers shall not redefine lower-layer concepts.
+Higher layers SHALL NOT redefine lower-layer concepts.
 
 Reference is a cross-cutting support section rather than a layer.
 

@@ -1,6 +1,6 @@
 # DOS-0002 — Design Philosophy
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Foundation
 

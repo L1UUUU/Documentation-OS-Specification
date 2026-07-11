@@ -1,6 +1,6 @@
 # DOS-1004 — Identity Model
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Model
 

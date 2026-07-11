@@ -1,6 +1,6 @@
 # DOS-3004 — Work Close Pipeline
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Lifecycle
 
@@ -105,10 +105,11 @@ Typical activities include:
 
 - updating Architecture;
 - creating or updating ADRs;
-- updating Standards;
-- creating Inbox observations where necessary.
+- updating Standards.
 
 Knowledge Synchronization modifies the Knowledge domain.
+
+Unresolved concerns discovered during synchronization are recorded as Inbox staging items; these do not modify Knowledge.
 
 Runtime remains active during this stage.
 

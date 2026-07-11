@@ -1,6 +1,6 @@
 # DOS-2002 — Repository Layout
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Repository Profile
 
@@ -148,7 +148,9 @@ Contents of `.scratch/` should disappear from active development once Work has c
 
 # Internal Documentation
 
-Documentation directories may contain local Agent Entry files (`AGENTS.md`, optionally mirrored by a local `CLAUDE.md`).
+Documentation directories may contain local Agent Entry files.
+
+Where present, both `AGENTS.md` and a content-equivalent `CLAUDE.md` SHALL be provided (see DOS-5001 — Agent Entry).
 
 These files provide directory-specific guidance.
 
@@ -161,7 +163,7 @@ docs/
 ├── architecture/
 ├── adr/
 ├── standards/
-└── inbox/
+└── inbox/   (Staging Information)
 ```
 
 A local AGENTS.md supplements, but does not replace, the root AGENTS.md.
@@ -188,6 +190,12 @@ Repository
 │      ├── Local AGENTS
 
 │      └── Knowledge Categories
+
+│
+
+├── Staging
+
+│      └── Inbox
 
 │
 

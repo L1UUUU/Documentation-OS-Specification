@@ -1,6 +1,6 @@
 # DOS-3003 — Knowledge Impact Analysis
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Lifecycle
 
@@ -89,7 +89,8 @@ Possible categories include:
 - Architecture
 - ADR
 - Standards
-- Inbox
+
+Implementation may also surface unresolved concerns that do not fit any category; these are recorded as Inbox staging items rather than Knowledge.
 
 ------
 
@@ -128,6 +129,8 @@ Repository Profiles may define additional inputs.
 
 Knowledge Impact Analysis produces a structured impact assessment.
 
+The assessment addresses the three Knowledge Categories below, and may additionally identify unresolved concerns to record as Inbox staging items.
+
 The assessment should answer the following questions.
 
 ## Architecture
@@ -162,7 +165,7 @@ If yes:
 
 ------
 
-## Inbox
+## Inbox (Staging Output)
 
 Did implementation discover unresolved repository concerns?
 
@@ -184,7 +187,7 @@ Typical outcomes include:
 | Architecture changed                | Update Architecture                   |
 | Significant design decision         | Create or update ADR                  |
 | Engineering convention changed      | Update Standards                      |
-| New unresolved concern discovered   | Create Inbox item                     |
+| New unresolved concern discovered   | Record Inbox staging item             |
 
 Multiple outcomes may occur within a single Work.
 
@@ -224,11 +227,9 @@ ADR
 ↓
 
 Standards
-
-↓
-
-Inbox
 ```
+
+Unresolved concerns that do not fit any category are recorded as Inbox staging items after category evaluation.
 
 Repository implementations may use different evaluation order provided identical results are produced.
 

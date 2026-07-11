@@ -1,6 +1,6 @@
 # DOS-4001 — Documentation Operations
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Operations
 

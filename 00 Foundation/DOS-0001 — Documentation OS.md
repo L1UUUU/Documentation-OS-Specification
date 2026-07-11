@@ -1,6 +1,6 @@
 # DOS-0001 — Documentation OS
 
-**Status:** Stable
+**Status:** Draft
 **Version:** 1.0
 **Category:** Foundation
 
