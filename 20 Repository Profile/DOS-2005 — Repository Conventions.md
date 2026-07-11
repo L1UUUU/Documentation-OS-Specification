@@ -86,7 +86,7 @@ Repository Profiles may define additional naming conventions for specific docume
 
 # Numbering
 
-Managed documentation categories requiring stable ordering should use deterministic numbering.
+Managed documentation categories requiring stable ordering use deterministic numbering.
 
 Examples include:
 
@@ -95,11 +95,79 @@ Examples include:
 - Standards
 - Work artifacts
 
-Number allocation shall be monotonic.
+Number allocation SHALL be monotonic.
 
-Allocated numbers shall never be reused.
+Allocated numbers SHALL never be reused.
 
-Specific numbering formats are defined by individual document specifications.
+------
+
+# Identifier Format
+
+The Single Repository Profile assigns every managed artifact a stable identifier of the form:
+
+```text
+PREFIX-NNNN
+```
+
+`PREFIX` identifies the Knowledge Category or Runtime type, and `NNNN` is a zero-padded four-digit monotonic number.
+
+The normative prefixes are:
+
+| Prefix | Category        | Example   |
+| ------ | --------------- | --------- |
+| ARCH   | Architecture    | ARCH-0003 |
+| ADR    | ADR             | ADR-0007  |
+| STD    | Standards       | STD-0012  |
+| WORK   | Runtime Work    | WORK-0015 |
+
+Inbox observations do not require a stable identifier; they may use lightweight local names until promoted into a Category.
+
+------
+
+# Identifier Resolution
+
+The Single Repository Profile resolves an identifier to a repository path by prefix:
+
+| Identifier | Path                        |
+| ---------- | --------------------------- |
+| ARCH-0003  | docs/architecture/0003-*.md |
+| ADR-0007   | docs/adr/0007-*.md          |
+| STD-0012   | docs/standards/0012-*.md    |
+| WORK-0015  | .scratch/WORK-0015/         |
+
+The numeric segment forms the leading segment of the filename.
+
+The remaining filename segment is human-readable and non-normative.
+
+Long-lived references SHALL target identifiers rather than filenames.
+
+------
+
+# Relationship Representation
+
+Relationships are declared in a YAML front matter block at the top of each managed document.
+
+A minimal block:
+
+```yaml
+---
+id: ADR-0007
+status: active
+relationships:
+  - type: affects
+    target: ARCH-0002
+---
+```
+
+`id` is the artifact identifier.
+
+`status` is the artifact lifecycle state.
+
+`relationships` is a list of `{ type, target }` entries, where `target` references another identifier.
+
+Relationship types are defined by DOS-1005 — Relationship Model.
+
+Reverse references and navigation indexes MAY be generated from these declarations by Documentation Operations.
 
 ------
 
@@ -107,11 +175,12 @@ Specific numbering formats are defined by individual document specifications.
 
 The repository exposes the following standard entry points.
 
-| Entry     | Purpose              |
-| --------- | -------------------- |
-| AGENTS.md | Agent entry          |
-| docs/     | Persistent Knowledge |
-| .scratch/ | Runtime              |
+| Entry      | Purpose                            |
+| ---------- | ---------------------------------- |
+| AGENTS.md  | Agent entry (canonical source)     |
+| CLAUDE.md  | Agent entry (mirror of AGENTS.md)  |
+| docs/      | Persistent Knowledge               |
+| .scratch/  | Runtime                            |
 
 Additional repository content may exist.
 
@@ -164,13 +233,19 @@ Operation behavior is defined by the Documentation Operations specifications.
 
 The Single Repository Profile includes compatibility mechanisms where required.
 
+The `CLAUDE.md` mirror of `AGENTS.md` is one such compatibility mechanism: it lets Claude-compatible tooling reuse the same Agent Entry Document without duplicating its content.
+
 Examples include:
 
-- compatibility guidance files;
+- `CLAUDE.md` as a content-equivalent mirror of `AGENTS.md`;
 - generated navigation artifacts;
 - repository metadata.
 
 Compatibility mechanisms should always be derivable from repository contents.
+
+The recommended mechanism to keep `CLAUDE.md` and `AGENTS.md` equivalent is a symbolic link (`CLAUDE.md` → `AGENTS.md`); generators, hooks, or Validation rules MAY be used instead.
+
+Because symbolic links are not reliably preserved across all platforms and version-control clients, equivalence SHALL NOT depend solely on link behavior.
 
 ------
 
@@ -195,6 +270,8 @@ A compliant Single Repository implementation SHALL satisfy the following require
 - Repository entry points shall remain stable.
 - Naming shall follow documented conventions.
 - Managed numbering shall remain deterministic.
+- Managed artifacts SHALL declare an identifier in the format defined above.
+- Relationships SHALL be declared through front matter targeting identifiers.
 - Local guidance shall not contradict repository guidance.
 - Generated content shall remain distinguishable from human-authored content.
 
@@ -204,8 +281,7 @@ A compliant Single Repository implementation SHALL satisfy the following require
 
 This specification intentionally does not define:
 
-- documentation templates;
-- Markdown formatting;
+- full document templates;
 - lifecycle behavior;
 - documentation operations;
 - implementation tooling.

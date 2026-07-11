@@ -28,7 +28,7 @@ The reference repository combines concepts defined across multiple specification
 | DOS-2002      | Repository Layout                |
 | DOS-2003      | Knowledge Mapping                |
 | DOS-2004      | Runtime Mapping                  |
-| DOS-5001      | AGENTS.md entry points           |
+| DOS-5001      | Agent Entry Document (AGENTS.md + CLAUDE.md)           |
 | DOS-5004      | Documentation Engine integration |
 
 This appendix is illustrative.
@@ -45,6 +45,7 @@ A Documentation OS repository may resemble the following structure.
 repository/
 
 ├── AGENTS.md
+├── CLAUDE.md
 │
 ├── docs/
 │   ├── AGENTS.md
@@ -193,6 +194,7 @@ Repository
 │
 
 ├── AGENTS.md
+├── CLAUDE.md (mirror)
 
 │
 
@@ -207,7 +209,7 @@ Repository
       └── AGENTS.md
 ```
 
-Each AGENTS.md narrows repository context.
+Each Agent Entry file narrows repository context.
 
 Lower-level guidance supplements higher-level guidance.
 
@@ -394,7 +396,7 @@ The agent performs engineering reasoning.
 An implementation agent might navigate the repository as follows.
 
 ```text
-AGENTS.md
+Agent Entry Document
 
 ↓
 

@@ -320,7 +320,7 @@ Implementations may extend Documentation OS provided that:
 - DOS-4005 — Documentation Testing
 - DOS-5004 — Documentation Engine
 - DOS-5005 — CLI
-- DOS-6002 — Glossary
+- DOS-6002 — Normative Language
 - DOS-6004 — Versioning
 
 ------

@@ -29,7 +29,7 @@ Every Work should progress through the same conceptual stages regardless of:
 - AI tooling;
 - repository implementation.
 
-The lifecycle exists to guarantee that temporary execution artifacts eventually leave the Runtime domain while preserving any knowledge created during implementation.
+The lifecycle exists to guarantee that temporary execution artifacts eventually leave the active execution context while preserving any knowledge created during implementation.
 
 ------
 

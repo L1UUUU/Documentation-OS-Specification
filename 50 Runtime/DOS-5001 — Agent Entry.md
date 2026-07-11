@@ -85,19 +85,33 @@ Repository conventions should be learned from repository guidance rather than in
 
 # Entry Point
 
-Every Single Repository shall expose one primary Agent Entry.
+Every Single Repository SHALL expose one Agent Entry Document at the repository root.
+
+The Single Repository Profile uses `AGENTS.md` as the canonical source of the Agent Entry Document.
+
+A content-equivalent mirror named `CLAUDE.md` SHALL accompany `AGENTS.md` at the repository root.
+
+Both files are valid entry points; an agent MAY begin from either.
 
 ```text
 Repository
 
 │
 
-└── AGENTS.md
+├── AGENTS.md    (canonical source)
+
+└── CLAUDE.md    (content-equivalent mirror)
 ```
 
-AGENTS.md is the canonical initialization document.
+`AGENTS.md` and `CLAUDE.md` SHALL remain content-equivalent.
 
-No alternative entry point shall replace it.
+Any change applied to one SHALL be reflected in the other.
+
+The recommended synchronization mechanism is a symbolic link (`CLAUDE.md` → `AGENTS.md`).
+
+Because symbolic links are not reliably preserved across all platforms and version-control clients, content-equivalence SHALL NOT depend solely on link behavior.
+
+Documentation Engines SHOULD verify equivalence through Validation.
 
 ------
 
@@ -110,7 +124,7 @@ Repository
 
 ↓
 
-Read AGENTS.md
+Read the Agent Entry Document
 
 ↓
 
@@ -167,7 +181,7 @@ Agents should avoid implementation before establishing this understanding.
 
 # Local Agent Guidance
 
-Repository subdirectories may define local AGENTS.md files.
+Repository subdirectories may define local Agent Entry files (`AGENTS.md`, optionally mirrored by a local `CLAUDE.md`).
 
 Local guidance supplements repository guidance.
 
@@ -250,7 +264,7 @@ Completion requires understanding repository organization.
 
 Agent Entry may fail when:
 
-- AGENTS.md is missing;
+- the Agent Entry Document is missing (neither `AGENTS.md` nor `CLAUDE.md` is present);
 - repository structure is inconsistent;
 - Repository Profile cannot be determined.
 
@@ -262,7 +276,7 @@ Implementations should report initialization failures explicitly.
 
 A Documentation OS-compliant agent SHALL:
 
-- begin with AGENTS.md;
+- begin with the Agent Entry Document;
 - understand the active Repository Profile;
 - understand Documentation Operations;
 - establish repository context before implementation;
@@ -299,6 +313,6 @@ These concerns remain implementation-specific.
 
 Agent Entry defines the standardized initialization process for Documentation OS repositories.
 
-Every compliant agent begins by reading the repository's AGENTS.md, establishing repository understanding, learning repository conventions, and locating authoritative Knowledge before performing engineering work.
+Every compliant agent begins by reading the repository's Agent Entry Document (`AGENTS.md`, mirrored as `CLAUDE.md`), establishing repository understanding, learning repository conventions, and locating authoritative Knowledge before performing engineering work.
 
 This ensures deterministic and consistent behavior across different AI agents and implementations.

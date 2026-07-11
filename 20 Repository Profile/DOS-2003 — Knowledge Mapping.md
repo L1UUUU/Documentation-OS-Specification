@@ -70,7 +70,7 @@ Knowledge synchronization updates categories according to their responsibilities
 
 # Knowledge Categories
 
-Documentation OS v1 defines four normative Knowledge Categories.
+Documentation OS defines three normative Knowledge Categories.
 
 ```text
 Knowledge
@@ -79,9 +79,7 @@ Knowledge
 
 ├── ADR
 
-├── Standards
-
-└── Inbox
+└── Standards
 ```
 
 Future specifications may introduce additional categories.
@@ -166,11 +164,13 @@ They guide future implementation rather than describing existing implementation.
 
 ------
 
-# Inbox
+# Inbox (Profile Staging Area)
 
 ## Purpose
 
-Inbox stores unresolved repository knowledge.
+Inbox is a staging area defined by the Single Repository Profile, not a normative Knowledge Category.
+
+It holds unresolved repository observations that have not yet been classified into Architecture, ADR, or Standards.
 
 Inbox answers:
 
@@ -180,7 +180,7 @@ Inbox exists before Runtime.
 
 Items in Inbox have not yet become implementation work.
 
-Examples include:
+Typical contents include:
 
 - architectural concerns;
 - documentation inconsistencies;
@@ -192,13 +192,17 @@ Inbox is intentionally lightweight.
 
 It does not contain implementation plans.
 
+Every Inbox item is expected to be promoted into a normative Knowledge Category or discarded.
+
+Inbox is not a long-term home for knowledge.
+
 ------
 
 # Category Relationships
 
 Knowledge Categories collaborate through explicit responsibilities.
 
-Typical relationships include:
+Observations typically enter through the Inbox staging area before settling into a Category:
 
 ```text
 Inbox
@@ -249,9 +253,10 @@ Each Knowledge Category possesses independent ownership.
 | Architecture | Current system structure           |
 | ADR          | Design rationale                   |
 | Standards    | Engineering conventions            |
-| Inbox        | Unresolved repository observations |
 
 Ownership determines synchronization responsibilities.
+
+Inbox observations do not carry category ownership; they are resolved into one of the categories above.
 
 ------
 
@@ -279,11 +284,11 @@ Implementation introduces major design decision.
 
 ADR created.
 
-Implementation reveals future work.
+Implementation reveals an unresolved observation.
 
 ↓
 
-Inbox updated.
+Inbox observation recorded (staging, not yet Knowledge).
 
 Not every implementation affects every category.
 
@@ -303,7 +308,7 @@ Architecture should not become:
 
 Standards should not duplicate Architecture.
 
-Inbox should not become Runtime.
+Inbox is a staging area, not a Category; its items should be resolved rather than accumulated.
 
 ADR should not become Architecture.
 
@@ -313,7 +318,7 @@ Clear boundaries improve long-term maintainability.
 
 # Repository Mapping
 
-The Single Repository Profile maps Knowledge Categories into repository directories.
+The Single Repository Profile maps the three Knowledge Categories into repository directories, alongside the Inbox staging area.
 
 A typical mapping is:
 
@@ -329,9 +334,11 @@ docs/
 └── inbox/
 ```
 
-This mapping belongs to the Single Repository Profile.
+`architecture/`, `adr/`, and `standards/` represent the three normative Knowledge Categories.
 
-The categories themselves belong to the Knowledge Model.
+`inbox/` represents the Inbox staging area defined by this profile, not a Knowledge Category.
+
+This mapping belongs to the Single Repository Profile.
 
 Future Repository Profiles may choose different directory structures while preserving identical semantics.
 
@@ -341,8 +348,9 @@ Future Repository Profiles may choose different directory structures while prese
 
 A compliant Single Repository implementation SHALL satisfy the following requirements.
 
-- Every Knowledge artifact belongs to one Knowledge Category.
+- Every Knowledge artifact belongs to one of the three Knowledge Categories.
 - Categories preserve distinct responsibilities.
+- Inbox is a staging area, not a normative Knowledge Category.
 - Inbox contains observations rather than implementation work.
 - Architecture describes current structure.
 - ADR records significant decisions.
@@ -377,12 +385,13 @@ These concerns are specified elsewhere.
 
 # Summary
 
-Knowledge Mapping organizes persistent project knowledge into four independent Knowledge Categories:
+Knowledge Mapping organizes persistent project knowledge into three normative Knowledge Categories:
 
 - Architecture
 - ADR
 - Standards
-- Inbox
+
+An additional Inbox staging area holds unresolved observations until they are promoted into a Category or discarded.
 
 Each category has a single, well-defined responsibility.
 

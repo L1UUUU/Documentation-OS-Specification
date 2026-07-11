@@ -1,5 +1,3 @@
-
-
 # Documentation OS Specification
 
 **Version:** 1.0
@@ -119,7 +117,7 @@ Temporary execution context.
 
 Runtime exists only while Work is active.
 
-Runtime disappears after implementation while transferring new understanding into Knowledge.
+Runtime leaves the active execution context after implementation, transferring new understanding into Knowledge.
 
 ------
 
@@ -186,15 +184,17 @@ Operations
 ↓
 
 Runtime
-
-↓
-
-Reference
 ```
 
 Each layer builds upon the previous one.
 
 Higher layers shall not redefine lower-layer concepts.
+
+Reference is a cross-cutting support section rather than a layer.
+
+It provides terminology, conformance, and versioning referenced by all layers.
+
+Reference does not participate in the vertical dependency chain.
 
 ------
 
@@ -209,6 +209,7 @@ Defines:
 - Documentation OS
 - Design Philosophy
 - Core Principles
+- Terminology
 
 ------
 
@@ -284,12 +285,11 @@ Includes:
 
 ## 60 — Reference
 
-Provides common terminology and compliance information.
+Provides common normative language and compliance information.
 
 Includes:
 
-- Terminology
-- Glossary
+- Normative Language
 - Conformance
 - Versioning
 - Change Log
@@ -446,7 +446,7 @@ The keywords:
 
 are interpreted according to the definitions provided in:
 
-**DOS-6002 — Glossary**
+**DOS-6002 — Normative Language**
 
 Unless explicitly stated otherwise, all normative statements within this specification use those definitions.
 

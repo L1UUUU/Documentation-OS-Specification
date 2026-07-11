@@ -80,6 +80,7 @@ The following documentation-related entries are defined at the repository root.
 repository/
 
 ├── AGENTS.md
+├── CLAUDE.md
 ├── docs/
 ├── .scratch/
 └── ...
@@ -95,7 +96,9 @@ Only documentation-related structures are defined here.
 
 ## Purpose
 
-The root AGENTS.md is the primary entry point for AI agents.
+The root `AGENTS.md` is the canonical source of the Agent Entry Document for AI agents.
+
+A content-equivalent mirror `CLAUDE.md` SHALL accompany it; both files are valid entry points (see DOS-5001 — Agent Entry).
 
 It defines:
 
@@ -145,7 +148,7 @@ Contents of `.scratch/` should disappear from active development once Work has c
 
 # Internal Documentation
 
-Documentation directories may contain local AGENTS.md files.
+Documentation directories may contain local Agent Entry files (`AGENTS.md`, optionally mirrored by a local `CLAUDE.md`).
 
 These files provide directory-specific guidance.
 
@@ -332,7 +335,7 @@ The Repository Layout provides the concrete filesystem organization for the Sing
 
 It establishes three stable repository entry points:
 
-- `AGENTS.md`
+- `AGENTS.md` (with its content-equivalent mirror `CLAUDE.md`)
 - `docs/`
 - `.scratch/`
 

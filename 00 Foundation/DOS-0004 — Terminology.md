@@ -37,44 +37,6 @@ This specification establishes a common language.
 
 ------
 
-# Normative Keywords
-
-The following keywords are interpreted according to RFC 2119.
-
-## MUST
-
-An absolute requirement.
-
-Implementations are not compliant if this requirement is violated.
-
-------
-
-## MUST NOT
-
-An absolute prohibition.
-
-------
-
-## SHOULD
-
-A strong recommendation.
-
-Deviation is permitted only when there is clear justification.
-
-------
-
-## SHOULD NOT
-
-A strong recommendation against a particular behavior.
-
-------
-
-## MAY
-
-An optional capability.
-
-------
-
 # Core Concepts
 
 ------
@@ -115,12 +77,14 @@ Documentation OS assumes exactly one repository within the current scope.
 
 Any structured information stored within the repository.
 
-Information is divided into two primary domains:
+Repository information is organized into Managed Information and Repository Guidance.
+
+Managed Information is divided into two domains:
 
 - Knowledge
 - Runtime
 
-Every documentation artifact belongs to exactly one domain.
+Every managed information artifact belongs to exactly one domain.
 
 ------
 
@@ -461,16 +425,96 @@ Ownership belongs to lifecycle rather than individuals.
 
 ## Definition
 
-A top-level classification of project information.
+A classification of Managed Information.
 
-Documentation OS currently defines two domains:
+Documentation OS defines two domains:
 
 - Knowledge
 - Runtime
 
+Every managed information artifact belongs to exactly one domain.
+
 Domains are conceptual.
 
 They are not filesystem directories.
+
+------
+
+# Artifact
+
+## Definition
+
+Any managed documentation object participating in Documentation OS.
+
+Examples include:
+
+- Architecture documents;
+- ADRs;
+- Standards;
+- Inbox observations;
+- Runtime artifacts.
+
+Artifacts possess identity and lifecycle.
+
+------
+
+# Agent
+
+## Definition
+
+An autonomous or semi-autonomous system capable of interacting with a Documentation OS repository.
+
+Agents perform:
+
+- repository understanding;
+- engineering reasoning;
+- implementation.
+
+Agents delegate deterministic maintenance to the Documentation Engine.
+
+------
+
+# Agent Entry Document
+
+## Definition
+
+The canonical repository entry document for AI agents.
+
+Under the Single Repository Profile, `AGENTS.md` is the canonical source of the Agent Entry Document, and `CLAUDE.md` is its content-equivalent mirror.
+
+Both files are valid entry points.
+
+The Agent Entry Document is Repository Guidance rather than Managed Information.
+
+------
+
+# Lifecycle
+
+## Definition
+
+The sequence of states through which an Artifact or Work evolves.
+
+Lifecycle governs:
+
+- creation;
+- modification;
+- validation;
+- archival;
+- retirement.
+
+Lifecycle progression is explicit.
+
+------
+
+# Inbox
+
+## Definition
+
+A staging area defined by the Single Repository Profile, not a normative Knowledge Category.
+
+Inbox holds unresolved repository observations that have not yet been classified into Architecture, ADR, or Standards.
+
+Inbox items are expected to be promoted into a Knowledge Category or discarded.
 
 ------
 

@@ -53,11 +53,12 @@ They do not redefine them.
                     50 — Runtime
                             │
                             ▼
-                   60 — Reference
-                            │
-                            ▼
                        Appendices
 ```
+
+Reference is a cross-cutting support section, not a vertical layer.
+
+It is referenced by all layers and does not participate in the vertical dependency chain.
 
 ------
 
@@ -77,9 +78,11 @@ Each specification layer has a distinct responsibility.
 | Reference          | Defines terminology, conformance, and versioning    |
 | Appendix           | Provides informative guidance                       |
 
-Only the first seven layers are normative.
+Foundation through Runtime are the six normative conceptual layers.
 
-Appendices are informative.
+Reference is a normative cross-cutting support section.
+
+README and Appendices are informative.
 
 ------
 
@@ -266,6 +269,7 @@ Repository
 │      └── Notes
 │
 ├── AGENTS.md
+├── CLAUDE.md
 │
 └── Documentation Engine
 ```
@@ -283,7 +287,7 @@ Agent
 
 ↓
 
-AGENTS.md
+Agent Entry Document
 
 ↓
 

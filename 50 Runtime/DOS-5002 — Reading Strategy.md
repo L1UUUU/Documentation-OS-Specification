@@ -106,7 +106,7 @@ They do not restrict exploration.
 Documentation OS recommends the following reading hierarchy.
 
 ```text
-AGENTS.md
+Agent Entry Document
 
 ↓
 
@@ -139,7 +139,7 @@ The first stage establishes repository context.
 
 Typical reading includes:
 
-- AGENTS.md;
+- the Agent Entry Document (`AGENTS.md` / `CLAUDE.md`);
 - repository conventions;
 - Repository Profile;
 - Documentation OS guidance.

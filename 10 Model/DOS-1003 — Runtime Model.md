@@ -100,11 +100,19 @@ Every Runtime artifact possesses the following characteristics.
 
 ## Temporary
 
-Runtime has limited lifetime.
+Runtime has limited lifetime as an active execution context.
 
-Every Runtime artifact shall eventually leave the Runtime domain.
+Every Runtime artifact SHALL eventually leave the active execution context.
 
-Runtime is never intended to become permanent documentation.
+After leaving the active context, a Runtime artifact transitions into one of:
+
+- Archived Runtime — preserved as an immutable historical record;
+- discarded — removed because it carries no lasting value;
+- transformed — promoted into persistent Knowledge through Knowledge Synchronization.
+
+Runtime is never intended to become permanent Managed Information.
+
+Archived Runtime is historical and immutable, but it is no longer active Runtime and does not participate in future execution.
 
 ------
 
@@ -136,11 +144,13 @@ Frequent modification is expected.
 
 ## Disposable
 
-Runtime artifacts may be discarded after their purpose has been fulfilled.
+Active Runtime artifacts may be discarded once their purpose has been fulfilled.
 
-Preservation is not the primary objective.
+Archival preserves a Runtime artifact as immutable history; discarding removes it entirely.
 
-Knowledge extraction is.
+Both outcomes end active Runtime status.
+
+Preservation of active Runtime is not the primary objective; Knowledge extraction is.
 
 ------
 
@@ -326,9 +336,10 @@ A Documentation OS implementation SHALL satisfy the following requirements.
 - Runtime SHALL remain separate from Knowledge.
 - Runtime SHALL support explicit Work.
 - Runtime SHALL participate in lifecycle transitions.
-- Runtime SHALL eventually leave the Runtime domain.
+- Runtime SHALL eventually leave the active execution context.
 - Runtime SHALL produce Knowledge through Knowledge Synchronization.
-- Runtime SHALL NOT become permanent repository storage.
+- Active Runtime SHALL NOT become permanent repository storage.
+- Archived Runtime SHALL remain immutable.
 
 ------
 

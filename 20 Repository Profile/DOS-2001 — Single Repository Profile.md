@@ -73,6 +73,7 @@ A compliant Single Repository SHALL contain the following documentation structur
 repository/
 
 ├── AGENTS.md
+├── CLAUDE.md
 │
 ├── docs/
 │
@@ -103,9 +104,15 @@ Responsibilities include:
 - execution contract;
 - reading strategy.
 
-AGENTS.md is not project knowledge.
+AGENTS.md is not Managed Information.
 
-It is runtime guidance for agents.
+It is Repository Guidance for agents.
+
+A content-equivalent mirror named `CLAUDE.md` SHALL accompany `AGENTS.md` at the repository root.
+
+Both files are valid entry points.
+
+See DOS-5001 — Agent Entry for the synchronization requirement.
 
 ------
 
@@ -143,13 +150,20 @@ The contents of `.scratch/` exist only while Work remains active.
 
 # Domain Mapping
 
-The Single Repository Profile maps conceptual domains as follows.
+The Single Repository Profile maps the Repository Information model into concrete locations.
 
-| Concept        | Repository Location |
-| -------------- | ------------------- |
-| Knowledge      | docs/               |
-| Runtime        | .scratch/           |
-| Agent Contract | AGENTS.md           |
+Managed Information domains:
+
+| Domain    | Repository Location |
+| --------- | ------------------- |
+| Knowledge | docs/               |
+| Runtime   | .scratch/           |
+
+Repository Guidance:
+
+| Concept        | Repository Location              |
+| -------------- | -------------------------------- |
+| Agent Contract | AGENTS.md (+ CLAUDE.md mirror)   |
 
 This mapping is specific to the Single Repository Profile.
 
@@ -203,7 +217,7 @@ Runtime supports implementation.
 
 ## Repository exposes an Agent Entry.
 
-Agents should be able to initialize repository understanding from AGENTS.md.
+Agents should be able to initialize repository understanding from the Agent Entry Document (`AGENTS.md`, mirrored as `CLAUDE.md`).
 
 ------
 
@@ -274,6 +288,6 @@ It maps:
 
 - Knowledge → `docs/`
 - Runtime → `.scratch/`
-- Agent Entry → `AGENTS.md`
+- Agent Entry → `AGENTS.md` (+ `CLAUDE.md` mirror)
 
 while preserving the implementation-independent semantics defined by the Documentation OS Model layer.

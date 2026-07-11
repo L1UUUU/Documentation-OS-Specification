@@ -1,4 +1,4 @@
-# DOS-6002 — Glossary
+# DOS-6002 — Normative Language
 
 **Status:** Stable
 **Version:** 1.0
@@ -274,7 +274,7 @@ This specification defines:
 
 Conceptual definitions are specified separately in:
 
-DOS-6001 — Terminology.
+DOS-0004 — Terminology.
 
 ------
 
@@ -289,7 +289,7 @@ DOS-6003 — Conformance.
 # References
 
 - README
-- DOS-6001 — Terminology
+- DOS-0004 — Terminology
 - DOS-6003 — Conformance
 
 ------

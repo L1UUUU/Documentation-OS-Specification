@@ -83,18 +83,25 @@ Lifecycle behavior is part of the information model rather than an implementatio
 
 # Top-Level Domains
 
-Documentation OS divides all repository information into two top-level domains.
+Documentation OS organizes all repository information into two top-level categories: Managed Information and Repository Guidance.
 
 ```text
 Repository Information
 
-├── Knowledge
-└── Runtime
+├── Managed Information
+│   ├── Knowledge
+│   └── Runtime
+└── Repository Guidance
+    └── Agent Entry Document
 ```
 
-Every information artifact SHALL belong to exactly one domain.
+Managed Information is divided into two mutually exclusive domains: Knowledge and Runtime.
 
-Domains are mutually exclusive.
+Every managed information artifact SHALL belong to exactly one of these two domains.
+
+Repository Guidance holds control artifacts that are not Managed Information and belong to neither domain.
+
+Repository Guidance is defined separately below.
 
 ------
 
@@ -139,6 +146,22 @@ Runtime exists only while implementation progresses.
 Runtime is defined further in:
 
 DOS-1003 — Runtime Model.
+
+------
+
+# Repository Guidance
+
+Repository Guidance consists of control artifacts that govern how agents and Documentation Engines enter, read, and operate on the repository.
+
+Repository Guidance is not Managed Information.
+
+It belongs to neither the Knowledge domain nor the Runtime domain.
+
+The Agent Entry Document is the normative Repository Guidance artifact.
+
+It is defined further in:
+
+DOS-5001 — Agent Entry.
 
 ------
 
@@ -279,8 +302,9 @@ Profiles SHALL NOT redefine Knowledge or Runtime.
 
 A Documentation OS implementation SHALL satisfy the following requirements.
 
-- Every artifact belongs to exactly one domain.
-- Domains remain conceptually independent.
+- Every managed information artifact belongs to exactly one domain (Knowledge or Runtime).
+- The Knowledge and Runtime domains remain conceptually independent.
+- Repository Guidance artifacts are not Managed Information.
 - Repository layout shall not define semantics.
 - Information identity remains stable across profiles.
 - Profiles preserve model semantics.
@@ -318,10 +342,10 @@ These concerns are addressed by later specifications.
 
 The Information Model defines the conceptual structure of all repository information.
 
-It introduces two fundamental domains:
+It organizes repository information into two top-level categories:
 
-- Knowledge
-- Runtime
+- Managed Information — the Knowledge and Runtime domains
+- Repository Guidance — the Agent Entry Document
 
 Every subsequent Documentation OS specification builds upon this abstraction.
 
