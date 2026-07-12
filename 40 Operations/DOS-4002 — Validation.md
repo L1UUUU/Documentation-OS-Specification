@@ -160,21 +160,24 @@ Relationship Validation does not evaluate semantic correctness.
 
 # Lifecycle Validation
 
-Lifecycle Validation verifies:
+Lifecycle Validation verifies only lifecycle facts that are observable in repository structure or metadata.
+
+For Knowledge artifacts: lifecycle state is determined by front matter status metadata. Lifecycle Validation verifies:
 
 - valid lifecycle states;
 - permitted lifecycle transitions;
-- required lifecycle ordering.
+- required ordering among metadata-observable states.
 
-For Knowledge artifacts: lifecycle state is determined by front matter status metadata.
+For Runtime Work: the only repository-observable lifecycle state is directory location (`active/` or `completed/`). Runtime workflow phases — Knowledge Impact Analysis, Knowledge Synchronization, Validation — are conceptual engineering phases rather than persistable states, and are not individually observable from repository structure (DOS-3002). Their ordering therefore SHALL NOT be verified by Repository Validation; the requirement that Knowledge Synchronization precede completion is behavioral and is verified through Documentation Testing (DOS-4005). Runtime Lifecycle Validation verifies only:
 
-For Runtime Work: lifecycle state is determined by directory location (active/ or completed/) — valid states correspond to valid directory locations under .scratch/.
+- the Work directory resides under `active/` or `completed/` (location-presence);
+- the same workstream slug is not present in both `active/` and `completed/`.
 
 Examples include:
 
-- Runtime completed before Knowledge Synchronization;
-- invalid lifecycle transitions;
-- Work directory not located under active/ or completed/ (location-presence validation).
+- Work directory not located under `active/` or `completed/`;
+- the same workstream slug present in both `active/` and `completed/`;
+- invalid Knowledge lifecycle transitions (front matter metadata).
 
 ------
 
@@ -209,10 +212,12 @@ Mandatory Work internal structure rules (error severity):
 - workstream slugs are globally unique across .scratch/active/ and .scratch/completed/;
 - the same slug does not appear in both .scratch/active/ and .scratch/completed/;
 - each Work contains a PRD.md;
+- each completed Work's PRD declares a legal `outcome` value (succeeded|cancelled|superseded|failed); an active Work SHALL NOT declare an `outcome`;
 - each Work contains an issues/ directory; while a Work is active the issues/ directory MAY be empty, but it SHALL contain at least one Issue file (NN-<slug>.md) before the Work enters the Complete stage;
+- a `succeeded` Work SHALL NOT enter the Complete stage while any Issue remains `open`, `in-progress`, or `blocked` (such Issues MUST be resolved to `done`, `cancelled`, or `superseded`); a non-`succeeded` Work MAY leave Issues in a non-terminal status, with the termination truthfully recorded in the Work `outcome`;
 - Issue filenames match the pattern NN-<slug>.md;
 - Issue numbers are unique within a Work;
-- Issue front matter contains a legal status value (open|in-progress|done|blocked);
+- Issue front matter contains a legal status value (open|in-progress|done|blocked|cancelled|superseded);
 - each Work contains a HANDOFF.md (HANDOFF.md is generated at Work creation per DOS-2004, so its absence indicates corruption or accidental deletion).
 
 Mandatory docs/ entry point presence rules (error severity):
@@ -351,12 +356,12 @@ A compliant Documentation Engine SHALL validate:
 - relationships (referenced artifacts resolvable; structural metadata checks apply to Knowledge front matter);
 - lifecycle consistency (location-presence for Runtime Work; metadata-presence for Knowledge artifacts);
 - repository structure (including .scratch/active/, .scratch/completed/, .scratch/INDEX.md);
-- Work internal structure (workstream slug uniqueness across .scratch/active/ and .scratch/completed/; PRD.md presence; issues/ directory presence; Issue filename pattern NN-<slug>.md; Issue number uniqueness within a Work; Issue front matter status in open|in-progress|done|blocked; at least one Issue file before Complete);
+- Work internal structure (workstream slug uniqueness across .scratch/active/ and .scratch/completed/; PRD.md presence; completed-Work PRD `outcome` in succeeded|cancelled|superseded|failed; issues/ directory presence; Issue filename pattern NN-<slug>.md; Issue number uniqueness within a Work; Issue front matter status in open|in-progress|done|blocked|cancelled|superseded; at least one Issue file before Complete; no `open`/`in-progress`/`blocked` Issue in a `succeeded` Work at Complete);
 - docs/ entry points (docs/architecture, docs/adr, docs/standards, docs/inbox);
 - generated content (including .scratch/INDEX.md consistency);
 - managed regions.
 
-A compliant Documentation Engine SHALL report a missing HANDOFF.md as an error (HANDOFF.md is generated at Work creation per DOS-2004, so its absence indicates corruption). A compliant Documentation Engine SHALL require each Work's issues/ directory to contain at least one Issue file (NN-<slug>.md) before the Work enters the Complete stage.
+A compliant Documentation Engine SHALL report a missing HANDOFF.md as an error (HANDOFF.md is generated at Work creation per DOS-2004, so its absence indicates corruption). A compliant Documentation Engine SHALL require each Work's issues/ directory to contain at least one Issue file (NN-<slug>.md) before the Work enters the Complete stage. A completed Work's PRD SHALL declare a legal `outcome` (succeeded|cancelled|superseded|failed); a `succeeded` completed Work SHALL NOT retain any `open`, `in-progress`, or `blocked` Issue.
 
 Additional validation rules MAY be introduced provided they remain compatible with Documentation OS.
 

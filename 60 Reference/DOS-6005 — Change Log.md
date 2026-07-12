@@ -296,6 +296,34 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v8 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking refinement — terminal-state semantics closed (Work `outcome`); Repository Validation scope narrowed to observable facts; Conformance and structure examples synchronized; no conceptual architecture change.
+
+### Added
+
+- Work `outcome` field: a Work records a terminal `outcome` (`succeeded`, `cancelled`, `superseded`, `failed`) in PRD front matter when it reaches Completed; `Completed` denotes termination, not necessarily success. A non-`succeeded` Work MAY reach Completed without achieving its implementation objectives, provided the outcome is truthfully recorded (DOS-3002, DOS-3004, DOS-5003, DOS-2004, DOS-2005, DOS-4002, DOS-6002).
+- Issue `cancelled` and `superseded` status values, so abandoned or superseded execution tasks need not be forced to `done` (DOS-2004, DOS-4002, DOS-6002).
+- Knowledge artifact (e.g. ADR) allocation timing rule: drafts use a non-final placeholder; the Documentation Engine allocates the final identifier atomically at integration time against the integration target state; concurrent collisions are resolved by re-numbering the later integration and regenerating managed references (DOS-2005).
+- Seven normative conformance scenarios in DOS-4005 — active Work with empty `issues/`; empty `issues/` at Complete; `generate work` INDEX consistency; `generate work` rollback; Complete-succeeds-Cleanup-fails with Cleanup resume; idempotent pipeline-stage retry; `completed/` location — promoted from a pending list to full expected-results specifications (initial state, operation, expected state, expected diagnostics) (DOS-4005).
+
+### Changed
+
+- Repository Validation no longer verifies Runtime workflow-phase ordering (e.g. "Runtime completed before Knowledge Synchronization"); Runtime Lifecycle Validation checks only observable facts (directory location; the same slug is not in both `active/` and `completed/`). Phase ordering is verified by Documentation Testing (DOS-4002, DOS-4005).
+- Work Close Pipeline completion terminology unified: a Work reaches the Completed terminal state at the Complete stage; the Cleanup stage finalizes repository state and is mandatory but independently retriable. The three notions — Completed state, Work Close Pipeline finalized, and execution complete — are no longer conflated (DOS-3004, DOS-5003).
+- Execution Contract Completion now varies by `outcome`: a `succeeded` Work must achieve its objectives and complete full Knowledge Synchronization; a non-`succeeded` Work must record its outcome and synchronize any Knowledge affected by the partial implementation (DOS-5003).
+- Documentation Engine Conformance, Level 2, the Conformance Matrix, and the Conformance Checklist now require Documentation Testing, consistent with DOS-4005 (DOS-6003).
+
+### Fixed
+
+- Repository Profile structure examples for `.scratch/` now include the mandatory `.scratch/AGENTS.md` and `.scratch/CLAUDE.md` mirrors required by DOS-5001 (DOS-2002, DOS-2004, DOS-4005).
+- Complete Operation and `complete` CLI command now define an explicit resume-from-Cleanup contract: re-invoking Complete on a Work already in `completed/` resumes from Cleanup only and does not re-execute the directory movement (DOS-4001, DOS-5005).
+- A `succeeded` Work SHALL NOT enter the Complete stage while any Issue remains `open`, `in-progress`, or `blocked`; a non-`succeeded` Work MAY leave non-terminal Issues with the outcome recorded (DOS-4002).
+
+------
+
 ## Documentation OS Specification 1.0 — v7 Revision
 
 **Status:** Draft

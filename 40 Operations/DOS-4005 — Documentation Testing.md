@@ -192,7 +192,7 @@ Examples include:
 - required directory layout;
 - required documentation locations;
 - profile-specific conventions;
-- .scratch structure assertions (.scratch/active/ + .scratch/completed/ + .scratch/INDEX.md + each Work containing PRD.md, issues/NN-<slug>.md, HANDOFF.md).
+- .scratch structure assertions (.scratch/AGENTS.md + .scratch/CLAUDE.md + .scratch/active/ + .scratch/completed/ + .scratch/INDEX.md + each Work containing PRD.md, issues/NN-<slug>.md, HANDOFF.md).
 
 Repository Profile Tests should remain independent of implementation language.
 
@@ -242,16 +242,65 @@ Typical fixtures include:
   - repository with completed Work(s) (verifying Core Assets preserved in completed/<slug>/);
   - repository with regenerated INDEX.md (verifying reproducibility);
   - repository violating Runtime Profile (negative: missing PRD/HANDOFF, incorrect WORK-NNNN/work.yaml usage, presence of archive/);
-  - pending conformance scenarios (to be added before final Conformance Review):
-    - active Work with empty `issues/` is valid;
-    - Work entering Complete with empty `issues/` is invalid;
-    - `generate work` leaves `.scratch/INDEX.md` consistent with the new active Work;
-    - `generate work` rolls back workspace and INDEX on mid-creation failure;
-    - Complete succeeds and Cleanup fails: the Work remains in `completed/` and Cleanup is independently retriable;
-    - a failed or interrupted pipeline stage is retried idempotently;
-    - `completed/` directory location corresponds to the Completed terminal state.
+  - normative conformance scenarios — see Normative Conformance Scenarios below.
 
 Fixtures should remain version-controlled.
+
+------
+
+# Normative Conformance Scenarios
+
+The following scenarios SHALL be covered by the conformance tests required in the Compliance section. Each scenario follows the Expected Results structure: initial repository state, operation under test, expected repository state, and expected diagnostics.
+
+## Scenario 1 — Active Work with empty `issues/` is valid
+
+- Initial state: a repository with one active Work under `.scratch/active/<slug>/` containing `PRD.md`, an empty `issues/` directory, and `HANDOFF.md`.
+- Operation: run Validation.
+- Expected state: repository unchanged (Validation is read-only).
+- Expected diagnostics: Passed — an active Work MAY have an empty `issues/` directory.
+
+## Scenario 2 — Work entering Complete with empty `issues/` is invalid
+
+- Initial state: an active Work whose `issues/` directory is empty.
+- Operation: invoke the Complete operation.
+- Expected state: the Work remains in `active/`; no directory movement occurs.
+- Expected diagnostics: Failure — the `issues/` directory SHALL contain at least one Issue file before Complete.
+
+## Scenario 3 — `generate work` leaves `.scratch/INDEX.md` consistent
+
+- Initial state: a repository with N existing Works; `.scratch/INDEX.md` reflects them.
+- Operation: run `generate work <new-slug>` for a new, globally unique slug.
+- Expected state: `.scratch/active/<new-slug>/` is created with `PRD.md`, `issues/`, and `HANDOFF.md`; `.scratch/INDEX.md` is regenerated and lists the new Work under "Active Works".
+- Expected diagnostics: Success; INDEX.md is reproducible from the contents of `active/` and `completed/`.
+
+## Scenario 4 — `generate work` rolls back on mid-creation failure
+
+- Initial state: a repository in which a creation step cannot succeed (for example the requested slug already exists under `active/` or `completed/`).
+- Operation: run `generate work <slug>`.
+- Expected state: no partial `.scratch/active/<slug>/` remains; `.scratch/INDEX.md` is identical to its pre-operation state.
+- Expected diagnostics: Failure; the report states that the workspace and the INDEX regeneration were rolled back.
+
+## Scenario 5 — Complete succeeds, Cleanup fails; Work stays Completed and Cleanup is retriable
+
+- Initial state: an active Work that satisfies all Complete preconditions.
+- Operation: invoke Complete; the Complete stage succeeds (the Work moves to `completed/` and its terminal `outcome` is recorded) but the Cleanup stage fails.
+- Expected state: the Work resides in `.scratch/completed/<slug>/` with Core Assets preserved and a legal `outcome` in PRD front matter; `.scratch/INDEX.md` is not yet regenerated.
+- Re-operation: re-invoke Complete; execution resumes from the Cleanup stage only (no repeated directory movement); `.scratch/INDEX.md` is regenerated.
+- Expected diagnostics: the first invocation returns Failure with a recovery instruction to retry only the idempotent Cleanup stage; the re-invocation returns Success.
+
+## Scenario 6 — A failed or interrupted pipeline stage is retried idempotently
+
+- Initial state: a Work in the Work Close Pipeline where an earlier stage (for example Validation) has failed.
+- Operation: re-invoke the pipeline after the cause of failure has been resolved.
+- Expected state: the Work progresses from the failed stage; no duplicated Knowledge edits and no inconsistent intermediate state are introduced.
+- Expected diagnostics: Success on retry; the resulting repository state is equivalent to a single uninterrupted run.
+
+## Scenario 7 — `completed/` location corresponds to the Completed terminal state
+
+- Initial state: a Work that has reached Completed.
+- Operation: run Validation / inspect `.scratch/`.
+- Expected state: the Work directory is located under `.scratch/completed/<slug>/` (not `active/`); the PRD declares a legal `outcome`; Core Runtime Assets are preserved.
+- Expected diagnostics: Validation passes; the Runtime location-presence check confirms the Completed terminal state.
 
 ------
 

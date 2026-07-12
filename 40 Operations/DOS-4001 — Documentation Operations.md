@@ -224,6 +224,10 @@ Regenerate `.scratch/INDEX.md` to reflect the updated Runtime state.
 
 This stage is idempotent and may be retried independently if it fails.
 
+### Resuming after a Cleanup Failure
+
+When a Complete Operation is re-invoked on a Work that already resides in `completed/`, the operation SHALL resume from the Cleanup stage only; it SHALL NOT re-execute the Complete stage directory movement. This gives the "retry only Cleanup" recovery path a standard, deterministic behavioral contract.
+
 ------
 
 # Migrate

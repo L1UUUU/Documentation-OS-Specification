@@ -255,6 +255,8 @@ Regenerate `.scratch/INDEX.md` to reflect the updated Runtime state.
 
 This stage is idempotent and may be retried independently if it fails.
 
+Re-invoking a Complete command on a Work that already resides in `completed/` SHALL resume from the Cleanup stage only and SHALL NOT re-execute the Complete stage directory movement, consistent with the Complete Operation contract in DOS-4001.
+
 ------
 
 # Migration Commands

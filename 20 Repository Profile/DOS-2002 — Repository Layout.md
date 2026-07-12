@@ -148,12 +148,16 @@ Runtime is organized into:
 
 ```text
 .scratch/
+├── AGENTS.md
+├── CLAUDE.md
 ├── active/
 │   └── <workstream-slug>/
 ├── completed/
 │   └── <workstream-slug>/
 └── INDEX.md
 ```
+
+`.scratch/` is the local entry point for Runtime workstreams and SHALL expose both `AGENTS.md` and a content-equivalent `CLAUDE.md` mirror, together with the generated `INDEX.md` (see DOS-5001 — Agent Entry).
 
 Active Work resides beneath `active/`. Completed Work is preserved beneath `completed/` with its Core Runtime Assets (PRD, Issues, Handoff).
 

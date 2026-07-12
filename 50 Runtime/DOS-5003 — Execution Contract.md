@@ -245,14 +245,26 @@ Agents should avoid leaving partially synchronized repository Knowledge.
 
 # Completion
 
-Execution completes when:
+Execution completes when the Work has reached `Completed` via the Complete stage. The conditions vary by terminal `outcome`.
+
+For a `succeeded` Work:
 
 - implementation objectives have been achieved;
 - Knowledge Impact Analysis has completed;
 - Knowledge Synchronization has completed;
 - Validation succeeds;
-- the Complete stage has moved the Work to `completed/` (the Work Close Pipeline's Cleanup stage may follow independently);
+- the Complete stage has moved the Work to `completed/`;
 - `PRD.md`, `issues/` (containing at least one Issue), and `HANDOFF.md` are present and finalized.
+
+For a non-`succeeded` Work (`cancelled`, `superseded`, `failed`):
+
+- the termination reason is truthfully recorded as the Work's `outcome` in PRD front matter;
+- any Knowledge affected by the partial implementation has been analyzed and synchronized;
+- Validation succeeds;
+- the Complete stage has moved the Work to `completed/`;
+- `PRD.md`, `issues/`, and `HANDOFF.md` are present.
+
+In both cases the Work Close Pipeline's Cleanup stage may follow independently.
 
 Implementation completion alone does not satisfy the Execution Contract.
 
@@ -300,7 +312,7 @@ A Documentation OS-compliant agent SHALL:
 - follow the Reading Strategy;
 - respect documentation Ownership;
 - invoke Documentation Operations when deterministic maintenance is required;
-- complete the Work Close Pipeline before considering Work finished.
+- reach the Completed state (the Complete stage moves the Work to `completed/`) before considering Work complete; the subsequent Cleanup stage finalizes repository state and is mandatory but may be retried independently.
 
 ------
 

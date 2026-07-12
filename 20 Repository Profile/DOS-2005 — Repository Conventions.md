@@ -98,6 +98,18 @@ Number allocation SHALL be monotonic.
 
 Allocated numbers SHALL NOT be reused.
 
+## Allocation Timing and Concurrent Work
+
+A Knowledge artifact (for example an ADR) MAY be authored as a draft while its Work is active. To avoid numbering collisions between parallel Works, a draft artifact SHALL NOT pre-allocate a final identifier; it uses a non-final local placeholder (for example `ADR-DRAFT`, or a Work-scoped working name) until integration.
+
+Final identifier allocation SHALL be performed by the Documentation Engine at integration time (PR preparation or the equivalent merge-to-trunk step), against the integration target repository state. Allocation SHALL be:
+
+- atomic — a single deterministic step assigns the next available number to one artifact at a time;
+- monotonic — a newly allocated number is greater than all previously allocated numbers in its category;
+- non-reusable — a number withdrawn after its artifact is retired SHALL NOT be reissued.
+
+If two integrations collide (concurrent branches each produced an artifact in the same category), the later integration SHALL receive a newly allocated number; the Documentation Engine SHALL regenerate all managed references to the renamed artifact so that long-lived identity references remain valid.
+
 ------
 
 # Identifier Format
@@ -146,6 +158,19 @@ Runtime Work uses a workstream slug for resolution:
 | `<workstream-slug>`      | `.scratch/completed/<workstream-slug>/` |
 
 Long-lived Knowledge references SHALL target identifiers rather than filenames. Runtime references SHALL use workstream slugs or Work-scoped paths (see DOS-2004); Runtime Works are not addressable by identifiers.
+
+------
+
+# Work Outcome
+
+A Runtime Work records its terminal result in the PRD's front matter `outcome` field when it reaches `Completed`. Normative `outcome` values are:
+
+- `succeeded`
+- `cancelled`
+- `superseded`
+- `failed`
+
+An active Work SHALL NOT declare an `outcome`. The field is set by the Complete stage (DOS-3004) and surfaced by INDEX.md for Completed Works (DOS-2004).
 
 ------
 

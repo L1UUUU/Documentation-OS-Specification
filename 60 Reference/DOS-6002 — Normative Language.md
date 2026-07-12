@@ -230,7 +230,13 @@ They remain immutable; only the generated INDEX.md may be regenerated.
 
 ## Issue Status
 
-The normative lifecycle state of a Runtime Issue, with values open, in-progress, done, blocked (defined in DOS-2004).
+The normative lifecycle state of a Runtime Issue, with values open, in-progress, done, blocked, cancelled, superseded (defined in DOS-2004).
+
+------
+
+## Work Outcome
+
+The terminal result of a Runtime Work, recorded in PRD front matter when the Work reaches Completed, with values succeeded, cancelled, superseded, failed (defined in DOS-3002; surfaced by INDEX.md per DOS-2004).
 
 ------
 

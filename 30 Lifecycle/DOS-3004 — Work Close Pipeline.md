@@ -10,11 +10,11 @@
 
 This specification defines the Work Close Pipeline of Documentation OS.
 
-The Work Close Pipeline is the mandatory sequence of operations required to complete a Work.
+The Work Close Pipeline is the mandatory sequence of operations required to bring a Work to its terminal state.
 
 Implementation completion alone does not complete a Work.
 
-A Work is considered complete only after repository Knowledge has been synchronized, repository consistency has been validated, Runtime has been completed, and lifecycle ownership has been released.
+A Work reaches the **Completed** terminal state only after repository Knowledge has been synchronized, repository consistency has been validated, and the Complete stage has moved the Work to `completed/` and released lifecycle ownership. The Cleanup stage then finalizes repository state; it is mandatory but may be retried independently without affecting the already-established Completed state.
 
 The Work Close Pipeline guarantees that every completed Work permanently improves repository quality.
 
@@ -39,9 +39,7 @@ The Work Close Pipeline prevents these forms of repository decay.
 
 This specification applies to every Runtime Work managed by Documentation OS.
 
-It begins after implementation has finished.
-
-It ends when the Work reaches the **Completed** lifecycle state.
+The pipeline begins after implementation has finished. A Work reaches its **Completed** terminal lifecycle state at the Complete stage; the subsequent Cleanup stage finalizes repository state and is mandatory but independently retriable.
 
 ------
 
@@ -147,11 +145,12 @@ The Complete stage performs the atomic transition of the Work to its final lifec
 Deterministic actions:
 
 1. Verify Core Runtime Assets exist (PRD.md, issues/*.md, HANDOFF.md);
-2. Clean Ephemeral Runtime Content only (temporary notes, planning artifacts);
-3. Atomically move active/<workstream-slug>/ → completed/<workstream-slug>/;
-4. Preserve Core Runtime Assets unchanged (immutable business content; generated INDEX.md MAY be regenerated).
+2. Record the Work's terminal `outcome` (`succeeded`, `cancelled`, `superseded`, or `failed`) in PRD front matter (see DOS-3002);
+3. Clean Ephemeral Runtime Content only (temporary notes, planning artifacts);
+4. Atomically move active/<workstream-slug>/ → completed/<workstream-slug>/;
+5. Preserve Core Runtime Assets unchanged (immutable business content; generated INDEX.md MAY be regenerated).
 
-Note: HANDOFF.md is generated at Work creation (DOS-2004) and is therefore always present; this step verifies integrity rather than first-time presence. The issues/ directory SHALL contain at least one Issue file at this stage.
+Note: HANDOFF.md is generated at Work creation (DOS-2004) and is therefore always present; this step verifies integrity rather than first-time presence. The issues/ directory SHALL contain at least one Issue file at this stage. For a non-`succeeded` Work, the recorded `outcome` truthfully reflects that the implementation objectives were not achieved; repository consistency verification SHALL NOT be bypassed regardless of outcome.
 
 Stage 3 owns the Work directory movement. Core Runtime Assets SHALL remain unchanged by completion.
 

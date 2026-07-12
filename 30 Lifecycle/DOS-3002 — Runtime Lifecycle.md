@@ -237,7 +237,7 @@ Validation ensures that synchronization has not introduced structural inconsiste
 
 ## Completed
 
-The Work has reached its terminal observable lifecycle state.
+The Work has reached its terminal observable lifecycle state, with its terminal `outcome` (`succeeded`, `cancelled`, `superseded`, or `failed`) recorded in PRD front matter.
 
 The workstream directory has moved from active/<slug>/ to completed/<slug>/.
 
@@ -422,11 +422,20 @@ Typical failure causes include:
 - requirements withdrawn;
 - engineering superseded.
 
+`Completed` denotes termination, not necessarily success. A Work reaches `Completed` with a terminal `outcome` recorded in its PRD front matter. Normative `outcome` values are:
+
+- `succeeded` — implementation objectives achieved and Knowledge synchronized;
+- `cancelled` — requirements withdrawn or implementation abandoned;
+- `superseded` — engineering approach replaced by another Work;
+- `failed` — implementation could not be completed.
+
+A non-`succeeded` Work MAY reach `Completed` without having achieved its implementation objectives, provided its `outcome` truthfully records the termination reason.
+
 Failed Works MAY reach the Completed state.
 
 Repository Profiles MAY define additional failure handling conventions.
 
-Failure SHALL NOT bypass required documentation consistency operations.
+Failure SHALL NOT bypass required documentation consistency operations: a non-`succeeded` Work SHALL still record its `outcome` and SHALL NOT leave the repository in an inconsistent state.
 
 ------
 

@@ -133,6 +133,7 @@ A Documentation Engine SHALL:
 - support Validation;
 - support Health evaluation;
 - support Migration;
+- support Documentation Testing (provide the conformance tests required by DOS-4005);
 - preserve repository consistency;
 - execute deterministic operations.
 
@@ -194,7 +195,8 @@ Supports:
 - Documentation Operations;
 - Validation;
 - Migration;
-- Health.
+- Health;
+- Documentation Testing.
 
 Suitable for automated documentation management.
 
@@ -222,6 +224,7 @@ Represents full Documentation OS implementation.
 | Repository Profile       | ✓    | ✓    | ✓    |
 | Documentation Engine     |      | ✓    | ✓    |
 | Documentation Operations |      | ✓    | ✓    |
+| Documentation Testing    |      | ✓    | ✓    |
 | Validation               |      | ✓    | ✓    |
 | Health                   |      | ✓    | ✓    |
 | Migration                |      | ✓    | ✓    |
@@ -269,6 +272,7 @@ A Documentation OS implementation should satisfy the following checklist.
 - Validation implemented.
 - Health implemented.
 - Migration implemented.
+- Documentation Testing provided (DOS-4005).
 - Deterministic behavior verified.
 
 ------
