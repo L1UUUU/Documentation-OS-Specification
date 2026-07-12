@@ -204,13 +204,13 @@ Validation precedes Complete.
 Complete precedes Cleanup.
 
 ------
-## WC-5
+## WC-4
 
 Pipeline stages SHALL reach successful completion at most once for each Work. Failed or interrupted attempts MAY be retried idempotently.
 
 ------
 
-## WC-6
+## WC-5
 
 Pipeline stages execute in order.
 
@@ -295,7 +295,7 @@ A compliant Documentation OS implementation SHALL ensure:
 - pipeline stages occur in the defined order;
 - Runtime is not completed before Knowledge Synchronization;
 - repository validation succeeds before Work completion;
-- Work ownership concludes only after successful pipeline completion.
+- Work ownership concludes when the Complete stage moves the Work to `completed/`; the subsequent Cleanup stage is mandatory and may be retried independently.
 
 ------
 
@@ -329,12 +329,12 @@ The Work Close Pipeline defines the mandatory completion process for every Runti
 
 A Work is not complete when implementation ends.
 
-A Work is complete only after:
+A Work reaches the Completed terminal state when:
 
 - Knowledge has been synchronized;
 - repository validation has succeeded;
-- Runtime has been completed;
-- cleanup has completed;
-- lifecycle ownership has been released.
+- the Complete stage has moved the Work to `completed/` and released Ownership.
+
+The subsequent Cleanup stage finalizes repository state (regenerating `.scratch/INDEX.md`); it is mandatory but idempotent and may be retried independently without affecting the already-established Completed state.
 
 This pipeline ensures that every completed Work leaves the repository in a consistent, maintainable, and knowledge-rich state.

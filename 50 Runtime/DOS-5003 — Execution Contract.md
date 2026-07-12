@@ -251,7 +251,7 @@ Execution completes when:
 - Knowledge Impact Analysis has completed;
 - Knowledge Synchronization has completed;
 - Validation succeeds;
-- the Work Close Pipeline finishes;
+- the Complete stage has moved the Work to `completed/` (the Work Close Pipeline's Cleanup stage may follow independently);
 - `PRD.md`, `issues/` (containing at least one Issue), and `HANDOFF.md` are present and finalized.
 
 Implementation completion alone does not satisfy the Execution Contract.

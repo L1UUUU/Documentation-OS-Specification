@@ -71,7 +71,7 @@ Every managed document progresses through one or more of the following conceptua
 ```text
 Knowledge documents:
 
-Created → Active ↔ Updated → Validated → Archived → Retired
+Created → Active → Updated → Validated → Active (evolution cycle) → (optional) Archived → (optional) Retired
 
 
 Runtime documents:
@@ -175,7 +175,7 @@ Completed documents:
 
 - are preserved in their final state;
 - do not return to `Active` state;
-- retain their established identities.
+- retain their stable Work-scoped addresses and workstream slug.
 
 `Completed` is the terminal state for Runtime documents only. Knowledge documents use `Archived` or `Retired` instead of `Completed`.
 
@@ -238,13 +238,21 @@ Create
 
 ↓
 
-Active ↔ Updated
+Active
+
+↓
+
+Updated
 
 ↓
 
 Validated
 
-↓ (optional)
+↓ (cycles back to Active while the document keeps evolving)
+
+Active
+
+↓ (optional, when no longer maintained)
 
 Archived
 

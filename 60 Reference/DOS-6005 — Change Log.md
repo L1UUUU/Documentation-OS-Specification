@@ -296,6 +296,38 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v7 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking refinement — Work state model consolidated to two observable states; Work completion semantics closed; no conceptual architecture change.
+
+### Changed
+
+- Work lifecycle state model consolidated: Accepted…Validated are now workflow phases (conceptual, non-persistable); the only observable lifecycle states are Active and Completed, determined by directory location. RI-1 narrowed accordingly (DOS-3002).
+- Work completion semantics unified to the Complete stage as the Completed terminal state; Cleanup is mandatory post-completion maintenance, idempotent and independently retried, not a precondition for the Completed state (DOS-3004, DOS-0004, DOS-1003, DOS-5003).
+- Knowledge lifecycle state diagram corrected: `Active ↔ Updated` replaced by a directed evolution cycle (Active → Updated → Validated → Active), resolving the conflict with "Validation MUST follow" and the missing post-Validation return path (DOS-3001).
+- Generate Work operation and `generate work` CLI command now regenerate `.scratch/INDEX.md` as part of creation, with INDEX regeneration included in rollback (DOS-4001, DOS-5005).
+- Documentation Testing lifecycle text corrected from "5-phase sequence" to "4-phase sequence" (DOS-4005).
+
+### Removed
+
+- Residual `Close` stage in the DOS-2004 Runtime Lifecycle diagram, left over from the v6 Close-stage removal (DOS-2004).
+
+### Fixed
+
+- WC invariant numbering renumbered consecutively (WC-1/2/3/4/5) after the v6 WC-4 removal left a gap (DOS-3004).
+- HANDOFF validation rule reworded from the negative "HANDOFF.md is missing" to the positive "each Work contains a HANDOFF.md" for consistency with the other mandatory structure rules (DOS-4002).
+- Completed Runtime document wording changed from "retain their established identities" to "retain their stable Work-scoped addresses and workstream slug", aligning with the Identity Model (Runtime has no global Identity) (DOS-3001).
+
+### Clarified
+
+- The v6 entry's "two states (Active / Completed)" now reflects the consolidated observable-state model (two normative repository-observable Work states).
+- Complete command partial-success behavior: when Complete succeeds and Cleanup fails, the Work is already Completed; the command returns Failure with a recovery instruction to retry only Cleanup (DOS-5005).
+- Pending Conformance test fixtures enumerated for the final Conformance Review (DOS-4005).
+
+------
+
 ## Documentation OS Specification 1.0 — v6 Revision
 
 **Status:** Draft

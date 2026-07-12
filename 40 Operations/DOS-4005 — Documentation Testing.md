@@ -160,7 +160,7 @@ Typical examples include:
 
 - valid lifecycle progression;
 - prohibited transitions;
-- Work Close Pipeline ordering (including 5-phase sequence with Cleanup);
+- Work Close Pipeline ordering (including 4-phase sequence: Knowledge Synchronization → Validation → Complete → Cleanup);
 - ownership transitions.
 
 Lifecycle behavior should remain specification compliant.
@@ -241,7 +241,15 @@ Typical fixtures include:
   - repository with active Work(s);
   - repository with completed Work(s) (verifying Core Assets preserved in completed/<slug>/);
   - repository with regenerated INDEX.md (verifying reproducibility);
-  - repository violating Runtime Profile (negative: missing PRD/HANDOFF, incorrect WORK-NNNN/work.yaml usage, presence of archive/).
+  - repository violating Runtime Profile (negative: missing PRD/HANDOFF, incorrect WORK-NNNN/work.yaml usage, presence of archive/);
+  - pending conformance scenarios (to be added before final Conformance Review):
+    - active Work with empty `issues/` is valid;
+    - Work entering Complete with empty `issues/` is invalid;
+    - `generate work` leaves `.scratch/INDEX.md` consistent with the new active Work;
+    - `generate work` rolls back workspace and INDEX on mid-creation failure;
+    - Complete succeeds and Cleanup fails: the Work remains in `completed/` and Cleanup is independently retriable;
+    - a failed or interrupted pipeline stage is retried idempotently;
+    - `completed/` directory location corresponds to the Completed terminal state.
 
 Fixtures should remain version-controlled.
 

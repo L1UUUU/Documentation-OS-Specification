@@ -212,7 +212,7 @@ A Work may include:
 
 Work begins when an accepted effort enters Runtime and its active/<workstream-slug>/ workspace is created.
 
-Work ends only after the Work Close Pipeline completes successfully.
+Work reaches its Completed terminal state when the Complete stage moves its workspace to `completed/`; the subsequent Cleanup stage finalizes repository state and may be retried independently.
 
 ------
 

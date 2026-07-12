@@ -442,7 +442,7 @@ Complete
 
 Cleanup
 
-A Work is not considered complete until the pipeline finishes successfully.
+A Work reaches the Completed terminal state at the Complete stage (directory movement to `completed/`); the subsequent Cleanup stage is mandatory post-completion maintenance and may be retried independently.
 
 ------
 

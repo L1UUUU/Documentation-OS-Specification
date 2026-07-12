@@ -69,7 +69,9 @@ In particular:
 
 # Runtime Lifecycle
 
-Every Work progresses through the following conceptual lifecycle.
+Every Work possesses exactly one observable lifecycle state — Active or Completed — determined by its directory location under `.scratch/` (`active/` or `completed/`).
+
+While a Work is Active, it progresses through the following conceptual workflow phases. These phases describe engineering progress; they are not separately persistable states and are not individually observable from repository structure alone.
 
 ```text
 Accepted
@@ -101,19 +103,21 @@ Knowledge Synchronized
 ↓
 
 Validated
-
-↓
-
-Completed
 ```
 
-Each transition represents a meaningful engineering event.
+The transition from Active to Completed occurs through the Work Close Pipeline (see DOS-3004): the Work directory moves from `active/<workstream-slug>/` to `completed/<workstream-slug>/`, which is the terminal observable state.
+
+Each phase transition represents a meaningful engineering event.
 
 No transition SHOULD occur implicitly.
 
 ------
 
-# State Definitions
+# Workflow Phases and Terminal State
+
+The following phases describe an Active Work's engineering progress. They are conceptual phases rather than separately persistable lifecycle states; an Active Work is in the Active observable state throughout, regardless of which phase it has reached.
+
+`Completed` is the terminal observable state, reached via the Work Close Pipeline (DOS-3004).
 
 ## Accepted
 
@@ -233,13 +237,11 @@ Validation ensures that synchronization has not introduced structural inconsiste
 
 ## Completed
 
-Runtime artifacts become historical execution records.
+The Work has reached its terminal observable lifecycle state.
 
-Completed Runtime no longer participates in active engineering work.
+The workstream directory has moved from active/<slug>/ to completed/<slug>/.
 
-The workstream directory moves from active/<slug>/ to completed/<slug>/.
-
-This is the Work's final lifecycle state. Ownership concludes at this point.
+Completed Runtime no longer participates in active engineering work. Ownership concludes at this point.
 
 Core Runtime assets are preserved (immutable business content; generated INDEX.md MAY be regenerated).
 
@@ -249,7 +251,7 @@ Repository knowledge now contains the enduring understanding created by the Work
 
 # Lifecycle Transitions
 
-The Runtime Lifecycle permits only forward progression.
+Workflow phases progress only forward.
 
 ```text
 Accepted
@@ -284,10 +286,16 @@ Validated
 
 ↓
 
+(Work Close Pipeline: active/ → completed/)
+
+↓
+
 Completed
 ```
 
-Implementations SHOULD avoid reversing lifecycle states.
+The Active → Completed transition is the only observable state transition and is performed by the Work Close Pipeline (DOS-3004).
+
+Implementations SHOULD avoid reversing workflow phases.
 
 If significant additional engineering work becomes necessary after completion, a new Work SHOULD be created.
 
@@ -374,7 +382,7 @@ The following invariants SHALL always remain true.
 
 ## RI-1
 
-Every Work possesses exactly one lifecycle state.
+Every Work possesses exactly one observable lifecycle state — Active or Completed — determined by its directory location under `.scratch/`.
 
 ------
 

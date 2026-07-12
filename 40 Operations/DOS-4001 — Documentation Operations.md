@@ -155,7 +155,8 @@ Operations include:
 - creating an empty `issues/` directory;
 - creating an empty `HANDOFF.md` file;
 - verifying that the workstream slug is globally unique across both `active/` and `completed/`;
-- rolling back all created artifacts if creation fails.
+- regenerating `.scratch/INDEX.md` to reflect the newly created Work;
+- rolling back all created artifacts (including the INDEX regeneration) if creation fails.
 
 Generate Work belongs to the Generate category and SHALL NOT introduce a new operation category.
 

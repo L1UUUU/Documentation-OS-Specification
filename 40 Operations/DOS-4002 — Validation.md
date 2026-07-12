@@ -213,7 +213,7 @@ Mandatory Work internal structure rules (error severity):
 - Issue filenames match the pattern NN-<slug>.md;
 - Issue numbers are unique within a Work;
 - Issue front matter contains a legal status value (open|in-progress|done|blocked);
-- HANDOFF.md is missing (HANDOFF.md is generated at Work creation, so its absence indicates corruption or accidental deletion).
+- each Work contains a HANDOFF.md (HANDOFF.md is generated at Work creation per DOS-2004, so its absence indicates corruption or accidental deletion).
 
 Mandatory docs/ entry point presence rules (error severity):
 

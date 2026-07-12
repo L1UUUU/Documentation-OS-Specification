@@ -214,7 +214,8 @@ Typical behavior includes:
 - creating an empty `issues/` directory;
 - creating an empty `HANDOFF.md` file;
 - verifying that the workstream slug is globally unique across both `active/` and `completed/`;
-- rolling back all created artifacts if creation fails.
+- regenerating `.scratch/INDEX.md` to reflect the newly created Work;
+- rolling back all created artifacts (including the INDEX regeneration) if creation fails.
 
 ------
 
@@ -315,6 +316,8 @@ Typical outcomes include:
 | Invalid Usage | Command invocation error                           |
 
 Specific numeric values remain implementation-defined.
+
+When a Complete command succeeds at the Complete stage but fails at the subsequent Cleanup stage, the Work has already reached its Completed terminal state. The command SHALL return Failure and provide a recovery instruction to retry only the idempotent Cleanup stage.
 
 ------
 

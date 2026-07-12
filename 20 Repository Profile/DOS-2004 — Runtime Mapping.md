@@ -288,10 +288,6 @@ Complete
 ↓
 
 Cleanup
-
-↓
-
-Close
 ```
 
 Runtime Mapping defines representation.
