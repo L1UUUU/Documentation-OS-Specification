@@ -10,7 +10,7 @@
 
 This specification defines the Identity Model of Documentation OS.
 
-Identity provides stable, implementation-independent identifiers for documentation artifacts throughout their lifecycle.
+Identity provides stable, implementation-independent identifiers for managed Knowledge artifacts throughout their lifecycle.
 
 Identity enables documentation to evolve without breaking references caused by file renames, directory restructuring, or repository profile changes.
 
@@ -22,7 +22,7 @@ Identity is not.
 
 # Purpose
 
-The purpose of the Identity Model is to establish a stable identity system for every significant documentation artifact.
+The purpose of the Identity Model is to establish a stable identity system for every managed Knowledge artifact.
 
 Identity enables:
 
@@ -338,7 +338,7 @@ These concerns belong to Repository Profiles.
 
 # Summary
 
-Identity provides a stable, implementation-independent identifier for managed documentation artifacts.
+Identity provides a stable, implementation-independent identifier for managed Knowledge artifacts.
 
 Identity enables Documentation OS to preserve long-term traceability while allowing repository layouts, filenames, and repository profiles to evolve independently.
 

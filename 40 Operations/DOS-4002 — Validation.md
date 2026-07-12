@@ -209,14 +209,11 @@ Mandatory Work internal structure rules (error severity):
 - workstream slugs are globally unique across .scratch/active/ and .scratch/completed/;
 - the same slug does not appear in both .scratch/active/ and .scratch/completed/;
 - each Work contains a PRD.md;
-- each Work contains an issues/ directory;
+- each Work contains an issues/ directory; while a Work is active the issues/ directory MAY be empty, but it SHALL contain at least one Issue file (NN-<slug>.md) before the Work enters the Complete stage;
 - Issue filenames match the pattern NN-<slug>.md;
 - Issue numbers are unique within a Work;
-- Issue front matter contains a legal status value (open|in-progress|done|blocked).
-
-Advisory Work internal structure rule (warning severity):
-
-- HANDOFF.md is missing; this warning is escalated to error when the Work enters the Close stage.
+- Issue front matter contains a legal status value (open|in-progress|done|blocked);
+- HANDOFF.md is missing (HANDOFF.md is generated at Work creation, so its absence indicates corruption or accidental deletion).
 
 Mandatory docs/ entry point presence rules (error severity):
 
@@ -354,12 +351,12 @@ A compliant Documentation Engine SHALL validate:
 - relationships (referenced artifacts resolvable; structural metadata checks apply to Knowledge front matter);
 - lifecycle consistency (location-presence for Runtime Work; metadata-presence for Knowledge artifacts);
 - repository structure (including .scratch/active/, .scratch/completed/, .scratch/INDEX.md);
-- Work internal structure (workstream slug uniqueness across .scratch/active/ and .scratch/completed/; PRD.md presence; issues/ directory presence; Issue filename pattern NN-<slug>.md; Issue number uniqueness within a Work; Issue front matter status in open|in-progress|done|blocked);
+- Work internal structure (workstream slug uniqueness across .scratch/active/ and .scratch/completed/; PRD.md presence; issues/ directory presence; Issue filename pattern NN-<slug>.md; Issue number uniqueness within a Work; Issue front matter status in open|in-progress|done|blocked; at least one Issue file before Complete);
 - docs/ entry points (docs/architecture, docs/adr, docs/standards, docs/inbox);
 - generated content (including .scratch/INDEX.md consistency);
 - managed regions.
 
-A compliant Documentation Engine SHOULD report a missing HANDOFF.md as a warning; this warning SHALL be escalated to error severity when the Work enters the Close stage.
+A compliant Documentation Engine SHALL report a missing HANDOFF.md as an error (HANDOFF.md is generated at Work creation per DOS-2004, so its absence indicates corruption). A compliant Documentation Engine SHALL require each Work's issues/ directory to contain at least one Issue file (NN-<slug>.md) before the Work enters the Complete stage.
 
 Additional validation rules MAY be introduced provided they remain compatible with Documentation OS.
 

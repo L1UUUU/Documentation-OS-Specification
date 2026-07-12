@@ -318,7 +318,7 @@ Artifact Archived
 Relationship Retired
 ```
 
-Relationships should never outlive the artifacts they connect.
+Relationships SHALL NOT outlive the artifacts they connect.
 
 ------
 

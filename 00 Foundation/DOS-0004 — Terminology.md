@@ -439,6 +439,10 @@ Complete
 
 ↓
 
+Cleanup
+
+↓
+
 Close
 
 A Work is not considered complete until the pipeline finishes successfully.

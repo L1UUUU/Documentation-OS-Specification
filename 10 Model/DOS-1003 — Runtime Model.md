@@ -12,7 +12,7 @@ This specification defines the Runtime Model of Documentation OS.
 
 Runtime represents the temporary execution domain of a software project. It exists to support planning, clarification, implementation, collaboration, and delivery.
 
-Unlike Knowledge, Runtime is transient by design. Runtime artifacts exist only while work is active and are eventually completed, discarded, or transformed into persistent Knowledge.
+Unlike Knowledge, Runtime is transient by design. Active Runtime artifacts exist only while Work remains active, and are eventually completed, discarded, or transformed into persistent Knowledge.
 
 The Runtime Model defines the semantics of Runtime independently of any repository layout or implementation profile.
 
@@ -88,7 +88,7 @@ Typical Runtime information includes:
 - execution artifacts;
 - temporary analysis.
 
-Runtime exists only while work remains active.
+Active Runtime exists only while Work remains active.
 
 ------
 

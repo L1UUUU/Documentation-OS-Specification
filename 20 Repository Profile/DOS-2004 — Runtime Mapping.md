@@ -119,7 +119,7 @@ A PRD serves as:
 
 - confirmed scope and constraints;
 - implementation strategy and execution phases;
-- the Work's primary identity and coordination document.
+- the Work's primary definition and coordination document.
 
 ### Structure
 
@@ -198,6 +198,10 @@ Handoff resides at:
 .scratch/active/<workstream-slug>/HANDOFF.md
 ```
 
+When a Work workspace is created, an initial HANDOFF.md SHALL be generated (it MAY initially be empty).
+
+HANDOFF.md is therefore present from Work creation onward; its absence during Validation indicates corruption or accidental deletion rather than an unfinished Work.
+
 Handoff content is contextual and may include:
 
 - current execution state;
@@ -275,7 +279,15 @@ Knowledge Synchronization
 
 ↓
 
+Validation
+
+↓
+
 Complete
+
+↓
+
+Cleanup
 
 ↓
 

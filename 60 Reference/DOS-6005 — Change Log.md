@@ -296,11 +296,38 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v5 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking refinement — consistency closure; no architecture change, but Work completion requirements were tightened (HANDOFF at creation, at least one Issue before Complete).
+
+### Fixed
+
+- Resolved the HANDOFF required-time contradiction: HANDOFF.md is now generated at Work creation (DOS-2004, DOS-3002), so Validation treats a missing HANDOFF.md as an error (DOS-4002) instead of a Close-stage-only escalation.
+- Reconciled the INDEX contract with HANDOFF presence (DOS-2004, DOS-5004): every Work always exposes a HANDOFF path.
+- Added the missing Validation/Cleanup stages to the Work Close Pipeline diagrams in DOS-0004 and DOS-2004.
+- Reclassified the v4 compatibility label from "Backward Compatible" to "Draft-breaking refinement" (DOS-6005).
+
+### Changed
+
+- issues/ SHALL contain at least one NN-<slug>.md before the Complete stage (DOS-4002, DOS-3004); an empty issues/ directory is permitted only while a Work is active.
+- Renamed the PRD from the Work's "primary identity" to "primary definition" (DOS-2004).
+- Split the long-lived reference rule into Knowledge (identifiers) and Runtime (workstream slugs / Work-scoped paths) (DOS-2005).
+
+### Clarified
+
+- Narrowed "Runtime exists only while active" to "Active Runtime ..." (DOS-1003).
+- Aligned the Identity Model abstract/purpose/summary to "managed Knowledge artifacts" (DOS-1004).
+- Upgraded the informative "Relationships should never outlive ..." to the normative "SHALL NOT outlive ..." (DOS-1005).
+
+------
+
 ## Documentation OS Specification 1.0 — v4 Revision
 
 **Status:** Draft
 
-**Compatibility:** Backward Compatible — consistency closure; no architecture change.
+**Compatibility:** Draft-breaking refinement — no conceptual architecture change, but repository conformance requirements were strengthened (mandatory issue front matter and status vocabulary, docs/ entry points, Work internal-structure validation, INDEX fields).
 
 ### Fixed
 

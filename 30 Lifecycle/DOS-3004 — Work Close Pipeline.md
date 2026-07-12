@@ -154,6 +154,8 @@ Deterministic actions:
 3. Atomically move active/<workstream-slug>/ → completed/<workstream-slug>/;
 4. Preserve Core Runtime Assets unchanged (immutable business content; generated INDEX.md MAY be regenerated).
 
+Note: HANDOFF.md is generated at Work creation (DOS-2004) and is therefore always present; this step verifies integrity rather than first-time presence. The issues/ directory SHALL contain at least one Issue file at this stage.
+
 Stage 3 owns the Work directory movement. Core Runtime Assets SHALL remain unchanged by completion.
 
 Repository Knowledge becomes the authoritative project memory.

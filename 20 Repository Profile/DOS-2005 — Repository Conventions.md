@@ -145,7 +145,7 @@ Runtime Work uses a workstream slug for resolution:
 | `<workstream-slug>`      | `.scratch/active/<workstream-slug>/`    |
 | `<workstream-slug>`      | `.scratch/completed/<workstream-slug>/` |
 
-Long-lived references SHALL target identifiers rather than filenames.
+Long-lived Knowledge references SHALL target identifiers rather than filenames. Runtime references SHALL use workstream slugs or Work-scoped paths (see DOS-2004); Runtime Works are not addressable by identifiers.
 
 ------
 

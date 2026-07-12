@@ -129,7 +129,8 @@ The Work receives:
 
 - ownership;
 - workstream slug and active/<slug>/ path (Runtime location, not global identity);
-- execution context.
+- execution context;
+- an initial HANDOFF.md (MAY be empty), generated when the workspace is created.
 
 ------
 
