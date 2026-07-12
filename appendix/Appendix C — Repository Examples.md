@@ -359,10 +359,6 @@ Complete (completed/)
 ↓
 
 Cleanup
-
-↓
-
-Closed
 ```
 
 The repository evolves without losing implementation knowledge.

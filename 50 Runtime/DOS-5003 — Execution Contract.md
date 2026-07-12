@@ -120,7 +120,7 @@ During execution an agent is responsible for:
 
 Before declaring Work Complete, an agent SHALL ensure that the workstream's Core Runtime Assets are present and finalized:
 - `PRD.md` (the workstream specification);
-- `issues/` (issue definitions, if any);
+- `issues/` (the Work's issue definitions; at least one `NN-<slug>.md` SHALL exist before Complete);
 - `HANDOFF.md` (cross-agent and cross-session transfer documentation).
 
 Agents are responsible for engineering decisions.
@@ -252,7 +252,7 @@ Execution completes when:
 - Knowledge Synchronization has completed;
 - Validation succeeds;
 - the Work Close Pipeline finishes;
-- `PRD.md`, `issues/`, and `HANDOFF.md` are present and finalized.
+- `PRD.md`, `issues/` (containing at least one Issue), and `HANDOFF.md` are present and finalized.
 
 Implementation completion alone does not satisfy the Execution Contract.
 

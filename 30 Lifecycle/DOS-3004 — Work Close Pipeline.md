@@ -41,7 +41,7 @@ This specification applies to every Runtime Work managed by Documentation OS.
 
 It begins after implementation has finished.
 
-It ends when the Work reaches the **Closed** lifecycle state.
+It ends when the Work reaches the **Completed** lifecycle state.
 
 ------
 
@@ -71,10 +71,6 @@ Complete
 ↓
 
 Cleanup
-
-↓
-
-Close
 ```
 
 Every completed Work SHALL pass through every stage.
@@ -87,7 +83,7 @@ The abstract Complete stage maps to active/<workstream-slug>/ → completed/<wor
 
 # Pipeline Overview
 
-The Work Close Pipeline consists of five sequential stages.
+The Work Close Pipeline consists of four sequential stages.
 
 | Stage                     | Responsibility                |
 | ------------------------- | ----------------------------- |
@@ -95,7 +91,6 @@ The Work Close Pipeline consists of five sequential stages.
 | Validation                | Verify repository consistency |
 | Complete                  | Complete Runtime artifacts     |
 | Cleanup                   | Finalize Runtime state        |
-| Close                     | Complete lifecycle ownership  |
 
 Each stage depends upon successful completion of the previous stage.
 
@@ -147,6 +142,8 @@ If validation fails, the Work SHALL NOT proceed to Complete.
 
 Move Runtime from active execution into completed state.
 
+The Complete stage performs the atomic transition of the Work to its final lifecycle state.
+
 Deterministic actions:
 
 1. Verify Core Runtime Assets exist (PRD.md, issues/*.md, HANDOFF.md);
@@ -158,6 +155,8 @@ Note: HANDOFF.md is generated at Work creation (DOS-2004) and is therefore alway
 
 Stage 3 owns the Work directory movement. Core Runtime Assets SHALL remain unchanged by completion.
 
+The directory movement to completed/<workstream-slug>/ represents the Work's entry into the Completed lifecycle state—the terminal state of the Work lifecycle. Ownership is released at this point.
+
 Repository Knowledge becomes the authoritative project memory.
 
 ------
@@ -167,6 +166,8 @@ Repository Knowledge becomes the authoritative project memory.
 ## Purpose
 
 Finalize Runtime after completion.
+
+Cleanup operates after the Work has already reached its Completed terminal state. Cleanup is idempotent and MAY be retried independently if it fails; failure does not affect the Work's already-established Completed state.
 
 Typical cleanup activities include:
 
@@ -179,24 +180,6 @@ Cleanup SHALL NOT move the Work directory; directory movement is owned by Stage 
 Cleanup prepares the repository for subsequent Work.
 
 Cleanup SHALL NOT modify synchronized Knowledge.
-
-------
-
-# Stage 5 — Close
-
-## Purpose
-
-Complete lifecycle ownership.
-
-Closing a Work confirms that:
-
-- implementation has completed;
-- Knowledge has been synchronized;
-- repository validation has succeeded;
-- Runtime has been completed;
-- cleanup has completed.
-
-Only after these conditions have been satisfied MAY the Work transition to the Closed state.
 
 ------
 
@@ -221,16 +204,9 @@ Validation precedes Complete.
 Complete precedes Cleanup.
 
 ------
-
-## WC-4
-
-Cleanup precedes Close.
-
-------
-
 ## WC-5
 
-Pipeline stages execute exactly once for each Work.
+Pipeline stages SHALL reach successful completion at most once for each Work. Failed or interrupted attempts MAY be retried idempotently.
 
 ------
 
@@ -262,8 +238,8 @@ If a stage fails before Complete:
 If a stage fails after Complete (the Work directory has already moved to completed/):
 
 - the Work SHALL remain in completed/;
-- the Work lifecycle has not yet reached Closed;
-- after recovery, remaining Cleanup and Close stages SHALL continue;
+- the Work has already reached its Completed terminal state;
+- after recovery, the remaining Cleanup stage MAY be retried idempotently;
 - failure SHALL be explicitly reported.
 
 In both cases the failure is recoverable, and the pipeline MAY resume after the failure has been resolved.
@@ -318,7 +294,7 @@ A compliant Documentation OS implementation SHALL ensure:
 - every completed Work executes the Work Close Pipeline;
 - pipeline stages occur in the defined order;
 - Runtime is not completed before Knowledge Synchronization;
-- repository validation succeeds before Work closure;
+- repository validation succeeds before Work completion;
 - Work ownership concludes only after successful pipeline completion.
 
 ------

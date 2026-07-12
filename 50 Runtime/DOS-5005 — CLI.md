@@ -134,6 +134,8 @@ Documentation OS defines the following normative command categories.
 ```text
 CLI
 
+├── Generate
+
 ├── Inspect
 
 ├── Validate
@@ -199,6 +201,23 @@ Health remains advisory.
 
 ------
 
+# Generate Commands
+
+Generate commands create new Work workspaces.
+
+The `generate work` command corresponds to the Generate Work operation defined in DOS-4001.
+
+Typical behavior includes:
+
+- creating the `active/<slug>/` directory structure;
+- generating a PRD template;
+- creating an empty `issues/` directory;
+- creating an empty `HANDOFF.md` file;
+- verifying that the workstream slug is globally unique across both `active/` and `completed/`;
+- rolling back all created artifacts if creation fails.
+
+------
+
 # Synchronization Commands
 
 Synchronization commands invoke Documentation Operations responsible for maintaining repository consistency.
@@ -215,15 +234,25 @@ Synchronization should remain deterministic.
 
 # Complete Commands
 
-Complete commands execute Runtime completion.
-
-Typical behavior includes:
-
-- moving `active/<workstream-slug>/` → `completed/<workstream-slug>/`;
-- regenerating `.scratch/INDEX.md`;
-- updating repository metadata.
+Complete commands execute Runtime completion by orchestrating two lifecycle stages.
 
 Complete commands SHALL preserve Core Runtime Assets (PRD.md, issues/, HANDOFF.md) and SHALL NOT delete them.
+
+## Lifecycle Stages
+
+Complete commands orchestrate the following stages:
+
+### Complete Stage
+
+Move the Work directory from `active/<workstream-slug>/` to `completed/<workstream-slug>/`.
+
+This transition marks the Work's entry into its terminal state and releases Ownership.
+
+### Cleanup Stage
+
+Regenerate `.scratch/INDEX.md` to reflect the updated Runtime state.
+
+This stage is idempotent and may be retried independently if it fails.
 
 ------
 

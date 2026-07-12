@@ -73,7 +73,7 @@ This directional dependency guarantees that long-term project understanding rema
 
 # Principle 3 — Runtime Is Finite
 
-Runtime exists only while work is active.
+Active Runtime exists only while Work remains active.
 
 Temporary Runtime content SHALL eventually be completed, synchronized into Knowledge, or discarded.
 

@@ -144,6 +144,21 @@ Typical examples include:
 
 Generated artifacts SHALL always be reproducible.
 
+## Generate Work
+
+Generate Work is responsible for creating a new Work workspace.
+
+Operations include:
+
+- creating the `active/<slug>/` directory structure;
+- generating a PRD template;
+- creating an empty `issues/` directory;
+- creating an empty `HANDOFF.md` file;
+- verifying that the workstream slug is globally unique across both `active/` and `completed/`;
+- rolling back all created artifacts if creation fails.
+
+Generate Work belongs to the Generate category and SHALL NOT introduce a new operation category.
+
 ------
 
 # Synchronize
@@ -188,14 +203,25 @@ DOS-4002.
 
 ## Purpose
 
-Perform deterministic Runtime completion.
-
-Operations include:
-
-- moving active/<workstream-slug>/ → completed/<workstream-slug>/;
-- regenerating .scratch/INDEX.md.
+Perform deterministic Runtime completion by orchestrating two lifecycle stages.
 
 Complete Operations SHALL NOT modify synchronized Knowledge.
+
+## Lifecycle Stages
+
+Complete Operation orchestrates the following stages:
+
+### Complete Stage
+
+Move the Work directory from `active/<workstream-slug>/` to `completed/<workstream-slug>/`.
+
+This transition marks the Work's entry into its terminal state and releases Ownership.
+
+### Cleanup Stage
+
+Regenerate `.scratch/INDEX.md` to reflect the updated Runtime state.
+
+This stage is idempotent and may be retried independently if it fails.
 
 ------
 

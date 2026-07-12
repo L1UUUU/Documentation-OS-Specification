@@ -105,10 +105,6 @@ Validated
 ↓
 
 Completed
-
-↓
-
-Closed
 ```
 
 Each transition represents a meaningful engineering event.
@@ -243,24 +239,11 @@ Completed Runtime no longer participates in active engineering work.
 
 The workstream directory moves from active/<slug>/ to completed/<slug>/.
 
+This is the Work's final lifecycle state. Ownership concludes at this point.
+
 Core Runtime assets are preserved (immutable business content; generated INDEX.md MAY be regenerated).
 
 Repository knowledge now contains the enduring understanding created by the Work.
-
-------
-
-## Closed
-
-The Work has completed successfully.
-
-Closure confirms that:
-
-- implementation is complete;
-- Knowledge has been synchronized;
-- repository validation has succeeded;
-- Runtime has been completed (moved to completed/<slug>/).
-
-Only at this point is the Work considered finished.
 
 ------
 
@@ -302,15 +285,11 @@ Validated
 ↓
 
 Completed
-
-↓
-
-Closed
 ```
 
 Implementations SHOULD avoid reversing lifecycle states.
 
-If significant additional engineering work becomes necessary after closure, a new Work SHOULD be created.
+If significant additional engineering work becomes necessary after completion, a new Work SHOULD be created.
 
 ------
 
@@ -349,7 +328,7 @@ Ownership includes responsibility for:
 - completing validation;
 - completing Runtime.
 
-Ownership concludes when the Work reaches the Closed state.
+Ownership concludes when the Work reaches the Completed state.
 
 Completed Runtime core assets are immutable. To correct a historical error in a completed Work, do not edit the completed Work; instead create a new Work whose relationships point to the original completed Work. Only INDEX.md MAY be regenerated; completed core content SHALL NOT be modified.
 
@@ -419,7 +398,7 @@ Completed Runtime core assets SHALL be preserved (immutable business content; th
 
 ## RI-5
 
-Closed Work SHALL NOT return to Executing.
+Completed Work SHALL NOT return to Executing.
 
 Subsequent implementation requires a new Work.
 
@@ -435,7 +414,7 @@ Typical failure causes include:
 - requirements withdrawn;
 - engineering superseded.
 
-Failed Works MAY be completed without reaching the Closed state.
+Failed Works MAY reach the Completed state.
 
 Repository Profiles MAY define additional failure handling conventions.
 

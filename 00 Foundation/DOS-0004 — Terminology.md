@@ -116,15 +116,15 @@ Knowledge includes categories such as:
 
 Temporary project information supporting active implementation.
 
-Runtime exists only while work is progressing.
+Active Runtime exists only while Work remains active.
 
-Runtime SHALL eventually:
+Active Runtime artifacts eventually:
 
 - become completed;
 - become discarded;
-- or produce persistent Knowledge.
+- or transform into persistent Knowledge.
 
-Runtime contains Core Runtime Assets (PRD, Issues, Handoff) that are preserved upon Work completion, and Ephemeral Runtime Content that may be discarded.
+Runtime contains Core Runtime Assets (PRD, Issues, Handoff) that are preserved as immutable historical records upon Work completion, and Ephemeral Runtime Content that may be discarded.
 
 ------
 
@@ -307,13 +307,14 @@ Multiple implementations may satisfy the same specification.
 
 A deterministic operation that maintains repository consistency.
 
-Operations include:
+See DOS-4001 for the normative categories:
 
 - Generate
+- Synchronize
 - Validate
+- Complete
 - Migrate
-- Health
-- Test
+- Inspect
 
 Documentation Operations maintain structure.
 
@@ -440,10 +441,6 @@ Complete
 ↓
 
 Cleanup
-
-↓
-
-Close
 
 A Work is not considered complete until the pipeline finishes successfully.
 

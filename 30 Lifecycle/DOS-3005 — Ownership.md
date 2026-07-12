@@ -120,7 +120,7 @@ Responsible for:
 - temporary execution context;
 - Work completion.
 
-Runtime ownership concludes when a Work is closed.
+Runtime ownership concludes when a Work is completed.
 
 ------
 
@@ -216,7 +216,7 @@ Runtime owners are responsible for:
 - initiating Knowledge Impact Analysis;
 - completing the Work Close Pipeline.
 
-Runtime ownership terminates upon Work closure.
+Runtime ownership terminates upon Work completion.
 
 ------
 

@@ -252,10 +252,6 @@ Validation
 ↓
 
 Completed
-
-↓
-
-Closed
 ```
 
 Repository Profiles may implement this lifecycle differently while preserving identical semantics.
@@ -321,7 +317,9 @@ Runtime completion occurs when:
 2. Knowledge Impact Analysis has been performed;
 3. Knowledge Synchronization has finished;
 4. repository validation succeeds;
-5. The Work directory has moved from active/<workstream-slug>/ to completed/<workstream-slug>/ and INDEX.md has been regenerated.
+5. The Work directory has moved from active/<workstream-slug>/ to completed/<workstream-slug>/.
+
+The Work is considered Completed upon completion of the Complete stage (directory movement). INDEX.md regeneration belongs to the subsequent Cleanup stage, which is idempotent and may be retried independently; it is not a precondition for Runtime Completion.
 
 Completion therefore represents successful transition rather than successful coding.
 

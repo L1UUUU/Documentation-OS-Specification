@@ -115,7 +115,7 @@ Knowledge survives implementation.
 
 Temporary execution context.
 
-Runtime exists only while Work is active.
+Active Runtime exists only while Work remains active.
 
 Runtime leaves the active execution context after implementation, transferring new understanding into Knowledge. Core Runtime Assets (PRD, Issues, Handoff) are preserved upon Work completion; only temporary Runtime content is disposable.
 

@@ -296,6 +296,46 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v6 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking refinement — lifecycle simplification (Completed/Closed merged into a single terminal state); no conceptual architecture change.
+
+### Removed
+
+- `Closed` lifecycle state and the Close pipeline stage: a Work now has two states (Active / Completed), and `Completed` (directory in `completed/`) is the terminal state (DOS-3002, DOS-3004).
+- WC-4 invariant ("Cleanup precedes Close"), made redundant by the Close stage removal (DOS-3004).
+
+### Changed
+
+- Work Close Pipeline consolidated from five stages to four: Knowledge Synchronization → Validation → Complete → Cleanup (DOS-3004, DOS-0004).
+- Ownership now concludes when the Work reaches the Completed state (Complete stage directory move), no longer at a separate Closed state (DOS-3002, DOS-3005).
+- Failure handling after Complete rewritten: the Work is already terminal; the remaining Cleanup stage MAY be retried idempotently (DOS-3004).
+- WC-5 rewritten from "execute exactly once" to "reach successful completion at most once; failed or interrupted attempts MAY be retried idempotently" (DOS-3004).
+- Complete Operation / Complete Command redefined as orchestrating two lifecycle stages (Complete: move directory + release Ownership; Cleanup: regenerate INDEX), with INDEX regeneration belonging to the Cleanup stage (DOS-4001, DOS-5005).
+- Runtime Completion no longer requires INDEX regeneration as a precondition; Completion is reached upon the Complete stage directory move (DOS-1003).
+- Document Lifecycle split into two chains: Knowledge (Created → Active ↔ Updated → Validated → Archived → Retired) and Runtime document (Created → Active → Updated → Validated → Completed) (DOS-3001).
+- Runtime definition harmonized to "Active Runtime exists only while Work remains active" across DOS-0003, DOS-0004, DOS-1001, DOS-1003, and README.
+- Documentation Operation terminology list in DOS-0004 aligned to the six normative categories (Generate / Synchronize / Validate / Complete / Migrate / Inspect).
+
+### Added
+
+- Generate Work sub-operation under the Generate category: creates the `active/<slug>/` workspace, PRD template, empty `issues/` directory, and empty `HANDOFF.md`; verifies workstream slug uniqueness across active+completed; rolls back on failure (DOS-4001).
+- `generate work` CLI command and Generate command category (DOS-5005).
+- `Archived` state definition for Knowledge documents (DOS-3001).
+
+### Fixed
+
+- Removed the `issues/ (issue definitions, if any)` wording in DOS-5003; `issues/` is a mandatory Core Runtime Asset containing at least one Issue before Complete.
+
+### Clarified
+
+- Completed Runtime core assets are preserved as immutable historical records (DOS-0004, DOS-1001).
+- The Completed terminal state and Ownership release point are documented at the Complete stage (DOS-3004).
+
+------
+
 ## Documentation OS Specification 1.0 — v5 Revision
 
 **Status:** Draft

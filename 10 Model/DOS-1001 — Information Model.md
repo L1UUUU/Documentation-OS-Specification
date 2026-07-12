@@ -143,7 +143,9 @@ Runtime answers questions such as:
 
 Runtime evolves continuously.
 
-Runtime exists only while implementation progresses.
+Active Runtime exists only while Work remains active.
+
+Completed Runtime core assets (PRD, Issues, Handoff) are preserved as immutable historical records.
 
 Runtime is defined further in:
 

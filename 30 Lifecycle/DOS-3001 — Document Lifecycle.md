@@ -69,30 +69,21 @@ In particular:
 Every managed document progresses through one or more of the following conceptual states.
 
 ```text
-Created
+Knowledge documents:
 
-↓
+Created → Active ↔ Updated → Validated → Archived → Retired
 
-Active
 
-↓
+Runtime documents:
 
-Updated
-
-↓
-
-Validated
-
-↓
-
-Archived
-
-↓
-
-Retired
+Created → Active → Updated → Validated → Completed
 ```
 
-Not every document necessarily reaches every state.
+Different document types follow different lifecycle chains.
+
+- Knowledge documents may reach `Archived` and `Retired` states.
+- Runtime documents terminate at `Completed` state.
+- Not every document necessarily reaches every state.
 
 However, lifecycle transitions SHALL remain explicit.
 
@@ -155,20 +146,38 @@ Validation does not certify engineering correctness.
 
 ------
 
+## Archived
+
+The document is no longer active but is intentionally preserved for potential reference.
+
+Archived is a terminal state for Knowledge documents that are no longer maintained but remain valuable for historical or reference purposes.
+
+Archived documents:
+
+- are preserved in their final state;
+- are not expected to receive further updates;
+- remain searchable and referenceable;
+- retain their established identities.
+
+Only Knowledge documents enter the `Archived` state. Runtime documents terminate at `Completed` and do not use `Archived`.
+
+------
+
 ## Completed
 
-The document is no longer active but remains intentionally preserved.
+The Runtime document has reached its terminal state.
 
-Core Runtime assets are preserved (immutable business content; generated summaries may be regenerated).
+Completion is indicated by the Work artifact residing in the `completed/` directory.
 
-Examples include:
+Core Runtime assets are preserved as immutable business content; generated summaries may be regenerated.
 
-- completed Runtime artifacts;
-- historical execution records.
+Completed documents:
 
-Knowledge documents are completed only in exceptional circumstances.
+- are preserved in their final state;
+- do not return to `Active` state;
+- retain their established identities.
 
-Runtime documents commonly enter this state.
+`Completed` is the terminal state for Runtime documents only. Knowledge documents use `Archived` or `Retired` instead of `Completed`.
 
 ------
 
@@ -197,6 +206,7 @@ Typical events include:
 | Create      | Created   |
 | Synchronize | Updated   |
 | Validate    | Validated |
+| Archive     | Archived  |
 | Complete    | Completed |
 | Retire      | Retired   |
 
@@ -228,24 +238,26 @@ Create
 
 ↓
 
-Active
+Active ↔ Updated
 
 ↓
 
-Update
+Validated
 
-↓
+↓ (optional)
 
-Validate
+Archived
 
-↓
+↓ (optional)
 
-Active
+Retired
 ```
 
 Knowledge normally remains active throughout repository lifetime.
 
-Knowledge is rarely archived.
+When Knowledge is no longer maintained but should be preserved, it may transition to `Archived`.
+
+When Knowledge is permanently deprecated, it transitions to `Retired`.
 
 ------
 
@@ -271,15 +283,11 @@ Validate
 ↓
 
 Complete
-
-↓
-
-Retire
 ```
 
-Runtime is expected to complete its lifecycle.
+Runtime terminates at the `Completed` state.
 
-Persistent Runtime indicates unfinished work.
+Runtime artifacts entering `completed/` preserve their core assets as immutable records.
 
 ------
 
