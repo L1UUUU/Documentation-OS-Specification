@@ -148,7 +148,8 @@ Typical observations include:
 - excessive active Work;
 - abandoned Runtime;
 - long-lived Runtime;
-- accumulated temporary artifacts.
+- accumulated temporary artifacts;
+- Works stalled in active/ past Work Close Pipeline.
 
 Healthy repositories continuously reduce Runtime through the Work Close Pipeline.
 
@@ -253,7 +254,7 @@ Report format is implementation-defined.
 Implementations may calculate metrics such as:
 
 - active Runtime count;
-- archived Runtime ratio;
+- completed Runtime ratio;
 - Knowledge growth;
 - Inbox growth;
 - relationship density;

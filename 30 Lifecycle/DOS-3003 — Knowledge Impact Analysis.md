@@ -205,7 +205,7 @@ Knowledge Impact Analysis is **not** responsible for:
 
 - editing documentation;
 - repository validation;
-- archive management.
+- complete management.
 
 These responsibilities belong to later lifecycle stages.
 
@@ -281,7 +281,7 @@ Every affected Knowledge Category shall be explicitly identified.
 
 ## KI-5
 
-No Runtime artifact shall be archived before Knowledge Impact Analysis has completed.
+No Runtime artifact shall be completed before Knowledge Impact Analysis has completed.
 
 ------
 
@@ -332,7 +332,7 @@ This specification intentionally does not define:
 - documentation editing;
 - synchronization algorithms;
 - repository validation;
-- archive behavior;
+- complete behavior;
 - engineering review methodology.
 
 These concerns are specified separately.

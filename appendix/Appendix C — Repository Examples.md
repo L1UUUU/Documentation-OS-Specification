@@ -63,10 +63,14 @@ repository/
 ├── .scratch/
 │   ├── AGENTS.md
 │   ├── CLAUDE.md
+│   ├── INDEX.md
 │   │
-│   ├── WORK-0001/
-│   ├── WORK-0002/
-│   └── archive/
+│   ├── active/
+│   │   ├── <workstream-slug>/
+│   │   └── <workstream-slug>/
+│   └── completed/
+│       ├── <workstream-slug>/
+│       └── <workstream-slug>/
 │
 ├── src/
 ├── tests/
@@ -145,18 +149,26 @@ Example layout:
 ```text
 .scratch/
 
-├── WORK-0001/
+├── active/
+│   ├── <workstream-slug>/
+│   └── <workstream-slug>/
 
-├── WORK-0002/
+├── completed/
+│   ├── <workstream-slug>/
+│   └── <workstream-slug>/
 
-├── archive/
+├── INDEX.md
 
-└── AGENTS.md
+├── AGENTS.md
+
+└── CLAUDE.md
 ```
 
 Each Work remains isolated.
 
-Completed Runtime eventually moves into the archive.
+Work state is expressed by directory location: active/ vs completed/.
+
+Completed Runtime is moved from active/ to completed/, preserving its Core Runtime Assets (PRD, Issues, Handoff).
 
 ------
 
@@ -165,26 +177,28 @@ Completed Runtime eventually moves into the archive.
 A Runtime Work may resemble the following structure.
 
 ```text
-WORK-0007/
+active/<workstream-slug>/
 
-├── work.yaml
+├── PRD.md
 
-├── requirements/
+├── issues/
+│   ├── 01-<slug>.md
+│   └── 02-<slug>.md
 
-├── plan/
-
-├── tasks/
-
-└── notes/
+└── HANDOFF.md
 ```
 
-These directories reflect the conceptual Work responsibilities defined in DOS-2004 — Clarified Requirements, Implementation Plan, Execution Tasks, Temporary Notes.
+PRD.md holds Work requirements and scoped context.
 
-`work.yaml` carries the Work identifier, status, and relationships (see DOS-2005).
+issues/ holds execution issues tracking implementation progress.
 
-Actual repository implementations may introduce additional directories.
+HANDOFF.md holds cross-session execution context.
 
-The conceptual lifecycle remains unchanged.
+Work state is expressed by directory location (active/ vs completed/) rather than status metadata.
+
+Core Runtime Assets (PRD, Issues, Handoff) are preserved upon Work completion; only temporary Runtime content is disposable.
+
+No work.yaml is required; PRD.md front matter may hold Work-level relationships.
 
 ------
 
@@ -288,11 +302,11 @@ Work
 
 ↓
 
-Requirements
+PRD
 
 ↓
 
-Planning
+Issues
 
 ↓
 
@@ -324,7 +338,7 @@ Accepted Work
 
 ↓
 
-Runtime
+Runtime (active/)
 
 ↓
 
@@ -344,7 +358,7 @@ Validation
 
 ↓
 
-Archive
+Complete (completed/)
 
 ↓
 
@@ -448,7 +462,7 @@ Work Created
 
 ↓
 
-Runtime
+Runtime (active/)
 
 ↓
 
@@ -460,7 +474,7 @@ Knowledge Updated
 
 ↓
 
-Runtime Archived
+Runtime Moved to completed/
 
 ↓
 
@@ -480,7 +494,8 @@ Repository implementations are encouraged to:
 - preserve the separation of Knowledge and Runtime;
 - expose clear Agent entry points;
 - isolate Documentation Engine artifacts;
-- maintain stable artifact identities;
+- preserve Core Runtime Assets (PRD, Issues, Handoff) upon Work completion;
+- maintain stable identities for globally identified Artifacts;
 - minimize coupling between documentation categories.
 
 Individual directory names may differ provided conceptual behavior remains consistent with the Repository Profile.

@@ -187,6 +187,8 @@ Where a subdirectory defines a local Agent Entry file, it SHALL provide both `AG
 
 Local `AGENTS.md` and `CLAUDE.md` SHALL remain content-equivalent under the same rule that governs the repository root.
 
+The `.scratch/` directory, as the local entry point for Runtime workstreams, SHALL also follow the AGENTS.md + CLAUDE.md dual-file rule and SHALL include `.scratch/INDEX.md` as the generated workstream index.
+
 Local guidance supplements repository guidance.
 
 Typical hierarchy:
@@ -248,7 +250,7 @@ Examples include:
 - Validation;
 - identifier allocation;
 - generated artifact updates;
-- Runtime archival.
+- Runtime completion.
 
 Agents should avoid manually reproducing deterministic operations.
 

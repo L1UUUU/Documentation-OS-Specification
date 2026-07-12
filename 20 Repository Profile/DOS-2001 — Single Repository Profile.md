@@ -136,18 +136,22 @@ Knowledge stored here persists across implementation activities.
 
 The Runtime domain.
 
-Contains temporary execution artifacts.
+Contains temporary execution artifacts organized by workstream.
 
 Typical examples include:
 
 - PRDs
 - generated Issues
-- execution notes
+- Handoff documents
 - temporary planning artifacts
 
-The active contents of `.scratch/` exist while Work remains active.
+The active contents of `.scratch/` exist while Work remains active beneath:
 
-Archived Runtime is preserved beneath `.scratch/archive/`.
+```text
+.scratch/active/<workstream-slug>/
+```
+
+Completed Runtime is preserved beneath `.scratch/completed/`, retaining its Core Runtime Assets (PRD, Issues, Handoff).
 
 ------
 

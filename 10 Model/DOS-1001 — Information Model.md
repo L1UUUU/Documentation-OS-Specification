@@ -159,7 +159,7 @@ Repository Guidance is not Managed Information.
 
 It belongs to neither the Knowledge domain nor the Runtime domain.
 
-The Agent Entry Document is the normative Repository Guidance artifact.
+The Agent Entry Document (AGENTS.md + CLAUDE.md) is the normative Repository Guidance document.
 
 It is defined further in:
 
@@ -175,13 +175,13 @@ Staging Information is not Managed Information.
 
 It belongs to neither the Knowledge domain nor the Runtime domain.
 
-Staging artifacts are intentionally lightweight.
+Staging items are intentionally lightweight.
 
 They do not possess stable identity, do not participate in lifecycle transitions, and do not carry ownership obligations.
 
 Each staging item is expected to be promoted into a Knowledge Category or discarded.
 
-The Inbox is the normative Staging Information artifact.
+The Inbox is the normative Staging Information staging area.
 
 It is defined further in:
 
@@ -209,7 +209,7 @@ Runtime
 Knowledge
 ```
 
-This relationship guarantees that long-term understanding remains available even after Runtime has been archived.
+This relationship guarantees that long-term understanding remains available even after Runtime has been completed.
 
 ------
 
@@ -328,8 +328,8 @@ A Documentation OS implementation SHALL satisfy the following requirements.
 
 - Every managed information artifact belongs to exactly one domain (Knowledge or Runtime).
 - The Knowledge and Runtime domains remain conceptually independent.
-- Repository Guidance artifacts are not Managed Information.
-- Staging Information artifacts are not Managed Information and carry no identity, lifecycle, or ownership obligations.
+- Repository Guidance documents are not Managed Information.
+- Staging Information items are not Managed Information and carry no identity, lifecycle, or ownership obligations.
 - Repository layout shall not define semantics.
 - Information identity remains stable across profiles.
 - Profiles preserve model semantics.

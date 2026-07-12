@@ -129,6 +129,8 @@ Implementations may introduce additional validation categories.
 
 # Identity Validation
 
+Identity Validation applies exclusively to Knowledge artifacts (ARCH, ADR, STD) that possess identity-managed front matter.
+
 Identity Validation verifies:
 
 - identity uniqueness;
@@ -140,7 +142,7 @@ Examples of failures include:
 
 - duplicate identifiers;
 - reused retired identifiers;
-- missing identities.
+- missing identities on Knowledge artifacts.
 
 ------
 
@@ -148,9 +150,9 @@ Examples of failures include:
 
 Relationship Validation verifies:
 
-- referenced identities exist;
+- referenced artifacts are resolvable (identity references resolve to docs/; workstream slug references resolve to .scratch/active|completed/<slug>/);
 - relationship targets are valid;
-- relationship metadata is structurally correct.
+- relationship metadata is structurally correct for Knowledge artifacts (Runtime Work relationships are defined in PRD front matter; Issues and HANDOFF.md without structured relationship metadata are exempt from structural metadata checks).
 
 Relationship Validation does not evaluate semantic correctness.
 
@@ -164,11 +166,15 @@ Lifecycle Validation verifies:
 - permitted lifecycle transitions;
 - required lifecycle ordering.
 
+For Knowledge artifacts: lifecycle state is determined by front matter status metadata.
+
+For Runtime Work: lifecycle state is determined by directory location (active/ or completed/) — valid states correspond to valid directory locations under .scratch/.
+
 Examples include:
 
-- Runtime archived before Knowledge Synchronization;
+- Runtime completed before Knowledge Synchronization;
 - invalid lifecycle transitions;
-- missing lifecycle metadata.
+- Work directory not located under active/ or completed/ (location-presence validation).
 
 ------
 
@@ -177,8 +183,9 @@ Examples include:
 Generated Content Validation verifies:
 
 - generated artifacts are synchronized;
-- managed metadata is current;
-- generated indexes are consistent.
+- managed metadata is current (for Knowledge artifacts; Runtime metadata validation excluded following work.yaml removal);
+- generated indexes are consistent (including .scratch/INDEX.md consistency and reproducibility);
+- .scratch/INDEX.md exists and reflects the current state of active/ and completed/ workstreams.
 
 Generated content should always be reproducible.
 
@@ -191,7 +198,7 @@ Repository Structure Validation verifies compliance with the active Repository P
 Examples include:
 
 - required entry points exist;
-- reserved directories are present;
+- reserved directories are present (including .scratch/active/, .scratch/completed/, and the requirement that .scratch/INDEX.md exists);
 - required repository guidance files exist;
 - Agent Entry mirrors (`AGENTS.md`, `CLAUDE.md`) remain content-equivalent at every scope that requires a mirror.
 
@@ -260,7 +267,7 @@ Validation
 
 ↓
 
-Archive
+Complete
 ```
 
 Additional validation may occur:
@@ -320,11 +327,11 @@ Validation failures should remain reproducible.
 
 A compliant Documentation Engine SHALL validate:
 
-- identities;
-- relationships;
-- lifecycle consistency;
-- repository structure;
-- generated content;
+- identities (Knowledge artifacts only);
+- relationships (referenced artifacts resolvable; structural metadata checks apply to Knowledge front matter);
+- lifecycle consistency (location-presence for Runtime Work; metadata-presence for Knowledge artifacts);
+- repository structure (including .scratch/active/, .scratch/completed/, .scratch/INDEX.md);
+- generated content (including .scratch/INDEX.md consistency);
 - managed regions.
 
 Additional validation rules may be introduced provided they remain compatible with Documentation OS.

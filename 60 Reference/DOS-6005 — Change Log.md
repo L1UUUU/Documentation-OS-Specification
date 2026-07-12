@@ -296,9 +296,9 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
-## Documentation OS Specification 1.0
+## Documentation OS Specification 1.0 — Baseline
 
-**Status:** Initial Release
+**Status:** Draft (pending final release)
 
 **Compatibility:** Baseline Specification
 
@@ -337,9 +337,49 @@ This release establishes the initial Documentation OS Specification.
 
 ------
 
-## Documentation OS Specification 1.0 — Draft Revision
+## Documentation OS Specification 1.0 — v3 Revision
 
 **Status:** Draft
+
+**Compatibility:** Breaking — Runtime architecture reverted from v2 identifier-based model back to directory-based workstreams.
+
+### Removed
+
+- `WORK-NNNN` identifier scheme for Works.
+- `work.yaml` metadata file for Work identity and status.
+- Abstract directory model `requirements/plan/tasks/notes` under Work.
+- `.scratch/archive/WORK-NNNN/` path pattern.
+- PRD/Issue Work-ID inheritance convention.
+- Mandatory Runtime front matter (identity/status/relationships).
+
+### Changed
+
+- `.scratch/archive/` renamed to `.scratch/completed/`.
+- Work identification changed from `WORK-NNNN` to `<workstream-slug>`.
+- "Archived Runtime immutable" refined to "Completed Runtime core assets preserved".
+- Work state expression changed from status field to directory location (active/ vs completed/).
+- Runtime content organization simplified from five abstract directories to three Core Runtime Assets.
+
+### Added
+
+- Core Runtime Assets model: `PRD.md` + `issues/NN-<slug>.md` + `HANDOFF.md`.
+- `.scratch/INDEX.md` auto-generated navigation (Engine-generated).
+- Work-scoped path addressing for PRD/Issues/Handoff (no global Identity required).
+- Core Runtime Assets preservation rule upon Work completion.
+
+### Clarified
+
+- Staging Information added to DOS-0004 Information definition as a third top-level category.
+- Artifact terminology harmonized: "Staging items" (not artifacts), "Inbox staging area", "Repository Guidance documents" (not artifacts).
+- Agent Entry requires dual-file `AGENTS.md` + `CLAUDE.md` with SHALL-level equivalence validation.
+- Dependency rules clarified as bidirectional: higher layers extend without redefining; lower layers shall not contradict higher-layer normative requirements (DOS-6002, Appendix A, README).
+- Authored Knowledge principle renamed from Human Knowledge (DOS-0003).
+
+------
+
+## Documentation OS Specification 1.0 — v2 Revision
+
+**Status:** Superseded by v3
 
 **Compatibility:** Breaking — Inbox semantics, Identity representation, and Agent Entry validation changed relative to the initial draft baseline.
 
@@ -348,7 +388,6 @@ This release establishes the initial Documentation OS Specification.
 - Information Model: introduced Staging Information as a third top-level category alongside Managed Information and Repository Guidance (DOS-1001).
 - Inbox: reclassified from a Knowledge Category to unmanaged Staging Information across DOS-0004, DOS-2003, DOS-2004, DOS-3001, DOS-3003, DOS-3004, DOS-5002, Appendix A, Appendix C.
 - Runtime: clarified the Active/Archived Runtime distinction and unified "leave the active execution context" wording (DOS-2004).
-- Identity: defined the Work metadata file (`work.yaml`), status and relationship token enumerations, PRD/Issue inheritance of Work identifiers, and archived Runtime path resolution (DOS-2005).
 - Agent Entry: local entry files now require both `AGENTS.md` and a content-equivalent `CLAUDE.md`; equivalence validation upgraded from SHOULD to SHALL (DOS-5001, DOS-4002).
 - Terminology SoT: DOS-6002 now references DOS-0004 for core terms instead of redefining them.
 - Dependency direction: clarified the distinct roles of redefine (concept ownership) and contradict (compliance priority) in DOS-6002.

@@ -104,7 +104,7 @@ However, lifecycle transitions shall remain explicit.
 
 The document has been introduced into the repository.
 
-Identity has been allocated.
+Identity has been allocated (for Knowledge documents); for Runtime Work, location is established via active/<workstream-slug>/ path.
 
 Ownership has been established.
 
@@ -155,16 +155,18 @@ Validation does not certify engineering correctness.
 
 ------
 
-## Archived
+## Completed
 
 The document is no longer active but remains intentionally preserved.
+
+Core Runtime assets are preserved (immutable business content; generated summaries may be regenerated).
 
 Examples include:
 
 - completed Runtime artifacts;
 - historical execution records.
 
-Knowledge documents are archived only in exceptional circumstances.
+Knowledge documents are completed only in exceptional circumstances.
 
 Runtime documents commonly enter this state.
 
@@ -195,7 +197,7 @@ Typical events include:
 | Create      | Created   |
 | Synchronize | Updated   |
 | Validate    | Validated |
-| Archive     | Archived  |
+| Complete    | Completed |
 | Retire      | Retired   |
 
 Documentation shall not transition implicitly.
@@ -268,7 +270,7 @@ Validate
 
 ↓
 
-Archive
+Complete
 
 ↓
 
@@ -302,7 +304,7 @@ Typical examples include:
 - identifier allocation;
 - validation;
 - generated content update;
-- archive operations.
+- complete operations.
 
 Operations maintain lifecycle consistency.
 
@@ -334,7 +336,7 @@ Validation follows modification.
 
 ## LI-4
 
-Archived Runtime shall not become Active again.
+Completed Runtime shall not become Active again.
 
 If additional work is required, a new Runtime artifact should be created.
 
@@ -354,7 +356,7 @@ A compliant Documentation OS implementation SHALL ensure:
 - lifecycle transitions are explicit;
 - lifecycle ownership is defined;
 - validation follows updates;
-- archived Runtime remains immutable.
+- completed Runtime core assets are preserved.
 
 ------
 

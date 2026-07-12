@@ -12,7 +12,7 @@ This specification defines the Runtime Model of Documentation OS.
 
 Runtime represents the temporary execution domain of a software project. It exists to support planning, clarification, implementation, collaboration, and delivery.
 
-Unlike Knowledge, Runtime is transient by design. Runtime artifacts exist only while work is active and are eventually archived, discarded, or transformed into persistent Knowledge.
+Unlike Knowledge, Runtime is transient by design. Runtime artifacts exist only while work is active and are eventually completed, discarded, or transformed into persistent Knowledge.
 
 The Runtime Model defines the semantics of Runtime independently of any repository layout or implementation profile.
 
@@ -106,13 +106,15 @@ Every Runtime artifact SHALL eventually leave the active execution context.
 
 After leaving the active context, a Runtime artifact transitions into one of:
 
-- Archived Runtime — preserved as an immutable historical record;
+- Completed Runtime — core assets preserved (immutable business content);
 - discarded — removed because it carries no lasting value;
 - transformed — promoted into persistent Knowledge through Knowledge Synchronization.
 
 Runtime is never intended to become permanent Managed Information.
 
-Archived Runtime is historical and immutable, but it is no longer active Runtime and does not participate in future execution.
+Completed Runtime core assets (PRD, Issues, Handoff) are preserved as immutable historical records, but they are no longer active Runtime and do not participate in future execution.
+
+The INDEX.md at `.scratch/INDEX.md` is generated content that may be refreshed by the Documentation Engine.
 
 ------
 
@@ -146,7 +148,12 @@ Frequent modification is expected.
 
 Active Runtime artifacts may be discarded once their purpose has been fulfilled.
 
-Archival preserves a Runtime artifact as immutable history; discarding removes it entirely.
+Runtime distinguishes between Core Runtime Assets and Ephemeral Runtime Content:
+
+- Core Runtime Assets (PRD, Issues, Handoff) are preserved upon Work completion and retained in the completed/ directory.
+- Ephemeral Runtime Content may be discarded once its purpose is fulfilled.
+
+Completion preserves Core Runtime Assets as immutable history; discarding removes Ephemeral content entirely.
 
 Both outcomes end active Runtime status.
 
@@ -177,6 +184,14 @@ Typical Runtime responsibilities include:
 - implementation planning;
 - execution artifacts;
 - closure.
+
+Within each Work, the Core Runtime Assets are:
+
+- PRD.md — the canonical entry document and Work definition;
+- issues/ — individual execution items (NN-<slug>.md format);
+- HANDOFF.md — execution context for cross-agent/session/phase handoff.
+
+These Core Runtime Assets are preserved upon Work completion.
 
 Repository Profiles determine how these responsibilities are represented.
 
@@ -236,7 +251,7 @@ Validation
 
 ↓
 
-Archive
+Completed
 
 ↓
 
@@ -290,7 +305,7 @@ Ownership includes responsibility for:
 - initiating Knowledge Impact Analysis;
 - completing the Work Close Pipeline.
 
-Ownership terminates when Runtime is archived.
+Ownership terminates when Runtime is completed.
 
 Knowledge ownership then continues independently.
 
@@ -306,7 +321,7 @@ Runtime completion occurs when:
 2. Knowledge Impact Analysis has been performed;
 3. Knowledge Synchronization has finished;
 4. repository validation succeeds;
-5. Runtime has been archived.
+5. Runtime has been completed.
 
 Completion therefore represents successful transition rather than successful coding.
 
@@ -339,7 +354,7 @@ A Documentation OS implementation SHALL satisfy the following requirements.
 - Runtime SHALL eventually leave the active execution context.
 - Runtime SHALL produce Knowledge through Knowledge Synchronization.
 - Active Runtime SHALL NOT become permanent repository storage.
-- Archived Runtime SHALL remain immutable.
+- Completed Runtime core assets SHALL be preserved.
 
 ------
 

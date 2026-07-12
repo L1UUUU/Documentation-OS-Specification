@@ -130,7 +130,8 @@ Examples include:
 - identifier allocation;
 - generated content updates;
 - relationship synchronization;
-- archive operations.
+- complete operations (active→completed move);
+- .scratch/INDEX.md regeneration determinism.
 
 Each operation should be tested independently.
 
@@ -159,7 +160,7 @@ Typical examples include:
 
 - valid lifecycle progression;
 - prohibited transitions;
-- Work Close Pipeline ordering;
+- Work Close Pipeline ordering (including 5-phase sequence with Cleanup);
 - ownership transitions.
 
 Lifecycle behavior should remain specification compliant.
@@ -190,7 +191,8 @@ Examples include:
 - required repository entry points;
 - required directory layout;
 - required documentation locations;
-- profile-specific conventions.
+- profile-specific conventions;
+- .scratch structure assertions (.scratch/active/ + .scratch/completed/ + .scratch/INDEX.md + each Work containing PRD.md, issues/NN-<slug>.md, HANDOFF.md).
 
 Repository Profile Tests should remain independent of implementation language.
 
@@ -211,7 +213,7 @@ Validate
 
 ↓
 
-Archive
+Complete (active→completed + INDEX regeneration)
 
 ↓
 
@@ -234,7 +236,12 @@ Typical fixtures include:
 - healthy repository;
 - invalid repository;
 - partially synchronized repository;
-- migrated repository.
+- migrated repository;
+- Runtime Profile conformance fixtures:
+  - repository with active Work(s);
+  - repository with completed Work(s) (verifying Core Assets preserved in completed/<slug>/);
+  - repository with regenerated INDEX.md (verifying reproducibility);
+  - repository violating Runtime Profile (negative: missing PRD/HANDOFF, incorrect WORK-NNNN/work.yaml usage, presence of archive/).
 
 Fixtures should remain version-controlled.
 

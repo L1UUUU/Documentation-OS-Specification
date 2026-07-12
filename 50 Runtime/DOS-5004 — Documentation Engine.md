@@ -112,7 +112,8 @@ Examples include:
 - validating repository consistency;
 - maintaining generated artifacts;
 - synchronizing managed metadata;
-- archiving Runtime;
+- moving active Runtime workstreams to completed (Complete Work: `active/<workstream-slug>/` → `completed/<workstream-slug>/`);
+- generating and refreshing `.scratch/INDEX.md`;
 - evaluating repository Health;
 - executing Migration.
 
@@ -192,11 +193,11 @@ The Documentation Engine may maintain repository metadata required for determini
 Examples include:
 
 - allocated identifiers;
-- generated indexes;
+- generated indexes (including `.scratch/INDEX.md`);
 - managed metadata;
 - compatibility information.
 
-Repository metadata shall remain reproducible whenever possible.
+Repository metadata shall remain reproducible whenever possible, with `.scratch/INDEX.md` maintained as a stateless derivative of the active and completed workstreams.
 
 ------
 

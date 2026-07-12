@@ -95,6 +95,8 @@ Runtime exists to accomplish work.
 
 Runtime itself is not project knowledge.
 
+Core Runtime Assets (PRD, Issues, Handoff) survive Work completion; only truly temporary content is disposable.
+
 ------
 
 # Philosophy 4 — Knowledge Is Persistent
@@ -115,7 +117,7 @@ Persistent knowledge forms the long-term memory of the repository.
 
 New knowledge is produced during implementation.
 
-Before Runtime can be archived, that knowledge must be synchronized into the permanent knowledge base.
+Before Runtime can be completed, that knowledge must be synchronized into the permanent knowledge base.
 
 The required order is:
 
@@ -136,7 +138,7 @@ Validation
 
 ↓
 
-Archive
+Complete
 ```
 
 This ordering prevents knowledge loss during software evolution.

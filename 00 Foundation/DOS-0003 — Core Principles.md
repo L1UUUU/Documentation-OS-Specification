@@ -67,7 +67,7 @@ Knowledge SHALL NOT depend upon Runtime.
 
 Runtime MAY reference Knowledge.
 
-This directional dependency guarantees that long-term project understanding remains available after Runtime has been archived.
+This directional dependency guarantees that long-term project understanding remains available after Runtime has been completed.
 
 ------
 
@@ -75,11 +75,9 @@ This directional dependency guarantees that long-term project understanding rema
 
 Runtime exists only while work is active.
 
-Every Runtime artifact SHALL eventually become one of:
+Temporary Runtime content SHALL eventually be completed, synchronized into Knowledge, or discarded.
 
-- archived runtime;
-- synchronized knowledge;
-- discarded runtime.
+Core Runtime Assets (PRD, Issues, Handoff) SHALL be preserved upon Work completion.
 
 Runtime SHALL NOT become permanent project storage.
 
@@ -107,7 +105,7 @@ Standards describe expected future behavior.
 
 Implementation frequently produces new knowledge.
 
-Whenever implementation changes project understanding, that knowledge SHALL be synchronized before Runtime is archived.
+Whenever implementation changes project understanding, that knowledge SHALL be synchronized before Runtime is completed.
 
 The minimum sequence is:
 
@@ -127,8 +125,7 @@ Knowledge Synchronization
 Validation
 
 ↓
-
-Archive
+Complete
 ```
 
 Skipping Knowledge Synchronization violates Documentation OS.

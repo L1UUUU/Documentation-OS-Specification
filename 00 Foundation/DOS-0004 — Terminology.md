@@ -77,7 +77,11 @@ Documentation OS assumes exactly one repository within the current scope.
 
 Any structured information stored within the repository.
 
-Repository information is organized into Managed Information and Repository Guidance.
+Repository information is organized into three categories:
+
+- Managed Information (Knowledge and Runtime)
+- Staging Information
+- Repository Guidance
 
 Managed Information is divided into two domains:
 
@@ -116,15 +120,11 @@ Runtime exists only while work is progressing.
 
 Runtime SHALL eventually:
 
-- become archived;
+- become completed;
 - become discarded;
 - or produce persistent Knowledge.
 
-Examples include:
-
-- PRDs
-- Issues
-- Scratch artifacts
+Runtime contains Core Runtime Assets (PRD, Issues, Handoff) that are preserved upon Work completion, and Ephemeral Runtime Content that may be discarded.
 
 ------
 
@@ -136,13 +136,79 @@ A bounded implementation effort managed within the Runtime domain.
 
 A Work represents a unit of execution.
 
-A Work may contain:
+Work is identified by a workstream slug (lowercase kebab-case), which is guaranteed to be globally unique across both active/ and completed/ directories.
 
-- one PRD;
-- multiple Issues;
-- implementation artifacts.
+A Work contains Core Runtime Assets:
 
-A Work concludes through the Work Close Pipeline.
+- PRD.md — canonical entry and Work definition;
+- issues/ — individual execution items (NN-<slug>.md format);
+- HANDOFF.md — cross-agent/session/phase handoff context.
+
+A Work concludes through the Work Close Pipeline, after which its Core Runtime Assets are preserved in completed/.
+
+------
+
+# PRD
+
+## Definition
+
+The canonical entry document and Work definition, located at `<slug>/PRD.md`.
+
+The PRD captures requirements, objectives, and context for a Work.
+
+The PRD top-level front matter carries Work-level relationships.
+
+------
+
+# Issue
+
+## Definition
+
+An individual execution item within a Work, formatted as `issues/NN-<slug>.md`.
+
+Issues represent discrete tasks or decisions within a Work.
+
+------
+
+# Handoff
+
+## Definition
+
+A Core Runtime Asset for passing execution context across agents, sessions, or phases.
+
+Located at `<slug>/HANDOFF.md`.
+
+The Handoff preserves execution state and is retained upon Work completion, but does not serve as long-term Knowledge.
+
+------
+
+# Workstream Slug
+
+## Definition
+
+A lowercase kebab-case identifier that uniquely identifies a Work.
+
+Validation guarantees global uniqueness across both active/ and completed/ directories.
+
+The workstream slug is used for addressing Runtime assets; it is not an identity.
+
+------
+
+# Core Runtime Assets
+
+## Definition
+
+The essential runtime documents that are preserved upon Work completion.
+
+Core Runtime Assets consist of:
+
+- PRD.md
+- issues/
+- HANDOFF.md
+
+These assets are retained in completed/ and form the historical record of the Work.
+
+They are distinct from Ephemeral Runtime Content, which may be discarded.
 
 ------
 
@@ -369,7 +435,7 @@ Validation
 
 ↓
 
-Archive
+Complete
 
 ↓
 
@@ -390,6 +456,10 @@ Identity remains stable throughout the artifact lifecycle.
 Identity is independent of filename.
 
 Identity specifications are defined separately.
+
+Identity applies only to Knowledge artifacts.
+
+Work-internal Runtime assets (PRD, Issues, Handoff) are addressed by Work-scoped paths rather than global identities.
 
 ------
 
@@ -500,7 +570,8 @@ Lifecycle governs:
 - creation;
 - modification;
 - validation;
-- archival;
+- completion (for Runtime);
+- archival (for Knowledge);
 - retirement.
 
 Lifecycle progression is explicit.

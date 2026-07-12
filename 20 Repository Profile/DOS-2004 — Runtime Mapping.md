@@ -51,7 +51,7 @@ Every Runtime artifact should contribute directly to implementation.
 
 Active Runtime SHALL leave the active execution context after Work completion.
 
-It may then be archived as immutable history, discarded, or transformed into Knowledge.
+It may then be completed (Core Runtime Assets preserved), discarded, or transformed into Knowledge.
 
 Long-lived active Runtime indicates incomplete lifecycle management.
 
@@ -89,86 +89,118 @@ A Runtime implementation consists of one or more independent Works.
 
 # Runtime Responsibilities
 
-Each Work maintains the following conceptual responsibilities.
+Each Work maintains the following Core Runtime Assets.
 
 ```text
 Work
 
-├── Clarified Requirements
+├── PRD
 
-├── Implementation Plan
+├── Issues
 
-├── Execution Tasks
+├── Handoff
 
-└── Temporary Notes
+└── Ephemeral Runtime Content
 ```
 
-These responsibilities are conceptual.
-
-Repository layout is an implementation choice.
+These are the canonical Runtime components.
 
 ------
 
-# Clarified Requirements
+## PRD
 
-## Purpose
+### Purpose
 
-Clarified Requirements describe the agreed implementation objective.
+The PRD (Product Requirements Document) is the canonical entry point for a Work.
 
-They are produced after requirement clarification.
+It combines clarified requirements and implementation plan into a single authoritative source.
 
-Clarified Requirements should represent:
+A PRD serves as:
 
-- confirmed scope;
-- confirmed constraints;
-- accepted assumptions;
-- implementation boundaries.
+- confirmed scope and constraints;
+- implementation strategy and execution phases;
+- the Work's primary identity and coordination document.
 
-Clarified Requirements become the authoritative execution input.
+### Structure
 
-------
+The PRD resides at:
 
-# Implementation Plan
+```text
+.scratch/active/<workstream-slug>/PRD.md
+```
 
-## Purpose
+Upon completion, it moves to:
 
-Implementation Plans translate clarified requirements into executable engineering work.
+```text
+.scratch/completed/<workstream-slug>/PRD.md
+```
 
-Typical examples include:
+### Relationships
 
-- PRDs;
-- implementation strategy;
-- execution phases.
+Work-level relationships are declared in the PRD's front matter YAML block.
 
-Implementation Plans exist only for the duration of the Work.
-
-They are Runtime artifacts.
-
-------
-
-# Execution Tasks
-
-## Purpose
-
-Execution Tasks decompose implementation into concrete engineering work.
-
-Typical examples include:
-
-- generated Issues;
-- implementation checklist;
-- engineering subtasks.
-
-Documentation OS intentionally does not prescribe issue tracking methodology.
-
-Execution Tasks merely provide execution guidance.
+This establishes the Work's connections to other Works and Knowledge artifacts.
 
 ------
 
-# Temporary Notes
+## Issues
 
-## Purpose
+### Purpose
 
-Temporary Notes capture information useful during implementation but not intended to become permanent repository knowledge.
+Issues represent execution tasks—the concrete engineering work that implements the PRD.
+
+Each issue corresponds to one implementation task or subtask.
+
+### Structure
+
+Issues reside within the Work's issues directory:
+
+```text
+.scratch/active/<workstream-slug>/issues/NN-<slug>.md
+```
+
+Where `NN` is a sequential number and `<slug>` is a kebab-case descriptor.
+
+The issue's status and execution details are recorded within the issue file content.
+
+Issues do not require front matter unless they need to declare specific relationships.
+
+------
+
+## Handoff
+
+### Purpose
+
+Handoff documents capture execution context for transfer across:
+
+- agents
+- sessions
+- execution phases
+
+They preserve the state necessary for another agent or session to continue the Work seamlessly.
+
+### Structure
+
+Handoff resides at:
+
+```text
+.scratch/active/<workstream-slug>/HANDOFF.md
+```
+
+Handoff content is contextual and may include:
+
+- current execution state;
+- pending decisions;
+- intermediate results;
+- context for continuation.
+
+------
+
+## Ephemeral Runtime Content
+
+### Purpose
+
+Ephemeral Runtime Content captures temporary information useful during implementation but not intended for long-term preservation.
 
 Examples include:
 
@@ -177,12 +209,15 @@ Examples include:
 - discarded implementation ideas;
 - temporary references.
 
-Temporary Notes should leave the active execution context with the Work, either:
+### Lifecycle
 
-- archived or discarded;
-- or promoted into Knowledge.
+Ephemeral Content may be:
 
-They should not accumulate indefinitely in the active context.
+- cleaned up after Work completion;
+- promoted into Knowledge if it contains lasting value;
+- discarded when no longer relevant.
+
+Unlike Core Runtime Assets, Ephemeral Content is not preserved in completed Work.
 
 ------
 
@@ -229,7 +264,7 @@ Knowledge Synchronization
 
 ↓
 
-Archive
+Complete
 
 ↓
 
@@ -292,25 +327,43 @@ However, Runtime shall never become the repository's long-term memory.
 
 # Repository Representation
 
-A typical Runtime representation may resemble:
+The Single Repository Profile defines the normative Runtime structure as:
 
 ```text
 .scratch/
 
-└── WORK-0007/
-
-    ├── requirements/
-
-    ├── plan/
-
-    ├── tasks/
-
-    └── notes/
+├── active/
+│   └── <workstream-slug>/
+│       ├── PRD.md
+│       ├── issues/
+│       │   ├── NN-<slug>.md
+│       │   └── ...
+│       └── HANDOFF.md
+│
+├── completed/
+│   └── <workstream-slug>/
+│       ├── PRD.md
+│       ├── issues/
+│       │   ├── NN-<slug>.md
+│       │   └── ...
+│       └── HANDOFF.md
+│
+└── INDEX.md
 ```
 
-This example illustrates one valid implementation.
+This is the normative Single Repository Profile structure.
 
-Repository Profiles may evolve internal Runtime organization while preserving identical Runtime semantics.
+A `<workstream-slug>` is a lowercase kebab-case identifier that uniquely names a Work within active/ and completed/.
+
+### Core Runtime Assets Preservation
+
+Upon Work completion, the Core Runtime Assets (PRD, Issues, Handoff) are preserved when the Work transitions from active/ to completed/.
+
+Only Ephemeral Runtime Content may be cleaned up.
+
+### INDEX.md
+
+The `.scratch/INDEX.md` file is generated by the Documentation Engine to provide Runtime overview and navigation.
 
 ------
 
@@ -331,7 +384,6 @@ A compliant Single Repository implementation SHALL satisfy the following require
 This specification intentionally does not define:
 
 - PRD templates;
-- Issue formats;
 - task estimation;
 - agile methodologies;
 - implementation workflows.
@@ -358,9 +410,9 @@ Runtime is organized around independent Works.
 
 Each Work contains:
 
-- Clarified Requirements;
-- Implementation Plan;
-- Execution Tasks;
-- Temporary Notes.
+- PRD (canonical entry, combining clarified requirements and implementation plan);
+- Issues (execution tasks);
+- Handoff (cross-context transfer);
+- Ephemeral Runtime Content (temporary, disposable).
 
 Runtime exists solely to complete implementation and produce new repository knowledge before leaving the active execution domain.

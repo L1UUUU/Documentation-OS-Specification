@@ -54,7 +54,7 @@ Failure to satisfy a SHALL statement results in non-conformance.
 
 Example:
 
-> Every managed Artifact SHALL possess exactly one Identity.
+> Every managed Artifact SHALL belong to exactly one domain.
 
 ------
 
@@ -218,13 +218,13 @@ An Active Repository may contain both Knowledge and Runtime.
 
 ------
 
-## Archived Runtime
+## Completed Runtime
 
 Runtime that has completed the Work Close Pipeline and no longer participates in active execution.
 
-Archived Runtime remains historical.
+Completed Runtime core assets (PRD, Issues, Handoff) are preserved.
 
-It is immutable.
+They remain immutable; only the generated INDEX.md may be regenerated.
 
 ------
 

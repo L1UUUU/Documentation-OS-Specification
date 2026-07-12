@@ -119,7 +119,7 @@ Knowledge is the authoritative description of the current system.
 
 When conflicting information exists:
 
-Current Knowledge takes precedence over archived Runtime.
+Current Knowledge takes precedence over completed Runtime.
 
 ------
 
@@ -329,7 +329,7 @@ Knowledge changes only when project understanding changes.
 
 Knowledge must remain understandable without Runtime.
 
-After all Runtime artifacts have been archived or removed, repository Knowledge should still describe:
+After all Runtime artifacts have been completed or removed, repository Knowledge should still describe:
 
 - system architecture;
 - engineering decisions;

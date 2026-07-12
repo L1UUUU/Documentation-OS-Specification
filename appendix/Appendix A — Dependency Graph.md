@@ -29,7 +29,7 @@ Each layer depends only on lower layers.
 
 Higher layers extend lower layers.
 
-They do not redefine them.
+They do not redefine them; lower layers shall not contradict higher-layer normative requirements.
 
 ```text
                          README
@@ -262,10 +262,10 @@ Repository
 │   │   ├── ADR
 │   │   └── Standards
 │   └── Runtime
-│       ├── Work
-│       ├── Planning
-│       ├── Execution
-│       └── Notes
+│       └── Work (<workstream-slug>)
+│           ├── PRD.md
+│           ├── issues/
+│           └── HANDOFF.md
 │
 ├── Staging Information
 │   └── Inbox
@@ -276,6 +276,8 @@ Repository
 │
 └── Documentation Engine
 ```
+
+Work state expressed by location: active/ vs completed/.
 
 Repository representation depends upon the active Repository Profile.
 
@@ -335,7 +337,7 @@ Higher-numbered layers may depend upon lower-numbered layers.
 
 ## DR-2
 
-Lower-numbered layers shall never depend upon higher-numbered layers.
+Lower-numbered layers shall never depend upon higher-numbered layers; lower-numbered layers shall not contradict higher-layer normative requirements.
 
 ------
 

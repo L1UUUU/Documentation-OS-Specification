@@ -118,6 +118,11 @@ During execution an agent is responsible for:
 - participating in Knowledge Impact Analysis;
 - initiating Knowledge Synchronization when required.
 
+Before declaring Work Complete, an agent SHALL ensure that the workstream's Core Runtime Assets are present and finalized:
+- `PRD.md` (the workstream specification);
+- `issues/` (issue definitions, if any);
+- `HANDOFF.md` (cross-agent and cross-session transfer documentation).
+
 Agents are responsible for engineering decisions.
 
 They are not responsible for deterministic repository maintenance.
@@ -133,7 +138,7 @@ Typical responsibilities include:
 - identifier allocation;
 - generated artifact updates;
 - Validation;
-- Runtime archival;
+- Runtime completion (moving `active/<workstream-slug>/` → `completed/<workstream-slug>/`) and `.scratch/INDEX.md` regeneration;
 - repository Migration.
 
 Agents should invoke these operations rather than implementing them manually.
@@ -190,10 +195,9 @@ Agents may freely update active Runtime artifacts while Work remains active.
 
 Typical Runtime modifications include:
 
-- refining plans;
-- updating execution tasks;
-- recording temporary notes;
-- maintaining implementation context.
+- updating `PRD.md` (workstream specification and evolution);
+- adding or updating `issues/` (issue definitions and resolution);
+- maintaining `HANDOFF.md` (cross-agent and cross-session transfer documentation).
 
 Runtime should remain temporary.
 
@@ -206,7 +210,7 @@ Whenever deterministic maintenance is required, agents shall invoke Documentatio
 Typical examples include:
 
 - Validate;
-- Archive;
+- Complete;
 - Generate;
 - Synchronize.
 
@@ -247,7 +251,8 @@ Execution completes when:
 - Knowledge Impact Analysis has completed;
 - Knowledge Synchronization has completed;
 - Validation succeeds;
-- the Work Close Pipeline finishes.
+- the Work Close Pipeline finishes;
+- `PRD.md`, `issues/`, and `HANDOFF.md` are present and finalized.
 
 Implementation completion alone does not satisfy the Execution Contract.
 

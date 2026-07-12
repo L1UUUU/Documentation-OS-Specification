@@ -117,7 +117,7 @@ Temporary execution context.
 
 Runtime exists only while Work is active.
 
-Runtime leaves the active execution context after implementation, transferring new understanding into Knowledge.
+Runtime leaves the active execution context after implementation, transferring new understanding into Knowledge. Core Runtime Assets (PRD, Issues, Handoff) are preserved upon Work completion; only temporary Runtime content is disposable.
 
 ------
 
@@ -188,7 +188,7 @@ Runtime
 
 Each layer builds upon the previous one.
 
-Higher layers SHALL NOT redefine lower-layer concepts.
+Higher layers SHALL NOT redefine lower-layer concepts; lower layers SHALL NOT contradict higher-layer normative requirements.
 
 Reference is a cross-cutting support section rather than a layer.
 

@@ -54,7 +54,7 @@ Changing repository layout must not change its identity.
 
 ## ID-2 Uniqueness
 
-Every managed documentation artifact shall possess exactly one unique identity.
+Every managed Knowledge artifact shall possess exactly one unique identity.
 
 Duplicate identities are prohibited.
 
@@ -104,16 +104,15 @@ Identity remains constant until the artifact is retired.
 
 # Managed Artifacts
 
-Documentation OS requires stable identities only for managed artifacts.
+Documentation OS requires stable identities only for managed Knowledge artifacts.
 
-Examples include:
+Knowledge artifacts include:
 
 - Architecture documents
 - ADRs
 - Standards
-- Runtime Work
-- PRDs
-- Issue collections
+
+Runtime assets are addressed differently. A Work is identified by its workstream slug and located by its directory (`active/<slug>/` or `completed/<slug>/`); its PRD, Issues, and Handoff are addressed by Work-scoped paths. Runtime assets do not receive global identities and are therefore not identity-managed artifacts.
 
 Derived artifacts such as generated indexes do not require independent identities.
 
@@ -173,11 +172,11 @@ ADR-0001
 ARCH-0003
 
 STD-0007
-
-WORK-0015
 ```
 
 Another profile may adopt a different naming convention while preserving identical semantics.
+
+These identity formats apply to Knowledge artifacts. Runtime Works are identified by workstream slugs (see DOS-2004 — Runtime Mapping), not by numbered prefixes.
 
 ------
 
@@ -282,14 +281,16 @@ A future Workspace Profile may map the same identity elsewhere without affecting
 
 # Identity and Relationships
 
-Relationships should reference stable identities.
+Relationships reference addressable artifacts.
 
-Identity therefore forms the foundation of:
+For Knowledge artifacts, relationships reference stable identities, and identity therefore forms the foundation of:
 
 - cross-document references;
 - reverse references;
 - traceability;
 - impact analysis.
+
+Runtime assets participate in relationships without possessing global identities; Runtime relationships reference workstream slugs or Work-scoped paths.
 
 Relationship semantics are defined separately.
 
@@ -299,11 +300,12 @@ Relationship semantics are defined separately.
 
 A Documentation OS implementation SHALL satisfy the following requirements.
 
-- Every managed artifact SHALL possess exactly one identity.
+- Every managed Knowledge artifact SHALL possess exactly one identity.
 - Identity SHALL remain stable throughout the artifact lifecycle.
 - Identity SHALL be independent of repository layout.
 - Identity SHALL NOT be reused.
 - Repository Profiles SHALL preserve identity semantics.
+- Runtime assets SHALL be addressable by workstream slug and Work-scoped paths rather than global identities.
 
 ------
 

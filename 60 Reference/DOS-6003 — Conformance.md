@@ -102,7 +102,8 @@ The repository SHALL:
 
 - expose a valid Repository Profile;
 - maintain Knowledge and Runtime separation;
-- preserve managed artifact identities;
+- preserve Knowledge artifact identities (identity-managed artifacts: ARCH, ADR, STD);
+- preserve Core Runtime Assets (PRD, Issues, Handoff) upon Work completion;
 - participate in documented lifecycle behavior;
 - support Documentation Operations.
 

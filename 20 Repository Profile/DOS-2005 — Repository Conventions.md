@@ -93,7 +93,6 @@ Examples include:
 - ADRs
 - Architecture documents
 - Standards
-- Work artifacts
 
 Number allocation SHALL be monotonic.
 
@@ -109,7 +108,7 @@ The Single Repository Profile assigns every managed artifact a stable identifier
 PREFIX-NNNN
 ```
 
-`PREFIX` identifies the Knowledge Category or Runtime type, and `NNNN` is a zero-padded four-digit monotonic number.
+`PREFIX` identifies the Knowledge Category, and `NNNN` is a zero-padded four-digit monotonic number.
 
 The normative prefixes are:
 
@@ -118,19 +117,10 @@ The normative prefixes are:
 | ARCH   | Architecture    | ARCH-0003 |
 | ADR    | ADR             | ADR-0007  |
 | STD    | Standards       | STD-0012  |
-| WORK   | Runtime Work    | WORK-0015 |
 
 Inbox observations do not require a stable identifier; they may use lightweight local names until promoted into a Category.
 
-PRDs, Issues, and other Runtime artifacts that belong to a Work inherit the Work identifier rather than receiving their own prefix; they are addressed as files within `.scratch/WORK-NNNN/`.
-
-Because a Work maps to a directory rather than a single document, its canonical metadata resides in:
-
-```text
-.scratch/WORK-NNNN/work.yaml
-```
-
-This file carries the Work identifier, status, and relationship declarations defined below.
+Runtime Work uses a workstream slug rather than a global identifier.
 
 ------
 
@@ -138,24 +128,22 @@ This file carries the Work identifier, status, and relationship declarations def
 
 The Single Repository Profile resolves an identifier to a repository path by prefix:
 
-| Identifier | Path                             |
-| ---------- | -------------------------------- |
-| ARCH-0003  | docs/architecture/0003-*.md      |
-| ADR-0007   | docs/adr/0007-*.md               |
-| STD-0012   | docs/standards/0012-*.md         |
-| WORK-0015  | .scratch/WORK-0015/work.yaml     |
+| Identifier | Path                          |
+| ---------- | ----------------------------- |
+| ARCH-0003  | docs/architecture/0003-*.md   |
+| ADR-0007   | docs/adr/0007-*.md            |
+| STD-0012   | docs/standards/0012-*.md      |
 
 For documents, the numeric segment forms the leading segment of the filename.
 
 The remaining filename segment is human-readable and non-normative.
 
-For Works, the identifier resolves to the `work.yaml` metadata file inside the Work directory.
+Runtime Work uses a workstream slug for resolution:
 
-When a Work is archived, its identifier resolves beneath the archive root instead:
-
-| Identifier             | Path                                   |
-| ---------------------- | -------------------------------------- |
-| WORK-0015 (archived)   | .scratch/archive/WORK-0015/work.yaml   |
+| Workstream slug          | Path                                    |
+| ------------------------ | --------------------------------------- |
+| `<workstream-slug>`      | `.scratch/active/<workstream-slug>/`    |
+| `<workstream-slug>`      | `.scratch/completed/<workstream-slug>/` |
 
 Long-lived references SHALL target identifiers rather than filenames.
 
@@ -163,9 +151,9 @@ Long-lived references SHALL target identifiers rather than filenames.
 
 # Relationship Representation
 
-Relationships are declared in a YAML front matter block at the top of each managed document.
+Relationships for Knowledge documents are declared in a YAML front matter block at the top of each Knowledge document.
 
-A minimal block:
+A minimal Knowledge document example:
 
 ```yaml
 ---
@@ -179,9 +167,9 @@ relationships:
 
 `id` is the artifact identifier.
 
-`status` is the artifact lifecycle state.
+`status` is the Knowledge artifact lifecycle state.
 
-Valid status values are:
+Valid status values for Knowledge front matter are:
 
 - `created`
 - `active`
@@ -189,8 +177,6 @@ Valid status values are:
 - `validated`
 - `archived`
 - `retired`
-
-Works follow the Runtime Lifecycle states defined in DOS-3002.
 
 `relationships` is a list of `{ type, target }` entries, where `target` references another identifier.
 
@@ -203,7 +189,13 @@ Valid relationship types are:
 - `affects`
 - `supersedes`
 
+These relationship types form the normative vocabulary for expressing relationships between managed artifacts.
+
 Relationship type semantics are defined by DOS-1005 — Relationship Model.
+
+Work-level relationships are declared in the PRD.md front matter at the top of the PRD document.
+
+Issues and HANDOFF documents do not require front matter unless they need to declare specific relationships.
 
 Reverse references and navigation indexes MAY be generated from these declarations by Documentation Operations.
 
@@ -308,8 +300,9 @@ A compliant Single Repository implementation SHALL satisfy the following require
 - Repository entry points shall remain stable.
 - Naming shall follow documented conventions.
 - Managed numbering shall remain deterministic.
-- Managed artifacts SHALL declare an identifier in the format defined above.
-- Relationships SHALL be declared through front matter targeting identifiers.
+- Managed Knowledge artifacts SHALL declare an identifier in the format defined above.
+- Relationships for Knowledge documents SHALL be declared through front matter targeting identifiers.
+- Work-level relationships SHALL be declared in the PRD.md front matter or referenced via workstream slug.
 - Local guidance shall not contradict repository guidance.
 - Generated content shall remain distinguishable from human-authored content.
 

@@ -47,7 +47,7 @@ Typical operations include:
 - Validation;
 - Health evaluation;
 - Migration;
-- Runtime archival;
+- Runtime completion;
 - repository inspection.
 
 The CLI intentionally avoids embedding engineering reasoning.
@@ -142,7 +142,7 @@ CLI
 
 ├── Synchronize
 
-├── Archive
+├── Complete
 
 ├── Migrate
 
@@ -162,7 +162,7 @@ Typical capabilities include:
 - Documentation OS version;
 - active Repository Profile;
 - repository summary;
-- Runtime overview;
+- Runtime overview (including active and completed workstreams, based on `.scratch/INDEX.md`);
 - Knowledge overview.
 
 Inspection shall remain read-only.
@@ -213,17 +213,17 @@ Synchronization should remain deterministic.
 
 ------
 
-# Archive Commands
+# Complete Commands
 
-Archive commands execute Runtime archival.
+Complete commands execute Runtime completion.
 
 Typical behavior includes:
 
-- archiving completed Runtime;
-- updating repository metadata;
-- refreshing generated artifacts.
+- moving `active/<workstream-slug>/` → `completed/<workstream-slug>/`;
+- regenerating `.scratch/INDEX.md`;
+- updating repository metadata.
 
-Archive commands shall preserve repository Knowledge.
+Complete commands shall preserve Core Runtime Assets (PRD.md, issues/, HANDOFF.md) and shall not delete them.
 
 ------
 

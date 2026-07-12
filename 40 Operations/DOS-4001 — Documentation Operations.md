@@ -117,7 +117,7 @@ Documentation Operations
 
 ├── Validate
 
-├── Archive
+├── Complete
 
 ├── Migrate
 
@@ -136,7 +136,7 @@ Generate deterministic repository artifacts.
 
 Typical examples include:
 
-- indexes;
+- indexes (including `.scratch/INDEX.md`, which provides navigation and statistics for active and completed Works);
 - summaries;
 - managed metadata;
 - navigation files;
@@ -184,19 +184,18 @@ DOS-4002.
 
 ------
 
-# Archive
+# Complete
 
 ## Purpose
 
-Perform deterministic Runtime archival.
+Perform deterministic Runtime completion.
 
-Archive Operations include:
+Operations include:
 
-- moving Runtime into historical state;
-- updating repository metadata;
-- preserving artifact identities.
+- moving active/<workstream-slug>/ → completed/<workstream-slug>/;
+- regenerating .scratch/INDEX.md.
 
-Archive Operations shall not modify synchronized Knowledge.
+Complete Operations shall not modify synchronized Knowledge.
 
 ------
 
@@ -297,7 +296,7 @@ Typical examples include:
 - allocating identifiers;
 - validating repository state;
 - updating generated indexes;
-- archiving Runtime.
+- completing Runtime.
 
 Agents should not manually reproduce deterministic operations already implemented by the Documentation Engine.
 
@@ -318,7 +317,7 @@ Validate
 
 ↓
 
-Archive
+Complete
 ```
 
 Individual specifications define additional ordering requirements.
@@ -348,7 +347,7 @@ A compliant Documentation Engine SHALL provide operations capable of:
 - generating deterministic artifacts;
 - synchronizing repository state;
 - validating repository consistency;
-- archiving Runtime;
+- completing Runtime;
 - migrating repository structure;
 - inspecting repository health.
 

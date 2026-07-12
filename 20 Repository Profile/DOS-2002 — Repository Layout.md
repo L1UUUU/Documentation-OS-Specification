@@ -131,18 +131,35 @@ Runtime artifacts shall not be stored here.
 
 ## Purpose
 
-The `.scratch/` directory contains Runtime.
+The `.scratch/` directory contains Runtime organized by workstream.
 
 Runtime artifacts support active implementation.
 
 Examples include:
 
-- clarified requirements;
 - PRDs;
 - generated implementation Issues;
+- Handoff documents;
 - temporary execution notes.
 
-Contents of `.scratch/` should disappear from active development once Work has completed.
+## Structure
+
+Runtime is organized into:
+
+```text
+.scratch/
+├── active/
+│   └── <workstream-slug>/
+├── completed/
+│   └── <workstream-slug>/
+└── INDEX.md
+```
+
+Active Work resides beneath `active/`. Completed Work is preserved beneath `completed/` with its Core Runtime Assets (PRD, Issues, Handoff).
+
+The Documentation Engine generates `INDEX.md` to provide Runtime overview and navigation.
+
+Contents of `.scratch/active/` should disappear from active development once Work has completed.
 
 ------
 

@@ -14,7 +14,7 @@ The Work Close Pipeline is the mandatory sequence of operations required to comp
 
 Implementation completion alone does not complete a Work.
 
-A Work is considered complete only after repository Knowledge has been synchronized, repository consistency has been validated, Runtime has been archived, and lifecycle ownership has been released.
+A Work is considered complete only after repository Knowledge has been synchronized, repository consistency has been validated, Runtime has been completed, and lifecycle ownership has been released.
 
 The Work Close Pipeline guarantees that every completed Work permanently improves repository quality.
 
@@ -66,7 +66,11 @@ Validation
 
 ↓
 
-Archive
+Complete
+
+↓
+
+Cleanup
 
 ↓
 
@@ -76,6 +80,8 @@ Close
 Every completed Work shall pass through every stage.
 
 Stages shall not be skipped.
+
+The abstract Complete stage maps to active/<workstream-slug>/ → completed/<workstream-slug>/ directory movement in the Single Repository implementation.
 
 ------
 
@@ -87,7 +93,7 @@ The Work Close Pipeline consists of five sequential stages.
 | ------------------------- | ----------------------------- |
 | Knowledge Synchronization | Update persistent Knowledge   |
 | Validation                | Verify repository consistency |
-| Archive                   | Archive Runtime artifacts     |
+| Complete                  | Complete Runtime artifacts     |
 | Cleanup                   | Finalize Runtime state        |
 | Close                     | Complete lifecycle ownership  |
 
@@ -135,20 +141,20 @@ If validation fails, the Work shall not proceed to archival.
 
 ------
 
-# Stage 3 — Archive
+# Stage 3 — Complete
 
 ## Purpose
 
-Move Runtime from active execution into historical state.
+Move Runtime from active execution into completed state.
 
-Typical archived artifacts include:
+Deterministic actions:
 
-- clarified requirements;
-- implementation plans;
-- execution tasks;
-- temporary notes.
+1. Verify Core Runtime Assets exist (PRD.md, issues/*.md, HANDOFF.md);
+2. Move active/<workstream-slug>/ → completed/<workstream-slug>/;
+3. Preserve Core Runtime Assets (immutable business content);
+4. Clean Ephemeral Runtime Content only (temporary notes, planning artifacts).
 
-Archived Runtime becomes immutable.
+Core Runtime Assets are preserved upon completion (immutable business content; generated INDEX.md may be regenerated).
 
 Repository Knowledge becomes the authoritative project memory.
 
@@ -158,13 +164,12 @@ Repository Knowledge becomes the authoritative project memory.
 
 ## Purpose
 
-Finalize Runtime after archival.
+Finalize Runtime after completion.
 
 Typical cleanup activities include:
 
-- updating Runtime status;
-- removing obsolete temporary artifacts;
-- refreshing generated summaries;
+- moving active/<workstream-slug>/ → completed/<workstream-slug>/ (status expressed by directory location; no status field update);
+- regenerating .scratch/INDEX.md (generated summaries may be refreshed);
 - updating repository indexes.
 
 Cleanup prepares the repository for subsequent Work.
@@ -184,7 +189,7 @@ Closing a Work confirms that:
 - implementation has completed;
 - Knowledge has been synchronized;
 - repository validation has succeeded;
-- Runtime has been archived;
+- Runtime has been completed;
 - cleanup has completed.
 
 Only after these conditions have been satisfied may the Work transition to the Closed state.
@@ -203,13 +208,13 @@ Knowledge Synchronization precedes Validation.
 
 ## WC-2
 
-Validation precedes Archive.
+Validation precedes Complete.
 
 ------
 
 ## WC-3
 
-Archive precedes Cleanup.
+Complete precedes Cleanup.
 
 ------
 
@@ -273,7 +278,7 @@ Typical operations include:
 - synchronizing generated indexes;
 - validating references;
 - refreshing managed regions;
-- archiving Runtime;
+- completing Runtime;
 - updating repository summaries.
 
 Documentation Operations maintain structural consistency.
@@ -301,7 +306,7 @@ A compliant Documentation OS implementation SHALL ensure:
 
 - every completed Work executes the Work Close Pipeline;
 - pipeline stages occur in the defined order;
-- Runtime is not archived before Knowledge Synchronization;
+- Runtime is not completed before Knowledge Synchronization;
 - repository validation succeeds before Work closure;
 - Work ownership concludes only after successful pipeline completion.
 
@@ -341,7 +346,7 @@ A Work is complete only after:
 
 - Knowledge has been synchronized;
 - repository validation has succeeded;
-- Runtime has been archived;
+- Runtime has been completed;
 - cleanup has completed;
 - lifecycle ownership has been released.
 

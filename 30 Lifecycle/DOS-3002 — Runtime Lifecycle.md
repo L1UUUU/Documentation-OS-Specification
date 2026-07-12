@@ -62,7 +62,7 @@ In particular:
 
 - Runtime is temporary.
 - Runtime produces Knowledge.
-- Knowledge must be synchronized before Runtime is archived.
+- Knowledge must be synchronized before Runtime is completed.
 - Runtime shall not become long-term repository storage.
 
 ------
@@ -104,7 +104,7 @@ Validated
 
 ↓
 
-Archived
+Completed
 
 ↓
 
@@ -128,7 +128,7 @@ Runtime begins at this point.
 The Work receives:
 
 - ownership;
-- identity;
+- workstream slug and active/<slug>/ path (Runtime location, not global identity);
 - execution context.
 
 ------
@@ -234,11 +234,15 @@ Validation ensures that synchronization has not introduced structural inconsiste
 
 ------
 
-## Archived
+## Completed
 
 Runtime artifacts become historical execution records.
 
-Archived Runtime no longer participates in active engineering work.
+Completed Runtime no longer participates in active engineering work.
+
+The workstream directory moves from active/<slug>/ to completed/<slug>/.
+
+Core Runtime assets are preserved (immutable business content; generated INDEX.md may be regenerated).
 
 Repository knowledge now contains the enduring understanding created by the Work.
 
@@ -253,7 +257,7 @@ Closure confirms that:
 - implementation is complete;
 - Knowledge has been synchronized;
 - repository validation has succeeded;
-- Runtime has been archived.
+- Runtime has been completed (moved to completed/<slug>/).
 
 Only at this point is the Work considered finished.
 
@@ -296,7 +300,7 @@ Validated
 
 ↓
 
-Archived
+Completed
 
 ↓
 
@@ -313,7 +317,13 @@ If significant additional engineering work becomes necessary after closure, a ne
 
 Runtime artifacts participate in the lifecycle together with their Work.
 
-Examples include:
+Core Runtime Assets (preserved upon completion):
+
+- PRD.md;
+- issues/*.md;
+- HANDOFF.md.
+
+Ephemeral Runtime Content (may be cleaned up):
 
 - clarified requirements;
 - implementation plans;
@@ -322,7 +332,7 @@ Examples include:
 
 Artifacts may evolve while the Work remains active.
 
-They become immutable after archival.
+Core assets are preserved upon completion (immutable business content; generated INDEX.md may be regenerated).
 
 ------
 
@@ -400,7 +410,7 @@ Knowledge Synchronization shall precede Runtime archival.
 
 ## RI-4
 
-Archived Runtime shall remain immutable.
+Completed Runtime core assets shall be preserved (immutable business content; the generated INDEX.md may be regenerated).
 
 ------
 
@@ -422,7 +432,7 @@ Typical failure causes include:
 - requirements withdrawn;
 - engineering superseded.
 
-Failed Works may be archived without reaching the Closed state.
+Failed Works may be completed without reaching the Closed state.
 
 Repository Profiles may define additional failure handling conventions.
 
@@ -437,8 +447,8 @@ A compliant Documentation OS implementation SHALL ensure:
 - every Work follows the Runtime Lifecycle;
 - lifecycle transitions are explicit;
 - Knowledge Impact Analysis occurs after implementation;
-- Knowledge Synchronization precedes archival;
-- archived Runtime remains immutable.
+- Knowledge Synchronization precedes completion;
+- completed Runtime core assets remain preserved.
 
 ------
 
@@ -478,6 +488,6 @@ A Work is complete only after:
 - Knowledge has been analysed;
 - Knowledge has been synchronized;
 - the repository has been validated;
-- Runtime has been archived.
+- Runtime has been completed.
 
 This lifecycle ensures that every implementation leaves the repository with greater long-term understanding than before the Work began.

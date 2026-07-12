@@ -98,7 +98,9 @@ Relationships are independent of:
 - repository profile;
 - implementation language.
 
-Relationships connect identities rather than filesystem paths.
+Relationships connect addressable artifacts rather than filesystem paths.
+
+Knowledge artifacts use identities; Runtime assets (Work, PRD, Issues, Handoff) use workstream slugs or Work-scoped paths.
 
 ------
 
@@ -150,7 +152,9 @@ Documentation OS discourages relationships inferred solely from filenames, direc
 
 ## Stable
 
-Relationships reference artifact identities.
+Relationships reference addressable artifacts.
+
+Knowledge artifacts are referenced by stable identities; Runtime assets are referenced by workstream slugs or Work-scoped paths.
 
 Repository restructuring must not invalidate relationships.
 
@@ -210,6 +214,8 @@ Architecture
 
 Implementation work realizes architectural intent.
 
+Work is addressed by workstream slug, not by identity.
+
 ------
 
 ## Produces
@@ -225,6 +231,8 @@ Work
 ADR
 
 A completed Work produces a new Architecture Decision Record.
+
+Work is addressed by workstream slug, not by identity.
 
 ------
 
@@ -259,6 +267,8 @@ Runtime → Knowledge
 Runtime → Runtime
 
 The meaning of each relationship depends upon its type.
+
+When Runtime is a relationship endpoint, references are resolved using workstream slugs or Work-scoped paths.
 
 Repository Profiles shall preserve relationship semantics.
 
@@ -388,13 +398,16 @@ The Relationship Model defines semantics.
 
 Profiles define representation.
 
+Different artifact categories may use different representations; for example, Knowledge artifacts use YAML front matter, while Runtime Work uses PRD front matter or its own format.
+
 ------
 
 # Compliance
 
 A Documentation OS implementation SHALL satisfy the following requirements.
 
-- Relationships SHALL reference stable identities.
+- Knowledge relationships SHALL reference stable identities.
+- Runtime relationships SHALL reference resolvable workstream slugs or Work-scoped paths.
 - Every Relationship SHALL possess a relationship type.
 - Relationships SHALL remain independent of repository layout.
 - Repository Profiles SHALL preserve relationship semantics.
@@ -439,6 +452,8 @@ Relationships form the conceptual Documentation Graph, enabling:
 - navigation;
 - impact analysis.
 
-Relationships connect identities rather than filesystem locations.
+Relationships connect addressable artifacts rather than filesystem locations.
+
+Knowledge artifacts are referenced by identities; Runtime assets are referenced by workstream slugs or Work-scoped paths.
 
 They improve repository understanding while remaining independent of repository implementation.
