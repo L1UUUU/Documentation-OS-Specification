@@ -214,11 +214,13 @@ Mandatory Work internal structure rules (error severity):
 - each Work contains a PRD.md;
 - each completed Work's PRD declares a legal `outcome` value (succeeded|cancelled|superseded|failed); an active Work SHALL NOT declare an `outcome`;
 - each Work contains an issues/ directory; while a Work is active the issues/ directory MAY be empty, but it SHALL contain at least one Issue file (NN-<slug>.md) before the Work enters the Complete stage;
-- a `succeeded` Work SHALL NOT enter the Complete stage while any Issue remains `open`, `in-progress`, or `blocked` (such Issues MUST be resolved to `done`, `cancelled`, or `superseded`); a non-`succeeded` Work MAY leave Issues in a non-terminal status, with the termination truthfully recorded in the Work `outcome`;
+- a completed Work whose PRD `outcome` is `succeeded` SHALL NOT retain any Issue in `open`, `in-progress`, or `blocked` (such Issues MUST be resolved to `done`, `cancelled`, or `superseded`); a non-`succeeded` completed Work MAY retain Issues in a non-terminal status as a record of where execution was interrupted, with the termination truthfully recorded in the Work `outcome`;
 - Issue filenames match the pattern NN-<slug>.md;
 - Issue numbers are unique within a Work;
 - Issue front matter contains a legal status value (open|in-progress|done|blocked|cancelled|superseded);
 - each Work contains a HANDOFF.md (HANDOFF.md is generated at Work creation per DOS-2004, so its absence indicates corruption or accidental deletion).
+
+Note: the `outcome`-dependent Issue rule above is verified statically against the `outcome` already recorded in a completed Work's PRD. Its pre-complete enforcement — at the moment a caller requests completion with a particular `outcome` — is a Complete Operation preflight, not a Repository Validation check, because an active Work carries no `outcome` to test against (DOS-4001, DOS-3004).
 
 Mandatory docs/ entry point presence rules (error severity):
 

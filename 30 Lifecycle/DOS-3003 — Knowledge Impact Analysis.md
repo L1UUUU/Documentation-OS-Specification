@@ -8,7 +8,7 @@
 
 # Abstract
 
-This specification defines Knowledge Impact Analysis (KIA), the lifecycle stage responsible for determining how completed implementation affects the repository's persistent Knowledge.
+This specification defines Knowledge Impact Analysis (KIA), the lifecycle stage responsible for determining how implementation or execution activity — whether it ended successfully, was abandoned, or was superseded — affects the repository's persistent Knowledge.
 
 Knowledge Impact Analysis bridges the Runtime and Knowledge domains.
 
@@ -34,7 +34,7 @@ Only after this question has been answered can Knowledge Synchronization occur.
 
 # Scope
 
-Knowledge Impact Analysis applies to every Work after implementation has completed.
+Knowledge Impact Analysis applies to every Work whose implementation or execution activity has ended (achieved, abandoned, or superseded), including a Work being terminated before its objectives were reached.
 
 It evaluates the impact of implementation on the Knowledge domain.
 
@@ -114,7 +114,7 @@ Knowledge Impact Analysis evaluates information from multiple sources.
 
 Typical inputs include:
 
-- completed implementation;
+- implementation or execution activity that has ended (successful, abandoned, or superseded);
 - Runtime artifacts;
 - implementation notes;
 - repository Knowledge;
@@ -257,7 +257,7 @@ The following invariants SHALL always remain true.
 
 ## KI-1
 
-Knowledge Impact Analysis occurs after implementation.
+Knowledge Impact Analysis occurs after a Work's implementation or execution activity has ended (successfully, by abandonment, or by supersession).
 
 ------
 

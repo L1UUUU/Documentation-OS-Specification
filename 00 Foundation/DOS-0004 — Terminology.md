@@ -418,7 +418,7 @@ Knowledge Synchronization transfers newly created understanding from Runtime int
 
 The lifecycle responsible for completing a Work.
 
-The pipeline includes:
+Preconditions and context (preceding lifecycle activity, not pipeline stages):
 
 Implementation
 
@@ -426,7 +426,7 @@ Implementation
 
 Knowledge Impact Analysis
 
-↓
+Pipeline stages:
 
 Knowledge Synchronization
 

@@ -39,13 +39,15 @@ The Work Close Pipeline prevents these forms of repository decay.
 
 This specification applies to every Runtime Work managed by Documentation OS.
 
-The pipeline begins after implementation has finished. A Work reaches its **Completed** terminal lifecycle state at the Complete stage; the subsequent Cleanup stage finalizes repository state and is mandatory but independently retriable.
+The pipeline begins after a Work's implementation or execution activity has ended — achieved, abandoned, or superseded. A Work terminated before implementation began still enters the pipeline, with Knowledge Impact Analysis typically producing no Knowledge impact (DOS-3002, DOS-3003). A Work reaches its **Completed** terminal lifecycle state at the Complete stage; the subsequent Cleanup stage finalizes repository state and is mandatory but independently retriable.
 
 ------
 
 # Lifecycle Position
 
-The Work Close Pipeline occupies the final phase of the Runtime Lifecycle.
+The Work Close Pipeline occupies the final phase of the Runtime Lifecycle. Implementation and Knowledge Impact Analysis are preceding lifecycle activity that establishes the context for the pipeline; they are not pipeline stages. The pipeline itself consists of the four stages defined in Pipeline Overview.
+
+Preceding activity:
 
 ```text
 Implementation
@@ -53,9 +55,11 @@ Implementation
 ↓
 
 Knowledge Impact Analysis
+```
 
-↓
+Pipeline stages:
 
+```text
 Knowledge Synchronization
 
 ↓
@@ -71,7 +75,7 @@ Complete
 Cleanup
 ```
 
-Every completed Work SHALL pass through every stage.
+Every completed Work SHALL pass through Knowledge Impact Analysis and all four pipeline stages; Implementation MAY be partial or absent for a Work terminated before its objectives were reached (DOS-3002, DOS-3003).
 
 Stages SHALL NOT be skipped.
 
@@ -140,19 +144,21 @@ If validation fails, the Work SHALL NOT proceed to Complete.
 
 Move Runtime from active execution into completed state.
 
-The Complete stage performs the atomic transition of the Work to its final lifecycle state.
+The Complete stage receives the Work's terminal `outcome` as an input to the Complete Operation — an engineering judgement supplied by the Agent or caller (DOS-4001). It performs the atomic transition of the Work to its final lifecycle state.
 
 Deterministic actions:
 
-1. Verify Core Runtime Assets exist (PRD.md, issues/*.md, HANDOFF.md);
-2. Record the Work's terminal `outcome` (`succeeded`, `cancelled`, `superseded`, or `failed`) in PRD front matter (see DOS-3002);
+1. Preflight — verify Core Runtime Assets exist (PRD.md, at least one `issues/NN-<slug>.md`, HANDOFF.md); verify a legal `outcome` value was supplied; and when `outcome = succeeded`, verify no Issue remains `open`, `in-progress`, or `blocked`. A non-`succeeded` Work MAY leave non-terminal Issues. Preflight failure aborts the stage with the Work unchanged under `active/`.
+2. Record the supplied terminal `outcome` (`succeeded`, `cancelled`, `superseded`, or `failed`) in PRD front matter (see DOS-3002);
 3. Clean Ephemeral Runtime Content only (temporary notes, planning artifacts);
 4. Atomically move active/<workstream-slug>/ → completed/<workstream-slug>/;
-5. Preserve Core Runtime Assets unchanged (immutable business content; generated INDEX.md MAY be regenerated).
+5. Preserve Core Runtime Assets unchanged — apart from the deterministic addition of the terminal `outcome` to PRD front matter in step 2, Core Runtime Assets SHALL remain unchanged (immutable business content; generated INDEX.md MAY be regenerated).
 
-Note: HANDOFF.md is generated at Work creation (DOS-2004) and is therefore always present; this step verifies integrity rather than first-time presence. The issues/ directory SHALL contain at least one Issue file at this stage. For a non-`succeeded` Work, the recorded `outcome` truthfully reflects that the implementation objectives were not achieved; repository consistency verification SHALL NOT be bypassed regardless of outcome.
+Steps 2–4 form a single transaction: if the directory movement fails, the `outcome` write and the Ephemeral cleanup SHALL be rolled back so that the Work remains valid under `active/` (an active Work SHALL NOT carry an `outcome`).
 
-Stage 3 owns the Work directory movement. Core Runtime Assets SHALL remain unchanged by completion.
+Note: HANDOFF.md is generated at Work creation (DOS-2004) and is therefore always present; preflight verifies integrity rather than first-time presence. For a non-`succeeded` Work, the recorded `outcome` truthfully reflects that the implementation objectives were not achieved; repository consistency verification SHALL NOT be bypassed regardless of outcome.
+
+Stage 3 owns the Work directory movement. Apart from the deterministic addition of the terminal `outcome` to PRD front matter, Core Runtime Assets SHALL remain unchanged by completion.
 
 The directory movement to completed/<workstream-slug>/ represents the Work's entry into the Completed lifecycle state—the terminal state of the Work lifecycle. Ownership is released at this point.
 

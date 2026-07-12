@@ -243,7 +243,7 @@ The workstream directory has moved from active/<slug>/ to completed/<slug>/.
 
 Completed Runtime no longer participates in active engineering work. Ownership concludes at this point.
 
-Core Runtime assets are preserved (immutable business content; generated INDEX.md MAY be regenerated).
+Core Runtime assets are preserved (immutable business content; only the terminal `outcome` is added to PRD front matter at completion, and the generated INDEX.md MAY be regenerated).
 
 Repository knowledge now contains the enduring understanding created by the Work.
 
@@ -400,7 +400,7 @@ Knowledge Synchronization SHALL precede Runtime completion.
 
 ## RI-4
 
-Completed Runtime core assets SHALL be preserved (immutable business content; the generated INDEX.md MAY be regenerated).
+Completed Runtime core assets SHALL be preserved (immutable business content; only the terminal `outcome` is added to PRD front matter at completion, and the generated INDEX.md MAY be regenerated).
 
 ------
 
@@ -430,6 +430,8 @@ Typical failure causes include:
 - `failed` — implementation could not be completed.
 
 A non-`succeeded` Work MAY reach `Completed` without having achieved its implementation objectives, provided its `outcome` truthfully records the termination reason.
+
+A Work terminated before reaching the `Implemented` phase (for example requirements withdrawn before coding began, or the approach superseded by another Work) MAY still enter the Work Close Pipeline from its current active phase: Knowledge Impact Analysis evaluates the impact of whatever activity did occur (frequently no impact), and the pipeline proceeds to Complete with a non-`succeeded` `outcome`. The workflow phases preceding `Implemented` are therefore not prerequisites for termination; only Knowledge Impact Analysis → Knowledge Synchronization → Validation → Complete is mandatory (DOS-3003, DOS-3004).
 
 Failed Works MAY reach the Completed state.
 

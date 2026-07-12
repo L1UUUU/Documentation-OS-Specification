@@ -302,6 +302,48 @@ The following scenarios SHALL be covered by the conformance tests required in th
 - Expected state: the Work directory is located under `.scratch/completed/<slug>/` (not `active/`); the PRD declares a legal `outcome`; Core Runtime Assets are preserved.
 - Expected diagnostics: Validation passes; the Runtime location-presence check confirms the Completed terminal state.
 
+## Scenario 8 — Active Work declaring an `outcome` is invalid
+
+- Initial state: an active Work whose PRD front matter declares `outcome: succeeded`.
+- Operation: run Validation.
+- Expected state: repository unchanged (Validation is read-only).
+- Expected diagnostics: Failure — an active Work SHALL NOT declare an `outcome`.
+
+## Scenario 9 — `outcome=succeeded` with a non-terminal Issue fails Complete preflight
+
+- Initial state: an active Work with at least one Issue, one of which has `status: in-progress`; the PRD carries no `outcome`.
+- Operation: invoke the Complete operation with `outcome=succeeded`.
+- Expected state: the Work remains in `active/`; no `outcome` is written; no directory movement occurs.
+- Expected diagnostics: Failure — preflight rejected a `succeeded` outcome because a non-terminal Issue remains.
+
+## Scenario 10 — A `cancelled` Work reaches Completed through the standard pipeline
+
+- Initial state: an active Work whose requirements were withdrawn before its implementation objectives were achieved; the PRD carries no `outcome`; Knowledge Impact Analysis produced no Knowledge impact.
+- Operation: invoke the Complete operation with `outcome=cancelled`.
+- Expected state: the Work moves to `.scratch/completed/<slug>/`; the PRD front matter records `outcome: cancelled`; Core Runtime Assets are preserved; `.scratch/INDEX.md` is regenerated (Cleanup) and surfaces the `cancelled` outcome.
+- Expected diagnostics: Success.
+
+## Scenario 11 — Complete rolls back if directory movement fails after writing `outcome`
+
+- Initial state: an active Work satisfying all Complete preconditions.
+- Operation: invoke the Complete operation with `outcome=succeeded`; the directory movement step fails.
+- Expected state: the Work remains valid under `.scratch/active/<slug>/`; the PRD carries no `outcome` (the write was rolled back); any Ephemeral cleanup is rolled back where required.
+- Expected diagnostics: Failure with recovery guidance; the Work remains valid for retry.
+
+## Scenario 12 — INDEX surfaces the terminal `outcome` for Completed Works
+
+- Initial state: a repository with one Completed Work whose PRD declares `outcome: superseded`.
+- Operation: regenerate `.scratch/INDEX.md`.
+- Expected state: INDEX lists the Completed Work with its `outcome` (`superseded`), alongside its slug, PRD path, HANDOFF path, and Issues.
+- Expected diagnostics: Success; INDEX is reproducible from repository state alone.
+
+## Scenario 13 — Concurrent ADR drafts receive distinct final numbers at integration
+
+- Initial state: two parallel Works each carry a draft ADR using a non-final placeholder name; neither pre-allocates a final `ADR-NNNN`.
+- Operation: integrate both Works; the Documentation Engine allocates final numbers against the integration target state.
+- Expected state: each ADR receives a distinct, atomically allocated `ADR-NNNN`; any collision from concurrent integration is resolved by re-numbering the later integration and regenerating its managed references.
+- Expected diagnostics: Success; no duplicate or reused ADR numbers.
+
 ------
 
 # Expected Results

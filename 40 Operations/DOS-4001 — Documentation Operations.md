@@ -208,13 +208,29 @@ Perform deterministic Runtime completion by orchestrating two lifecycle stages.
 
 Complete Operations SHALL NOT modify synchronized Knowledge.
 
+## Outcome Input
+
+The terminal `outcome` of a Work is an engineering judgement; it SHALL be supplied by the Agent or caller as an input parameter to the Complete Operation. The Documentation Engine does not decide the outcome; it validates and records it. Normative `outcome` values are `succeeded`, `cancelled`, `superseded`, `failed` (see DOS-3002).
+
+An active Work SHALL NOT carry an `outcome` in its PRD front matter before the Complete Operation is invoked; the `outcome` is recorded by the Complete stage (DOS-3004).
+
+## Preflight
+
+Before performing any state change, the Complete Operation SHALL verify, as a single atomic preflight:
+
+- a legal `outcome` value has been supplied;
+- Core Runtime Assets exist (PRD.md, at least one `issues/NN-<slug>.md`, HANDOFF.md);
+- when `outcome = succeeded`, no Issue remains `open`, `in-progress`, or `blocked` (such Issues MUST be resolved to `done`, `cancelled`, or `superseded`); a non-`succeeded` Work MAY leave non-terminal Issues with the outcome truthfully recorded.
+
+If preflight fails, the Complete Operation SHALL fail without modifying repository state, and the Work SHALL remain in `active/`.
+
 ## Lifecycle Stages
 
 Complete Operation orchestrates the following stages:
 
 ### Complete Stage
 
-Move the Work directory from `active/<workstream-slug>/` to `completed/<workstream-slug>/`.
+Record the supplied terminal `outcome` in PRD front matter, clean Ephemeral Runtime Content, and atomically move the Work directory from `active/<workstream-slug>/` to `completed/<workstream-slug>/`. Recording the `outcome`, cleaning Ephemeral Content, and moving the directory form a single transaction: if the directory movement fails, the `outcome` write and Ephemeral cleanup SHALL be rolled back so that the Work remains valid under `active/` (no `outcome` persists on an active Work).
 
 This transition marks the Work's entry into its terminal state and releases Ownership.
 

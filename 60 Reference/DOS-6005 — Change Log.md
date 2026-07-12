@@ -296,6 +296,37 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v9 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking refinement — Complete Operation `outcome` input/preflight contract; Complete stage atomicity; Repository Validation `outcome`-rule timing closed; INDEX Contract and terminology synchronized to the `outcome` model; no conceptual architecture change.
+
+### Added
+
+- Complete Operation `outcome` input and preflight contract: the terminal `outcome` is supplied by the Agent/caller as an operation parameter; the Documentation Engine validates and records it rather than deciding it; preflight verifies a legal `outcome`, Core Runtime Asset presence, and (for `outcome=succeeded`) no non-terminal Issue (DOS-4001, DOS-3004, DOS-5005).
+- Six normative conformance scenarios in DOS-4005 — active Work declaring an `outcome`; `outcome=succeeded` with a non-terminal Issue failing preflight; a `cancelled` Work reaching Completed; Complete transaction rollback on directory-move failure; INDEX surfacing Completed-Work `outcome`; concurrent ADR drafts receiving distinct final numbers — added as full expected-results specifications (DOS-4005).
+
+### Changed
+
+- Repository Validation `outcome`-dependent Issue rule realigned to a static post-completion check against the `outcome` already recorded in a completed Work's PRD; its pre-complete enforcement is restated as a Complete Operation preflight, removing the pre-Complete timing paradox under which an active Work (which carries no `outcome`) could not be evaluated (DOS-4002).
+- Complete stage steps 2–4 (write `outcome`, clean Ephemeral Content, move directory) defined as a single transaction with rollback, so a failed directory move never leaves an `outcome` on an active Work (DOS-3004, DOS-4001).
+- Work Close Pipeline restated as four pipeline stages (Knowledge Synchronization, Validation, Complete, Cleanup) preceded by Implementation and Knowledge Impact Analysis as context, not stages; Implementation MAY be partial or absent for a Work terminated early (DOS-0004, DOS-3004).
+- Knowledge Impact Analysis inputs and triggers generalized from "completed implementation" to "implementation or execution activity that has ended (successful, abandoned, or superseded)", so a Work terminated before its objectives were reached still performs (typically no-impact) KIA (DOS-3003, DOS-3002).
+
+### Fixed
+
+- INDEX Generation Contract now requires the terminal `outcome` for each Completed Work, read from PRD front matter, aligning DOS-5004 with DOS-2004 and DOS-6002 (previously missing) (DOS-5004).
+- "Core Runtime Assets unchanged" reconciled with the `outcome` write: an explicit `outcome` carve-out added across DOS-3004, DOS-3002 (RI-4 and the Completed section), and DOS-6002, resolving the prior literal contradiction (DOS-3004, DOS-3002, DOS-6002).
+- Completed Runtime definition no longer requires the full Work Close Pipeline; the Completed state is reached at the Complete stage and post-completion Cleanup MAY still be pending (DOS-6002).
+
+### Clarified
+
+- The `complete` CLI command accepts the terminal `outcome` as caller input and forwards it to the Complete Operation; command syntax remains implementation-defined (DOS-5005).
+- A non-`succeeded` completed Work MAY retain non-terminal Issues as a record of where execution was interrupted, with the termination truthfully recorded in the Work `outcome` (design note) (DOS-4002).
+
+------
+
 ## Documentation OS Specification 1.0 — v8 Revision
 
 **Status:** Draft

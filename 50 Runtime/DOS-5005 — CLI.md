@@ -239,13 +239,15 @@ Complete commands execute Runtime completion by orchestrating two lifecycle stag
 
 Complete commands SHALL preserve Core Runtime Assets (PRD.md, issues/, HANDOFF.md) and SHALL NOT delete them.
 
+A Complete command SHALL accept the Work's terminal `outcome` (`succeeded`, `cancelled`, `superseded`, `failed`) as input from the caller; the CLI does not decide the outcome, it forwards it to the Complete Operation (DOS-4001). Specific command syntax and option naming remain implementation-defined (see Non-Goals).
+
 ## Lifecycle Stages
 
 Complete commands orchestrate the following stages:
 
 ### Complete Stage
 
-Move the Work directory from `active/<workstream-slug>/` to `completed/<workstream-slug>/`.
+Record the supplied terminal `outcome` in PRD front matter and move the Work directory from `active/<workstream-slug>/` to `completed/<workstream-slug>/`, as a single transaction defined by the Complete Operation (DOS-4001).
 
 This transition marks the Work's entry into its terminal state and releases Ownership.
 

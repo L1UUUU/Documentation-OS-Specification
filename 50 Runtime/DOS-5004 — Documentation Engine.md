@@ -201,7 +201,7 @@ Repository metadata SHALL remain reproducible whenever possible, with `.scratch/
 
 ## INDEX Generation Contract
 
-When generating `.scratch/INDEX.md`, the Documentation Engine SHALL produce, under "Active Works" and "Completed Works" sections, each Work's workstream slug, PRD path, HANDOFF path, and each Issue listed as `NN-<slug>.md [status] <title>`, reading status and title from Issue front matter. INDEX SHALL remain reproducible from repository state alone.
+When generating `.scratch/INDEX.md`, the Documentation Engine SHALL produce, under "Active Works" and "Completed Works" sections, each Work's workstream slug, PRD path, HANDOFF path, and each Issue listed as `NN-<slug>.md [status] <title>`, reading status and title from Issue front matter. For each Completed Work, the INDEX SHALL additionally surface the Work's terminal `outcome`, read from the PRD front matter (DOS-2004, DOS-3002). INDEX SHALL remain reproducible from repository state alone.
 
 ------
 

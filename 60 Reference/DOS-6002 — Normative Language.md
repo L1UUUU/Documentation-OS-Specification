@@ -220,11 +220,11 @@ An Active Repository may contain both Knowledge and Runtime.
 
 ## Completed Runtime
 
-Runtime that has completed the Work Close Pipeline and no longer participates in active execution.
+Runtime that has reached the Completed terminal state through the Complete stage and no longer participates in active execution. Post-completion Cleanup MAY still be pending; the Completed state is established at the Complete stage and is independent of subsequent Cleanup.
 
 Completed Runtime core assets (PRD, Issues, Handoff) are preserved.
 
-They remain immutable; only the generated INDEX.md may be regenerated.
+They remain immutable; only the terminal `outcome` is added to PRD front matter at completion, and the generated INDEX.md MAY be regenerated.
 
 ------
 
