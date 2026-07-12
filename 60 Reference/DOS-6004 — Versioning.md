@@ -62,7 +62,7 @@ Changing one version does not necessarily require changing another.
 
 ## VS-2 Explicit Compatibility
 
-Compatibility shall be explicitly declared.
+Compatibility SHALL be explicitly declared.
 
 Implementations should never assume compatibility implicitly.
 

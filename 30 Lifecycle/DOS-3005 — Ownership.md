@@ -189,7 +189,7 @@ Knowledge
 
 Responsibility transitions together with lifecycle state.
 
-Ownership transitions shall always be explicit.
+Ownership transitions SHALL always be explicit.
 
 ------
 
@@ -273,7 +273,7 @@ These concepts remain intentionally separate.
 
 # Ownership Invariants
 
-The following invariants shall always remain true.
+The following invariants SHALL always remain true.
 
 ## OW-1
 

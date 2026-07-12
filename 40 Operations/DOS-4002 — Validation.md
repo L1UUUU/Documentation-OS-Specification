@@ -62,9 +62,9 @@ Validation follows the following principles.
 
 ## VL-1 Deterministic
 
-Validation shall always produce identical results for identical repository state.
+Validation SHALL always produce identical results for identical repository state.
 
-Validation shall never depend on:
+Validation SHALL NOT depend on:
 
 - execution time;
 - machine environment;
@@ -75,7 +75,7 @@ Validation shall never depend on:
 
 ## VL-2 Read-Only
 
-Validation shall not modify repository contents.
+Validation SHALL NOT modify repository contents.
 
 Repository modification belongs to Documentation Operations such as Synchronize or Migrate.
 
@@ -85,13 +85,13 @@ Validation only reports repository state.
 
 ## VL-3 Explicit
 
-Every validation failure shall identify:
+Every validation failure SHALL identify:
 
 - the affected artifact;
 - the violated rule;
 - the reason for failure.
 
-Validation should never produce ambiguous results.
+Validation SHOULD NOT produce ambiguous results.
 
 ------
 
@@ -123,7 +123,7 @@ Validation
 └── Managed Regions
 ```
 
-Implementations may introduce additional validation categories.
+Implementations MAY introduce additional validation categories.
 
 ------
 
@@ -187,7 +187,7 @@ Generated Content Validation verifies:
 - generated indexes are consistent (including .scratch/INDEX.md consistency and reproducibility);
 - .scratch/INDEX.md exists and reflects the current state of active/ and completed/ workstreams.
 
-Generated content should always be reproducible.
+Generated content SHOULD always be reproducible.
 
 ------
 
@@ -201,6 +201,29 @@ Examples include:
 - reserved directories are present (including .scratch/active/, .scratch/completed/, and the requirement that .scratch/INDEX.md exists);
 - required repository guidance files exist;
 - Agent Entry mirrors (`AGENTS.md`, `CLAUDE.md`) remain content-equivalent at every scope that requires a mirror.
+
+Work internal structure is also verified under this category.
+
+Mandatory Work internal structure rules (error severity):
+
+- workstream slugs are globally unique across .scratch/active/ and .scratch/completed/;
+- the same slug does not appear in both .scratch/active/ and .scratch/completed/;
+- each Work contains a PRD.md;
+- each Work contains an issues/ directory;
+- Issue filenames match the pattern NN-<slug>.md;
+- Issue numbers are unique within a Work;
+- Issue front matter contains a legal status value (open|in-progress|done|blocked).
+
+Advisory Work internal structure rule (warning severity):
+
+- HANDOFF.md is missing; this warning is escalated to error when the Work enters the Close stage.
+
+Mandatory docs/ entry point presence rules (error severity):
+
+- docs/architecture exists;
+- docs/adr exists;
+- docs/standards exists;
+- docs/inbox exists.
 
 Repository Profiles define profile-specific requirements.
 
@@ -238,7 +261,7 @@ Repository remains structurally valid.
 
 Non-blocking observations are reported.
 
-Warnings should not prevent lifecycle progression unless required by repository policy.
+Warnings SHOULD NOT prevent lifecycle progression unless required by repository policy.
 
 ------
 
@@ -248,7 +271,7 @@ One or more mandatory validation rules have been violated.
 
 Repository consistency cannot be guaranteed.
 
-Subsequent lifecycle stages requiring successful validation shall not continue until failures are resolved.
+Subsequent lifecycle stages requiring successful validation SHALL NOT continue until failures are resolved.
 
 ------
 
@@ -281,9 +304,9 @@ Additional validation may occur:
 
 # Validation Reports
 
-Validation should produce deterministic reports.
+Validation SHOULD produce deterministic reports.
 
-A report should include:
+A report SHOULD include:
 
 - validation category;
 - affected artifact;
@@ -301,9 +324,9 @@ Report semantics are standardized by this specification.
 
 Validation is a Documentation Operation.
 
-Documentation Engines shall expose Validation as a first-class operation.
+Documentation Engines SHALL expose Validation as a first-class operation.
 
-Validation may be executed:
+Validation MAY be executed:
 
 - manually;
 - automatically;
@@ -315,11 +338,11 @@ Validation execution policy is implementation-defined.
 
 # Failure Handling
 
-Validation failures shall be explicit.
+Validation failures SHALL be explicit.
 
-Documentation Engines shall avoid partial success reporting when repository correctness cannot be guaranteed.
+Documentation Engines SHALL avoid partial success reporting when repository correctness cannot be guaranteed.
 
-Validation failures should remain reproducible.
+Validation failures SHOULD remain reproducible.
 
 ------
 
@@ -331,10 +354,14 @@ A compliant Documentation Engine SHALL validate:
 - relationships (referenced artifacts resolvable; structural metadata checks apply to Knowledge front matter);
 - lifecycle consistency (location-presence for Runtime Work; metadata-presence for Knowledge artifacts);
 - repository structure (including .scratch/active/, .scratch/completed/, .scratch/INDEX.md);
+- Work internal structure (workstream slug uniqueness across .scratch/active/ and .scratch/completed/; PRD.md presence; issues/ directory presence; Issue filename pattern NN-<slug>.md; Issue number uniqueness within a Work; Issue front matter status in open|in-progress|done|blocked);
+- docs/ entry points (docs/architecture, docs/adr, docs/standards, docs/inbox);
 - generated content (including .scratch/INDEX.md consistency);
 - managed regions.
 
-Additional validation rules may be introduced provided they remain compatible with Documentation OS.
+A compliant Documentation Engine SHOULD report a missing HANDOFF.md as a warning; this warning SHALL be escalated to error severity when the Work enters the Close stage.
+
+Additional validation rules MAY be introduced provided they remain compatible with Documentation OS.
 
 ------
 

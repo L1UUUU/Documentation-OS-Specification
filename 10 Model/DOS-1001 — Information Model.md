@@ -42,7 +42,7 @@ The Information Model is designed to satisfy the following goals.
 
 ## Repository Independence
 
-The model must remain independent of filesystem layout.
+The model MUST remain independent of filesystem layout.
 
 The following concepts are intentionally excluded:
 
@@ -59,7 +59,7 @@ These concerns belong to Repository Profiles.
 
 The meaning of project information should remain constant regardless of implementation.
 
-Changing repository layout must never change the meaning of project knowledge.
+Changing repository layout MUST never change the meaning of project knowledge.
 
 ------
 
@@ -330,7 +330,7 @@ A Documentation OS implementation SHALL satisfy the following requirements.
 - The Knowledge and Runtime domains remain conceptually independent.
 - Repository Guidance documents are not Managed Information.
 - Staging Information items are not Managed Information and carry no identity, lifecycle, or ownership obligations.
-- Repository layout shall not define semantics.
+- Repository layout SHALL NOT define semantics.
 - Information identity remains stable across profiles.
 - Profiles preserve model semantics.
 

@@ -10,7 +10,7 @@
 
 This specification defines the Execution Contract between AI agents and a Documentation OS repository.
 
-The Execution Contract establishes the responsibilities, boundaries, and interaction rules that every agent shall follow while operating within a Documentation OS environment.
+The Execution Contract establishes the responsibilities, boundaries, and interaction rules that every agent follows while operating within a Documentation OS environment.
 
 Unlike the Reading Strategy, which defines how an agent acquires repository understanding, the Execution Contract defines how an agent behaves after execution begins.
 
@@ -65,7 +65,7 @@ Repositories never adapt to individual agents.
 
 ## EC-2 Respect Documentation Ownership
 
-Agents shall respect Ownership defined by Documentation OS.
+Agents SHALL respect Ownership defined by Documentation OS.
 
 Agents should modify only artifacts appropriate to the current lifecycle stage.
 
@@ -81,23 +81,23 @@ Agents should avoid manually reproducing deterministic operations.
 
 ## EC-4 Explicit Lifecycle
 
-Repository state shall progress through explicit lifecycle transitions.
+Repository state SHALL progress through explicit lifecycle transitions.
 
-Agents shall not bypass mandatory lifecycle stages.
+Agents SHALL NOT bypass mandatory lifecycle stages.
 
 ------
 
 ## EC-5 Knowledge Preservation
 
-Agents shall preserve existing repository Knowledge.
+Agents SHALL preserve existing repository Knowledge.
 
-Implementation shall improve repository understanding rather than replace it.
+Implementation SHALL improve repository understanding rather than replace it.
 
 ------
 
 # Execution Preconditions
 
-Before modifying a repository, an agent shall:
+Before modifying a repository, an agent SHALL:
 
 1. complete Agent Entry;
 2. establish sufficient repository understanding;
@@ -205,7 +205,7 @@ Runtime should remain temporary.
 
 # Documentation Operations
 
-Whenever deterministic maintenance is required, agents shall invoke Documentation Operations.
+Whenever deterministic maintenance is required, agents SHALL invoke Documentation Operations.
 
 Typical examples include:
 
@@ -260,35 +260,35 @@ Implementation completion alone does not satisfy the Execution Contract.
 
 # Execution Invariants
 
-The following invariants shall always remain true.
+The following invariants SHALL always remain true.
 
 ## ECI-1
 
-Repository Knowledge shall remain authoritative.
+Repository Knowledge SHALL remain authoritative.
 
 ------
 
 ## ECI-2
 
-Runtime shall remain temporary.
+Runtime SHALL remain temporary.
 
 ------
 
 ## ECI-3
 
-Documentation Operations shall perform deterministic maintenance.
+Documentation Operations SHALL perform deterministic maintenance.
 
 ------
 
 ## ECI-4
 
-Lifecycle stages shall not be bypassed.
+Lifecycle stages SHALL NOT be bypassed.
 
 ------
 
 ## ECI-5
 
-Agents shall preserve repository consistency throughout execution.
+Agents SHALL preserve repository consistency throughout execution.
 
 ------
 
@@ -332,7 +332,7 @@ These concerns remain implementation-specific.
 
 # Summary
 
-The Execution Contract defines the behavioral rules that every Documentation OS-compliant agent shall follow.
+The Execution Contract defines the behavioral rules that every Documentation OS-compliant agent follows.
 
 It establishes a clear separation of responsibilities between:
 

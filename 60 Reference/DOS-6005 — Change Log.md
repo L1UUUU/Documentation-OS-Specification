@@ -28,7 +28,7 @@ The purpose of the Change Log is to:
 - preserve historical context;
 - provide a stable migration reference.
 
-Every published Documentation OS Specification version shall include a corresponding Change Log.
+Every published Documentation OS Specification version includes a corresponding Change Log.
 
 ------
 
@@ -54,25 +54,25 @@ The Change Log follows the following principles.
 
 ## CL-1 Chronological
 
-Changes shall be recorded in chronological order.
+Changes SHALL be recorded in chronological order.
 
-The newest published version should appear first.
+The newest published version SHOULD appear first.
 
 ------
 
 ## CL-2 Immutable
 
-Published Change Log entries shall not be modified retrospectively.
+Published Change Log entries SHALL NOT be modified retrospectively.
 
-Corrections should be recorded as new entries.
+Corrections SHOULD be recorded as new entries.
 
 ------
 
 ## CL-3 Observable
 
-Every published specification change should be visible through the Change Log.
+Every published specification change SHOULD be visible through the Change Log.
 
-No published specification change should occur silently.
+No published specification change SHOULD occur silently.
 
 ------
 
@@ -104,7 +104,7 @@ Specification Changes
 └── Clarified
 ```
 
-Each recorded change should belong to exactly one category.
+Each recorded change SHOULD belong to exactly one category.
 
 ------
 
@@ -135,7 +135,7 @@ Examples include:
 
 Changed entries may affect implementations.
 
-Compatibility impact should be stated explicitly.
+Compatibility impact SHOULD be stated explicitly.
 
 ------
 
@@ -145,7 +145,7 @@ Records features scheduled for future removal.
 
 Deprecated features remain supported.
 
-Each deprecation should identify:
+Each deprecation SHOULD identify:
 
 - affected specification;
 - replacement behavior;
@@ -159,7 +159,7 @@ Records features removed from the specification.
 
 Removal constitutes a breaking specification change.
 
-Removed entries should reference:
+Removed entries SHOULD reference:
 
 - the version in which deprecation occurred;
 - the replacement mechanism.
@@ -176,7 +176,7 @@ Examples include:
 - normative inconsistencies;
 - specification defects.
 
-Fixed entries should not introduce new functionality.
+Fixed entries SHOULD NOT introduce new functionality.
 
 ------
 
@@ -198,7 +198,7 @@ Clarifications are non-breaking.
 
 # Entry Format
 
-Each Specification Version should use the following structure.
+Each Specification Version SHOULD use the following structure.
 
 ```text
 Version
@@ -220,13 +220,13 @@ Fixed
 Clarified
 ```
 
-Categories with no entries may be omitted.
+Categories with no entries MAY be omitted.
 
 ------
 
 # Compatibility Statement
 
-Each version shall include a compatibility statement.
+Each version SHALL include a compatibility statement.
 
 Typical examples include:
 
@@ -280,7 +280,7 @@ Change Log entries explain what changed.
 
 # Relationship to Migration
 
-Migration procedures should reference Change Log entries whenever repository transformation becomes necessary.
+Migration procedures SHOULD reference Change Log entries whenever repository transformation becomes necessary.
 
 Change Log entries help implementations determine:
 
@@ -296,44 +296,40 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
-## Documentation OS Specification 1.0 — Baseline
+## Documentation OS Specification 1.0 — v4 Revision
 
-**Status:** Draft (pending final release)
+**Status:** Draft
 
-**Compatibility:** Baseline Specification
+**Compatibility:** Backward Compatible — consistency closure; no architecture change.
+
+### Fixed
+
+- Resolved duplicate directory-move wording between Complete and Cleanup in DOS-3004.
+- Removed the circular definition in Runtime Completion (DOS-1003).
+- Eliminated residual archival terminology across DOS-3002, DOS-2004, and DOS-3004.
+- Reconciled the Artifact and Identity definition conflict between DOS-0004 and DOS-2005.
+- Aligned the Work starting point in DOS-1003 with DOS-3002.
+- Added the missing Cleanup stage to the Appendix C lifecycle.
+- Removed the inaccurate "Runtime continually disappears" wording.
+- Removed Inbox from the Knowledge Relationships in error.
+- Removed the misleading "directory names may differ" statement.
+
+### Changed
+
+- Rewrote Runtime Completion as a set of verifiable conditions.
+- Promoted the four docs/ entry documents to normative.
+- Clarified that Work-scoped paths do not carry a status prefix.
 
 ### Added
 
-- Foundation layer
-- Information Model
-- Knowledge Model
-- Runtime Model
-- Identity Model
-- Relationship Model
-- Single Repository Profile
-- Repository Layout
-- Knowledge Mapping
-- Runtime Mapping
-- Repository Conventions
-- Document Lifecycle
-- Runtime Lifecycle
-- Knowledge Impact Analysis
-- Work Close Pipeline
-- Ownership
-- Documentation Operations
-- Validation
-- Health
-- Migration
-- Documentation Testing
-- Agent Entry
-- Reading Strategy
-- Execution Contract
-- Documentation Engine
-- CLI
-- Reference specifications
-- Appendices
+- Defined the minimal issue front-matter contract (status and title) and the issue status vocabulary.
+- Defined the minimal INDEX.md generation contract (including issue status).
+- Added Validation checks for internal Work structure and docs/ entry points.
+- Added a correction flow whereby a Completed Runtime can repair historical errors through a new Work.
 
-This release establishes the initial Documentation OS Specification.
+### Clarified
+
+- Performed a full-text normative sentence audit: lowercase shall was either upgraded by semantics or rewritten as declarative statements.
 
 ------
 
@@ -400,11 +396,52 @@ This release establishes the initial Documentation OS Specification.
 
 ------
 
+## Documentation OS Specification 1.0 — Baseline
+
+**Status:** Draft (pending final release)
+
+**Compatibility:** Baseline Specification
+
+### Added
+
+- Foundation layer
+- Information Model
+- Knowledge Model
+- Runtime Model
+- Identity Model
+- Relationship Model
+- Single Repository Profile
+- Repository Layout
+- Knowledge Mapping
+- Runtime Mapping
+- Repository Conventions
+- Document Lifecycle
+- Runtime Lifecycle
+- Knowledge Impact Analysis
+- Work Close Pipeline
+- Ownership
+- Documentation Operations
+- Validation
+- Health
+- Migration
+- Documentation Testing
+- Agent Entry
+- Reading Strategy
+- Execution Contract
+- Documentation Engine
+- CLI
+- Reference specifications
+- Appendices
+
+This release establishes the initial Documentation OS Specification.
+
+------
+
 # Future Releases
 
-Subsequent Specification Versions should append additional entries above older releases.
+Subsequent Specification Versions SHOULD append additional entries above older releases.
 
-Historical entries shall remain unchanged.
+Historical entries SHALL remain unchanged.
 
 The Change Log therefore forms the permanent history of Documentation OS evolution.
 

@@ -303,7 +303,7 @@ Execution policy is implementation-defined.
 
 # Failure Handling
 
-Health observations shall never be treated as repository failures.
+Health observations SHALL NOT be treated as repository failures.
 
 Health should remain informative.
 

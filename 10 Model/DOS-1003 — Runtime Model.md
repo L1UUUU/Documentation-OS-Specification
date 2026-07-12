@@ -210,7 +210,7 @@ A Work may include:
 - one or more implementation tasks;
 - temporary execution artifacts.
 
-Work begins when execution starts.
+Work begins when an accepted effort enters Runtime and its active/<workstream-slug>/ workspace is created.
 
 Work ends only after the Work Close Pipeline completes successfully.
 
@@ -288,7 +288,7 @@ Runtime may depend upon:
 - repository source code;
 - implementation artifacts.
 
-Knowledge shall never depend upon Runtime.
+Knowledge SHALL NOT depend upon Runtime.
 
 This directional dependency prevents long-term understanding from becoming coupled to temporary execution artifacts.
 
@@ -321,7 +321,7 @@ Runtime completion occurs when:
 2. Knowledge Impact Analysis has been performed;
 3. Knowledge Synchronization has finished;
 4. repository validation succeeds;
-5. Runtime has been completed.
+5. The Work directory has moved from active/<workstream-slug>/ to completed/<workstream-slug>/ and INDEX.md has been regenerated.
 
 Completion therefore represents successful transition rather than successful coding.
 
@@ -355,6 +355,7 @@ A Documentation OS implementation SHALL satisfy the following requirements.
 - Runtime SHALL produce Knowledge through Knowledge Synchronization.
 - Active Runtime SHALL NOT become permanent repository storage.
 - Completed Runtime core assets SHALL be preserved.
+- Knowledge SHALL NOT depend upon Runtime.
 
 ------
 

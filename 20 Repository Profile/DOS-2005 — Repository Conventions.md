@@ -42,29 +42,29 @@ Repository Conventions follow the following principles.
 
 Repository-wide consistency is preferred over individual preference.
 
-When multiple valid approaches exist, one should be selected and applied consistently.
+When multiple valid approaches exist, one SHOULD be selected and applied consistently.
 
 ------
 
 ## RC-2 Explicit Structure
 
-Repository conventions should be explicit rather than implicit.
+Repository conventions SHOULD be explicit rather than implicit.
 
-Repository users should not rely on undocumented conventions.
+Repository users SHOULD NOT rely on undocumented conventions.
 
 ------
 
 ## RC-3 Deterministic Organization
 
-Repository organization should produce identical structure under identical circumstances.
+Repository organization SHOULD produce identical structure under identical circumstances.
 
-Documentation Operations should not rely on heuristic behavior.
+Documentation Operations SHOULD NOT rely on heuristic behavior.
 
 ------
 
 ## RC-4 Human and Machine Readability
 
-Repository conventions should remain understandable by both humans and automated tooling.
+Repository conventions SHOULD remain understandable by both humans and automated tooling.
 
 Readable repositories reduce onboarding effort and improve automation reliability.
 
@@ -96,13 +96,13 @@ Examples include:
 
 Number allocation SHALL be monotonic.
 
-Allocated numbers SHALL never be reused.
+Allocated numbers SHALL NOT be reused.
 
 ------
 
 # Identifier Format
 
-The Single Repository Profile assigns every managed artifact a stable identifier of the form:
+The Single Repository Profile assigns every identity-managed Knowledge artifact a stable identifier of the form:
 
 ```text
 PREFIX-NNNN
@@ -224,7 +224,7 @@ Subdirectories may contain local guidance documents.
 
 Local guidance refines repository behavior within a limited scope.
 
-Local guidance shall not contradict repository-level guidance.
+Local guidance SHALL NOT contradict repository-level guidance.
 
 Repository-level guidance always remains authoritative.
 
@@ -297,14 +297,14 @@ Large structural changes should occur only when justified by significant archite
 
 A compliant Single Repository implementation SHALL satisfy the following requirements.
 
-- Repository entry points shall remain stable.
-- Naming shall follow documented conventions.
-- Managed numbering shall remain deterministic.
+- Repository entry points SHALL remain stable.
+- Naming SHALL follow documented conventions.
+- Managed numbering SHALL remain deterministic.
 - Managed Knowledge artifacts SHALL declare an identifier in the format defined above.
 - Relationships for Knowledge documents SHALL be declared through front matter targeting identifiers.
 - Work-level relationships SHALL be declared in the PRD.md front matter or referenced via workstream slug.
-- Local guidance shall not contradict repository guidance.
-- Generated content shall remain distinguishable from human-authored content.
+- Local guidance SHALL NOT contradict repository guidance.
+- Generated content SHALL remain distinguishable from human-authored content.
 
 ------
 

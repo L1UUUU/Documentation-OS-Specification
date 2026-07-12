@@ -178,7 +178,7 @@ Authored knowledge SHALL remain authoritative.
 
 Knowledge may be authored by humans or AI agents; once accepted through review it is authoritative Authored Knowledge regardless of its origin.
 
-Generated content SHALL NEVER overwrite authored content.
+Generated content SHALL NOT overwrite authored content.
 
 Documentation OS distinguishes three categories:
 
@@ -186,7 +186,7 @@ Documentation OS distinguishes three categories:
 - Generated Content
 - Managed Regions
 
-Only Generated Content and Managed Regions may be regenerated automatically.
+Only Generated Content and Managed Regions MAY be regenerated automatically.
 
 ------
 

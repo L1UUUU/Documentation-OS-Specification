@@ -94,7 +94,7 @@ Retired
 
 Not every document necessarily reaches every state.
 
-However, lifecycle transitions shall remain explicit.
+However, lifecycle transitions SHALL remain explicit.
 
 ------
 
@@ -135,7 +135,7 @@ Examples include:
 
 Updating a document does not imply correctness.
 
-Validation must follow.
+Validation MUST follow.
 
 ------
 
@@ -200,7 +200,7 @@ Typical events include:
 | Complete    | Completed |
 | Retire      | Retired   |
 
-Documentation shall not transition implicitly.
+Documentation SHALL NOT transition implicitly.
 
 ------
 
@@ -289,7 +289,7 @@ Generated documentation participates in the lifecycle as managed artifacts.
 
 Generation is considered an Update event.
 
-Generated documents should always be reproducible.
+Generated documents SHALL always be reproducible.
 
 Manual modification outside managed regions is prohibited.
 
@@ -314,7 +314,7 @@ They do not determine engineering intent.
 
 # Lifecycle Invariants
 
-The following invariants shall always remain true.
+The following invariants SHALL always remain true.
 
 ## LI-1
 
@@ -336,7 +336,7 @@ Validation follows modification.
 
 ## LI-4
 
-Completed Runtime shall not become Active again.
+Completed Runtime SHALL NOT become Active again.
 
 If additional work is required, a new Runtime artifact should be created.
 
@@ -344,7 +344,7 @@ If additional work is required, a new Runtime artifact should be created.
 
 ## LI-5
 
-Retired identities shall never be reused.
+Retired identities SHALL NOT be reused.
 
 ------
 

@@ -66,7 +66,7 @@ Internal implementation details remain implementation-defined.
 
 Conformance is determined exclusively by normative requirements defined within the Documentation OS Specification.
 
-Undocumented implementation behavior shall not affect conformance.
+Undocumented implementation behavior SHALL NOT affect conformance.
 
 ------
 
@@ -90,7 +90,7 @@ Each component may achieve conformance separately.
 
 Conformance is always evaluated against a specific Documentation OS specification version.
 
-Implementations shall declare the specification version they support.
+Implementations SHALL declare the specification version they support.
 
 ------
 
@@ -107,7 +107,7 @@ The repository SHALL:
 - participate in documented lifecycle behavior;
 - support Documentation Operations.
 
-Repository structure shall conform to the active Repository Profile.
+Repository structure SHALL conform to the active Repository Profile.
 
 ------
 
@@ -121,7 +121,7 @@ A Repository Profile SHALL:
 - support Documentation Operations;
 - remain compatible with Documentation OS lifecycle semantics.
 
-Repository Profiles shall not redefine Knowledge or Runtime.
+Repository Profiles SHALL NOT redefine Knowledge or Runtime.
 
 ------
 
@@ -136,7 +136,7 @@ A Documentation Engine SHALL:
 - preserve repository consistency;
 - execute deterministic operations.
 
-Documentation Engines shall implement observable behavior consistent with Documentation OS.
+Documentation Engines SHALL implement observable behavior consistent with Documentation OS.
 
 ------
 
@@ -305,7 +305,7 @@ DOS-4005 — Documentation Testing.
 
 # Non-Conformance
 
-An implementation shall not claim Documentation OS compatibility if it knowingly violates mandatory (SHALL or MUST) requirements defined by the applicable specification version.
+An implementation SHALL NOT claim Documentation OS compatibility if it knowingly violates mandatory (SHALL or MUST) requirements defined by the applicable specification version.
 
 Implementations may extend Documentation OS provided that:
 

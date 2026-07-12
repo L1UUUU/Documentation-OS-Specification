@@ -44,17 +44,17 @@ The Identity Model is designed to satisfy the following goals.
 
 Identity should remain unchanged throughout an artifact's lifetime.
 
-Renaming a document must not change its identity.
+Renaming a document MUST NOT change its identity.
 
-Moving a document must not change its identity.
+Moving a document MUST NOT change its identity.
 
-Changing repository layout must not change its identity.
+Changing repository layout MUST NOT change its identity.
 
 ------
 
 ## ID-2 Uniqueness
 
-Every managed Knowledge artifact shall possess exactly one unique identity.
+Every managed Knowledge artifact SHALL possess exactly one unique identity.
 
 Duplicate identities are prohibited.
 
@@ -114,6 +114,8 @@ Knowledge artifacts include:
 
 Runtime assets are addressed differently. A Work is identified by its workstream slug and located by its directory (`active/<slug>/` or `completed/<slug>/`); its PRD, Issues, and Handoff are addressed by Work-scoped paths. Runtime assets do not receive global identities and are therefore not identity-managed artifacts.
 
+A Work-scoped path takes the form `<workstream-slug>/<file>` (e.g. `<workstream-slug>/PRD.md`, `<workstream-slug>/issues/01-<slug>.md`) and SHALL NOT include the `active/` or `completed/` segment. The Documentation Engine resolves a Work-scoped path to its current physical location based on whether the slug resides in `active/` or `completed/`.
+
 Derived artifacts such as generated indexes do not require independent identities.
 
 ------
@@ -135,9 +137,9 @@ Artifact Evolves
 Archive / Retire
 ```
 
-Identity shall never be reassigned.
+Identity SHALL NOT be reassigned.
 
-Once retired, an identity shall never be reused.
+Once retired, an identity SHALL NOT be reused.
 
 ------
 
@@ -182,7 +184,7 @@ These identity formats apply to Knowledge artifacts. Runtime Works are identifie
 
 # Identity Allocation
 
-Identity allocation shall satisfy the following properties.
+Identity allocation SHALL satisfy the following properties.
 
 ## Deterministic
 

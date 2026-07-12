@@ -77,9 +77,9 @@ Cleanup
 Close
 ```
 
-Every completed Work shall pass through every stage.
+Every completed Work SHALL pass through every stage.
 
-Stages shall not be skipped.
+Stages SHALL NOT be skipped.
 
 The abstract Complete stage maps to active/<workstream-slug>/ → completed/<workstream-slug>/ directory movement in the Single Repository implementation.
 
@@ -137,7 +137,7 @@ Validation includes, where applicable:
 
 Validation confirms repository correctness before Runtime leaves the active domain.
 
-If validation fails, the Work shall not proceed to archival.
+If validation fails, the Work SHALL NOT proceed to Complete.
 
 ------
 
@@ -150,11 +150,11 @@ Move Runtime from active execution into completed state.
 Deterministic actions:
 
 1. Verify Core Runtime Assets exist (PRD.md, issues/*.md, HANDOFF.md);
-2. Move active/<workstream-slug>/ → completed/<workstream-slug>/;
-3. Preserve Core Runtime Assets (immutable business content);
-4. Clean Ephemeral Runtime Content only (temporary notes, planning artifacts).
+2. Clean Ephemeral Runtime Content only (temporary notes, planning artifacts);
+3. Atomically move active/<workstream-slug>/ → completed/<workstream-slug>/;
+4. Preserve Core Runtime Assets unchanged (immutable business content; generated INDEX.md MAY be regenerated).
 
-Core Runtime Assets are preserved upon completion (immutable business content; generated INDEX.md may be regenerated).
+Stage 3 owns the Work directory movement. Core Runtime Assets SHALL remain unchanged by completion.
 
 Repository Knowledge becomes the authoritative project memory.
 
@@ -168,13 +168,15 @@ Finalize Runtime after completion.
 
 Typical cleanup activities include:
 
-- moving active/<workstream-slug>/ → completed/<workstream-slug>/ (status expressed by directory location; no status field update);
-- regenerating .scratch/INDEX.md (generated summaries may be refreshed);
+- regenerating .scratch/INDEX.md (generated summaries MAY be refreshed);
+- cleaning up external temporary state and caches;
 - updating repository indexes.
+
+Cleanup SHALL NOT move the Work directory; directory movement is owned by Stage 3 — Complete.
 
 Cleanup prepares the repository for subsequent Work.
 
-Cleanup shall not modify synchronized Knowledge.
+Cleanup SHALL NOT modify synchronized Knowledge.
 
 ------
 
@@ -192,13 +194,13 @@ Closing a Work confirms that:
 - Runtime has been completed;
 - cleanup has completed.
 
-Only after these conditions have been satisfied may the Work transition to the Closed state.
+Only after these conditions have been satisfied MAY the Work transition to the Closed state.
 
 ------
 
 # Pipeline Invariants
 
-The following invariants shall always remain true.
+The following invariants SHALL always remain true.
 
 ## WC-1
 
@@ -240,7 +242,7 @@ Reordering stages is prohibited.
 
 # Failure Handling
 
-A pipeline stage may fail.
+A pipeline stage can fail.
 
 Examples include:
 
@@ -249,29 +251,36 @@ Examples include:
 - documentation inconsistencies;
 - repository operation failures.
 
-If a stage fails:
+If a stage fails before Complete:
 
-- the Work shall remain active;
-- subsequent stages shall not execute;
-- failure shall be explicitly reported.
+- the Work SHALL remain in active/;
+- subsequent stages SHALL NOT execute;
+- failure SHALL be explicitly reported.
 
-The pipeline may resume after the failure has been resolved.
+If a stage fails after Complete (the Work directory has already moved to completed/):
+
+- the Work SHALL remain in completed/;
+- the Work lifecycle has not yet reached Closed;
+- after recovery, remaining Cleanup and Close stages SHALL continue;
+- failure SHALL be explicitly reported.
+
+In both cases the failure is recoverable, and the pipeline MAY resume after the failure has been resolved.
 
 ------
 
 # Idempotency
 
-Pipeline stages should be designed to support safe re-execution.
+Pipeline stages SHOULD be designed to support safe re-execution.
 
-Re-running a partially completed Work Close Pipeline should not introduce inconsistent repository state.
+Re-running a partially completed Work Close Pipeline SHOULD NOT introduce inconsistent repository state.
 
-Documentation Operations should therefore favor deterministic behavior and avoid destructive side effects.
+Documentation Operations SHOULD therefore favor deterministic behavior and avoid destructive side effects.
 
 ------
 
 # Documentation Operations
 
-Documentation Operations may automate portions of the Work Close Pipeline.
+Documentation Operations MAY automate portions of the Work Close Pipeline.
 
 Typical operations include:
 
@@ -296,7 +305,7 @@ Successful completion of the Work Close Pipeline guarantees:
 - repository consistency has been verified;
 - lifecycle ownership has concluded.
 
-The repository should therefore be immediately ready for the next Work.
+The repository is therefore immediately ready for the next Work.
 
 ------
 

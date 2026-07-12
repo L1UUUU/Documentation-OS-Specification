@@ -32,7 +32,7 @@ Normative keywords establish implementation requirements.
 
 Descriptive language explains concepts.
 
-Implementations claiming Documentation OS compliance shall interpret normative keywords according to this specification.
+Implementations claiming Documentation OS compliance SHALL interpret normative keywords according to this specification.
 
 ------
 
@@ -40,7 +40,7 @@ Implementations claiming Documentation OS compliance shall interpret normative k
 
 Documentation OS adopts the following requirement keywords.
 
-Unless explicitly stated otherwise, these keywords shall be interpreted exactly as defined below.
+Unless explicitly stated otherwise, these keywords SHALL be interpreted exactly as defined below.
 
 ------
 
@@ -72,7 +72,7 @@ Implementations may use either keyword for readability.
 
 **SHALL NOT** indicates an absolute prohibition.
 
-A compliant implementation shall never perform the prohibited behavior.
+A compliant implementation does not perform the prohibited behavior.
 
 Example:
 
@@ -228,6 +228,12 @@ They remain immutable; only the generated INDEX.md may be regenerated.
 
 ------
 
+## Issue Status
+
+The normative lifecycle state of a Runtime Issue, with values open, in-progress, done, blocked (defined in DOS-2004).
+
+------
+
 ## Compatible
 
 An implementation is **Documentation OS Compatible** when it satisfies the applicable conformance requirements defined by this specification.
@@ -245,8 +251,8 @@ When interpreting Documentation OS specifications:
 3. Higher-level specifications SHALL NOT redefine concepts defined at lower levels; lower-level specifications SHALL NOT contradict higher-level normative requirements.
 
    These two clauses govern different concerns. Redefinition governs where a concept is authoritatively defined: lower layers own their concepts and higher layers build upon them without redefining them. Contradiction governs compliance priority: lower-layer specifications must obey the normative requirements that higher layers establish upon those concepts.
-4. Repository Profiles shall preserve conceptual semantics.
-5. Implementations shall preserve externally observable behavior even if internal implementations differ.
+4. Repository Profiles SHALL preserve conceptual semantics.
+5. Implementations SHALL preserve externally observable behavior even if internal implementations differ.
 
 ------
 

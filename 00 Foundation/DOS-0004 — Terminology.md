@@ -339,7 +339,7 @@ A document region owned by the Documentation Engine.
 
 Managed Regions may be regenerated automatically.
 
-Human-authored content outside Managed Regions shall remain untouched.
+Human-authored content outside Managed Regions SHALL remain untouched.
 
 ------
 
@@ -349,7 +349,7 @@ Human-authored content outside Managed Regions shall remain untouched.
 
 Repository content produced deterministically by Documentation Operations.
 
-Generated Content shall always be reproducible.
+Generated Content SHALL always be reproducible.
 
 Examples include:
 
@@ -523,7 +523,7 @@ Examples include:
 - Standards;
 - Runtime artifacts.
 
-Artifacts possess identity and lifecycle.
+All Artifacts participate in lifecycle. Only Knowledge Artifacts possess global Identity; Runtime Artifacts are addressed by Work-scoped paths.
 
 Staging content such as Inbox items is not an Artifact; it is lightweight Staging Information defined separately.
 

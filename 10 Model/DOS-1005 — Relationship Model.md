@@ -34,7 +34,7 @@ Without explicit relationships:
 
 - navigation becomes dependent on directory structure;
 - impact analysis becomes unreliable;
-- AI agents must infer connections;
+- AI agents are forced to infer connections;
 - repository evolution becomes increasingly difficult.
 
 ------
@@ -102,6 +102,8 @@ Relationships connect addressable artifacts rather than filesystem paths.
 
 Knowledge artifacts use identities; Runtime assets (Work, PRD, Issues, Handoff) use workstream slugs or Work-scoped paths.
 
+A Work-scoped path takes the form `<workstream-slug>/<file>` (e.g. `<workstream-slug>/PRD.md`, `<workstream-slug>/issues/01-<slug>.md`) and SHALL NOT include the `active/` or `completed/` segment. The Documentation Engine resolves a Work-scoped path to its current physical location based on whether the slug resides in `active/` or `completed/`.
+
 ------
 
 # Relationship Characteristics
@@ -144,7 +146,7 @@ Relationship type determines semantics.
 
 ## Explicit
 
-Relationships shall be explicitly declared.
+Relationships SHALL be explicitly declared.
 
 Documentation OS discourages relationships inferred solely from filenames, directory placement, or naming conventions.
 
@@ -156,7 +158,7 @@ Relationships reference addressable artifacts.
 
 Knowledge artifacts are referenced by stable identities; Runtime assets are referenced by workstream slugs or Work-scoped paths.
 
-Repository restructuring must not invalidate relationships.
+Repository restructuring MUST NOT invalidate relationships.
 
 ------
 
@@ -270,7 +272,7 @@ The meaning of each relationship depends upon its type.
 
 When Runtime is a relationship endpoint, references are resolved using workstream slugs or Work-scoped paths.
 
-Repository Profiles shall preserve relationship semantics.
+Repository Profiles SHALL preserve relationship semantics.
 
 ------
 
@@ -377,7 +379,7 @@ Documentation Operations may:
 - generate navigation indexes;
 - detect broken references.
 
-Documentation Operations shall not invent semantic relationships.
+Documentation Operations SHALL NOT invent semantic relationships.
 
 Relationship creation remains the responsibility of humans or AI agents.
 

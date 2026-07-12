@@ -57,19 +57,19 @@ Migration follows the following principles.
 
 ## MG-1 Semantic Preservation
 
-Migration shall preserve repository meaning.
+Migration SHALL preserve repository meaning.
 
 Repository structure may change.
 
-Repository semantics shall remain unchanged.
+Repository semantics SHALL remain unchanged.
 
 ------
 
 ## MG-2 Deterministic
 
-Migration shall produce identical repository state when executed against identical input.
+Migration SHALL produce identical repository state when executed against identical input.
 
-Migration shall avoid heuristic behavior.
+Migration SHALL avoid heuristic behavior.
 
 ------
 
@@ -77,7 +77,7 @@ Migration shall avoid heuristic behavior.
 
 Migration should support rollback or recovery whenever practical.
 
-Partial migration shall not leave the repository in an inconsistent state.
+Partial migration SHALL NOT leave the repository in an inconsistent state.
 
 ------
 
@@ -91,7 +91,7 @@ Large structural changes should be decomposed into smaller migration steps.
 
 ## MG-5 Observable
 
-Migration shall clearly report:
+Migration SHALL clearly report:
 
 - repository version before migration;
 - repository version after migration;
@@ -148,7 +148,7 @@ Examples include:
 
 Repository Profiles may differ in layout.
 
-They shall preserve identical conceptual models.
+They SHALL preserve identical conceptual models.
 
 ------
 
@@ -163,7 +163,7 @@ Typical examples include:
 - category reorganization;
 - generated artifact relocation.
 
-Artifact identities shall remain unchanged.
+Artifact identities SHALL remain unchanged.
 
 ------
 
@@ -178,7 +178,7 @@ Examples include:
 - repository metadata;
 - generated metadata.
 
-Metadata Migration shall not modify human-authored knowledge.
+Metadata Migration SHALL NOT modify human-authored knowledge.
 
 ------
 
@@ -206,7 +206,7 @@ Validate
 Complete
 ```
 
-Each stage shall complete successfully before the next stage begins.
+Each stage SHALL complete successfully before the next stage begins.
 
 ------
 
@@ -219,7 +219,7 @@ Preparation identifies:
 - required migration path;
 - migration prerequisites.
 
-Migration shall not proceed if prerequisites are not satisfied.
+Migration SHALL NOT proceed if prerequisites are not satisfied.
 
 ------
 
@@ -249,13 +249,13 @@ Typical transformations include:
 - regenerating derived artifacts;
 - updating compatibility files.
 
-Transformation shall preserve repository semantics.
+Transformation SHALL preserve repository semantics.
 
 ------
 
 # Validate
 
-Migration shall conclude with repository Validation.
+Migration SHALL conclude with repository Validation.
 
 Validation confirms:
 
@@ -263,7 +263,7 @@ Validation confirms:
 - migration completeness;
 - specification compliance.
 
-Migration shall not complete successfully if Validation fails.
+Migration SHALL NOT complete successfully if Validation fails.
 
 ------
 
@@ -281,9 +281,9 @@ Repository should immediately satisfy the target specification.
 
 # Identity Preservation
 
-Migration shall preserve artifact identities.
+Migration SHALL preserve artifact identities.
 
-Identity shall remain stable across:
+Identity SHALL remain stable across:
 
 - directory changes;
 - filename changes;
@@ -296,13 +296,13 @@ Identity preservation is mandatory.
 
 # Relationship Preservation
 
-Migration shall preserve semantic Relationships.
+Migration SHALL preserve semantic Relationships.
 
-Repository restructuring shall not invalidate documented Relationships.
+Repository restructuring SHALL NOT invalidate documented Relationships.
 
 Relationship representation may change.
 
-Relationship semantics shall remain unchanged.
+Relationship semantics SHALL remain unchanged.
 
 ------
 
@@ -318,7 +318,7 @@ Generated artifacts remain reproducible.
 
 # Failure Handling
 
-Migration failures shall be explicit.
+Migration failures SHALL be explicit.
 
 Typical failures include:
 
@@ -327,7 +327,7 @@ Typical failures include:
 - validation failure;
 - repository inconsistency.
 
-Failed migration shall not claim completion.
+Failed migration SHALL NOT claim completion.
 
 Repository recovery strategy is implementation-defined.
 
@@ -337,7 +337,7 @@ Repository recovery strategy is implementation-defined.
 
 Migration is a Documentation Operation.
 
-Documentation Engines shall expose Migration independently from:
+Documentation Engines SHALL expose Migration independently from:
 
 - Validation;
 - Health;

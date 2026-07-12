@@ -56,7 +56,7 @@ Documentation Testing follows the following principles.
 
 ## DT-1 Specification-Driven
 
-Every test shall verify behavior defined by a Documentation OS specification.
+Every test SHALL verify behavior defined by a Documentation OS specification.
 
 Tests should never depend upon undocumented implementation details.
 
@@ -64,9 +64,9 @@ Tests should never depend upon undocumented implementation details.
 
 ## DT-2 Deterministic
 
-Executing identical tests against identical repository state shall produce identical results.
+Executing identical tests against identical repository state SHALL produce identical results.
 
-Tests shall avoid timing-dependent behavior.
+Tests SHALL avoid timing-dependent behavior.
 
 ------
 
@@ -74,7 +74,7 @@ Tests shall avoid timing-dependent behavior.
 
 Each test should execute independently.
 
-One failing test shall not invalidate unrelated tests.
+One failing test SHALL NOT invalidate unrelated tests.
 
 ------
 
@@ -82,13 +82,13 @@ One failing test shall not invalidate unrelated tests.
 
 Tests should be safely repeatable.
 
-Repeated execution shall not modify repository semantics.
+Repeated execution SHALL NOT modify repository semantics.
 
 ------
 
 ## DT-5 Observable
 
-Test results shall clearly identify:
+Test results SHALL clearly identify:
 
 - tested specification;
 - expected behavior;
@@ -249,14 +249,14 @@ Fixtures should remain version-controlled.
 
 # Expected Results
 
-Every Documentation Test shall define:
+Every Documentation Test SHALL define:
 
 - initial repository state;
 - operation under test;
 - expected repository state;
 - expected diagnostics.
 
-Tests shall not rely upon manual interpretation.
+Tests SHALL NOT rely upon manual interpretation.
 
 ------
 

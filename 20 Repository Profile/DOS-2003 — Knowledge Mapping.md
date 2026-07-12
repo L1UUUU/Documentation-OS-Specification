@@ -38,15 +38,15 @@ Knowledge Mapping follows the following principles.
 
 ## KM-1 Single Responsibility
 
-Every Knowledge Category should answer one primary question.
+Every Knowledge Category SHOULD answer one primary question.
 
-A category should not attempt to become a general-purpose documentation area.
+A category SHOULD NOT attempt to become a general-purpose documentation area.
 
 ------
 
 ## KM-2 Minimal Overlap
 
-Knowledge Categories should minimize duplicated information.
+Knowledge Categories SHOULD minimize duplicated information.
 
 If two categories continuously duplicate content, their responsibilities are incorrectly defined.
 
@@ -54,9 +54,9 @@ If two categories continuously duplicate content, their responsibilities are inc
 
 ## KM-3 Stable Knowledge
 
-Knowledge Categories should evolve slowly.
+Knowledge Categories SHOULD evolve slowly.
 
-They should represent long-term understanding rather than temporary implementation details.
+They SHOULD represent long-term understanding rather than temporary implementation details.
 
 ------
 
@@ -136,7 +136,7 @@ Architecture explains the system.
 
 ADR explains its evolution.
 
-These responsibilities shall remain separate.
+These responsibilities SHALL remain separate.
 
 ------
 
@@ -300,17 +300,17 @@ Knowledge Impact Analysis determines which categories require synchronization.
 
 Knowledge Categories remain independent.
 
-Architecture should not become:
+Architecture SHOULD NOT become:
 
 - design history;
 - engineering guide;
 - issue tracker.
 
-Standards should not duplicate Architecture.
+Standards SHOULD NOT duplicate Architecture.
 
 Inbox is a staging area, not a Category; its items should be resolved rather than accumulated.
 
-ADR should not become Architecture.
+ADR SHOULD NOT become Architecture.
 
 Clear boundaries improve long-term maintainability.
 
@@ -320,7 +320,7 @@ Clear boundaries improve long-term maintainability.
 
 The Single Repository Profile maps the three Knowledge Categories into repository directories, alongside the Inbox staging area.
 
-A typical mapping is:
+A compliant Single Repository SHALL provide `docs/architecture/`, `docs/adr/`, `docs/standards/`, and `docs/inbox/`. Additional auxiliary directories (e.g. `indexes/`, `templates/`) MAY exist. The canonical mapping is:
 
 ```text
 docs/
@@ -356,6 +356,7 @@ A compliant Single Repository implementation SHALL satisfy the following require
 - ADR records significant decisions.
 - Standards define engineering conventions.
 - Repository layout preserves category semantics.
+- The repository SHALL provide `docs/architecture/`, `docs/adr/`, `docs/standards/`, and `docs/inbox/`.
 
 ------
 

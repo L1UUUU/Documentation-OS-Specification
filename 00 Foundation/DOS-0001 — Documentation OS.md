@@ -152,7 +152,7 @@ Each layer builds upon the previous one.
 
 Higher layers may depend on lower layers.
 
-Lower layers must never depend on higher layers.
+Lower layers MUST never depend on higher layers.
 
 ------
 
@@ -283,7 +283,7 @@ Examples include:
 - New documentation operations
 - New knowledge categories
 
-Extensions must remain compatible with the Foundation specifications unless a new major version is introduced.
+Extensions MUST remain compatible with the Foundation specifications unless a new major version is introduced.
 
 ------
 

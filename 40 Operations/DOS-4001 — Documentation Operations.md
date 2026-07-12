@@ -64,9 +64,9 @@ Documentation Operations follow the following principles.
 
 ## DO-1 Deterministic
 
-Every operation shall produce identical results when executed against identical repository state.
+Every operation SHALL produce identical results when executed against identical repository state.
 
-Operations shall avoid non-deterministic behavior.
+Operations SHALL avoid non-deterministic behavior.
 
 ------
 
@@ -80,27 +80,27 @@ Executing the same operation multiple times should not introduce inconsistent re
 
 ## DO-3 Non-Destructive
 
-Operations shall preserve human-authored knowledge.
+Operations SHALL preserve human-authored knowledge.
 
 Managed content may be regenerated.
 
-Human-authored content outside managed regions shall remain untouched.
+Human-authored content outside managed regions SHALL remain untouched.
 
 ------
 
 ## DO-4 Specification Driven
 
-Operations shall implement Documentation OS specifications.
+Operations SHALL implement Documentation OS specifications.
 
-Repository behavior shall not depend upon undocumented implementation decisions.
+Repository behavior SHALL NOT depend upon undocumented implementation decisions.
 
 ------
 
 ## DO-5 Repository Local
 
-Operations shall derive their behavior entirely from repository contents.
+Operations SHALL derive their behavior entirely from repository contents.
 
-Persistent external state shall not be required.
+Persistent external state SHALL NOT be required.
 
 ------
 
@@ -142,7 +142,7 @@ Typical examples include:
 - navigation files;
 - compatibility files.
 
-Generated artifacts shall always be reproducible.
+Generated artifacts SHALL always be reproducible.
 
 ------
 
@@ -195,7 +195,7 @@ Operations include:
 - moving active/<workstream-slug>/ → completed/<workstream-slug>/;
 - regenerating .scratch/INDEX.md.
 
-Complete Operations shall not modify synchronized Knowledge.
+Complete Operations SHALL NOT modify synchronized Knowledge.
 
 ------
 
@@ -211,7 +211,7 @@ Migration includes:
 - structural transformations;
 - compatibility updates.
 
-Migration shall preserve repository semantics.
+Migration SHALL preserve repository semantics.
 
 Migration behavior is defined by:
 
@@ -238,7 +238,7 @@ Inspection does not modify repository contents.
 
 # Operational Characteristics
 
-Every Documentation Operation shall satisfy the following properties.
+Every Documentation Operation SHALL satisfy the following properties.
 
 ## Explicit
 
@@ -322,13 +322,13 @@ Complete
 
 Individual specifications define additional ordering requirements.
 
-Documentation Engines shall preserve required ordering.
+Documentation Engines SHALL preserve required ordering.
 
 ------
 
 # Failure Handling
 
-Documentation Operations shall fail explicitly.
+Documentation Operations SHALL fail explicitly.
 
 Failure should include sufficient information for:
 
@@ -336,7 +336,7 @@ Failure should include sufficient information for:
 - recovery;
 - retry.
 
-Failed operations shall avoid leaving the repository in an inconsistent state.
+Failed operations SHALL avoid leaving the repository in an inconsistent state.
 
 ------
 

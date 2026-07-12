@@ -117,7 +117,7 @@ Persistent knowledge forms the long-term memory of the repository.
 
 New knowledge is produced during implementation.
 
-Before Runtime can be completed, that knowledge must be synchronized into the permanent knowledge base.
+Before Runtime can be completed, that knowledge MUST be synchronized into the permanent knowledge base.
 
 The required order is:
 
@@ -143,7 +143,7 @@ Complete
 
 This ordering prevents knowledge loss during software evolution.
 
-Runtime must never disappear before the knowledge it produced has been preserved.
+Runtime MUST never disappear before the knowledge it produced has been preserved.
 
 ------
 
@@ -183,7 +183,7 @@ Documentation OS intentionally avoids introducing secondary persistent state.
 
 The repository itself contains the complete project knowledge.
 
-Implementations may generate derived artifacts, but these artifacts must always be reproducible from repository contents.
+Implementations may generate derived artifacts, but these artifacts MUST always be reproducible from repository contents.
 
 The repository therefore becomes:
 
@@ -347,11 +347,11 @@ These implications are specified in later documents.
 
 # Compliance
 
-Every Documentation OS specification shall be consistent with the philosophies defined in this document.
+Every Documentation OS specification SHALL be consistent with the philosophies defined in this document.
 
-Implementations may extend Documentation OS.
+Implementations MAY extend Documentation OS.
 
-They shall not contradict its design philosophy.
+They SHALL NOT contradict its design philosophy.
 
 ------
 

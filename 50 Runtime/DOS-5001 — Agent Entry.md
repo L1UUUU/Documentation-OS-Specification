@@ -45,7 +45,7 @@ Examples include:
 
 Repository Profiles may provide additional guidance.
 
-They shall not redefine the Agent Entry lifecycle.
+They SHALL NOT redefine the Agent Entry lifecycle.
 
 ------
 
@@ -207,7 +207,7 @@ architecture/AGENTS.md
 
 Each level narrows repository context.
 
-Lower-level guidance shall not contradict higher-level guidance.
+Lower-level guidance SHALL NOT contradict higher-level guidance.
 
 ------
 

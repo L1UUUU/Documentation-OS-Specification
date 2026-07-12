@@ -68,7 +68,7 @@ Business logic belongs exclusively to the Documentation Engine.
 
 ## CLI-2 Deterministic
 
-Executing identical commands against identical repository state shall produce identical results.
+Executing identical commands against identical repository state SHALL produce identical results.
 
 ------
 
@@ -165,7 +165,7 @@ Typical capabilities include:
 - Runtime overview (including active and completed workstreams, based on `.scratch/INDEX.md`);
 - Knowledge overview.
 
-Inspection shall remain read-only.
+Inspection SHALL remain read-only.
 
 ------
 
@@ -180,7 +180,7 @@ Results should include:
 - warnings;
 - affected artifacts.
 
-Validation commands shall not modify repository state.
+Validation commands SHALL NOT modify repository state.
 
 ------
 
@@ -223,7 +223,7 @@ Typical behavior includes:
 - regenerating `.scratch/INDEX.md`;
 - updating repository metadata.
 
-Complete commands shall preserve Core Runtime Assets (PRD.md, issues/, HANDOFF.md) and shall not delete them.
+Complete commands SHALL preserve Core Runtime Assets (PRD.md, issues/, HANDOFF.md) and SHALL NOT delete them.
 
 ------
 
@@ -307,7 +307,7 @@ Automation should invoke the same Documentation Operations available to interact
 
 # Relationship to Documentation Engine
 
-The CLI shall not duplicate Documentation Engine behavior.
+The CLI SHALL NOT duplicate Documentation Engine behavior.
 
 The relationship is:
 
@@ -337,7 +337,7 @@ Alternatively, agents may invoke Documentation Operations through:
 - native APIs;
 - embedded integrations.
 
-Invocation mechanism shall not affect Documentation Engine behavior.
+Invocation mechanism SHALL NOT affect Documentation Engine behavior.
 
 ------
 

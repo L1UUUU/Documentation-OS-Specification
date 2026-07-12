@@ -62,8 +62,8 @@ In particular:
 
 - Runtime is temporary.
 - Runtime produces Knowledge.
-- Knowledge must be synchronized before Runtime is completed.
-- Runtime shall not become long-term repository storage.
+- Knowledge MUST be synchronized before Runtime is completed.
+- Runtime SHALL NOT become long-term repository storage.
 
 ------
 
@@ -113,7 +113,7 @@ Closed
 
 Each transition represents a meaningful engineering event.
 
-No transition should occur implicitly.
+No transition SHOULD occur implicitly.
 
 ------
 
@@ -242,7 +242,7 @@ Completed Runtime no longer participates in active engineering work.
 
 The workstream directory moves from active/<slug>/ to completed/<slug>/.
 
-Core Runtime assets are preserved (immutable business content; generated INDEX.md may be regenerated).
+Core Runtime assets are preserved (immutable business content; generated INDEX.md MAY be regenerated).
 
 Repository knowledge now contains the enduring understanding created by the Work.
 
@@ -307,9 +307,9 @@ Completed
 Closed
 ```
 
-Implementations should avoid reversing lifecycle states.
+Implementations SHOULD avoid reversing lifecycle states.
 
-If significant additional engineering work becomes necessary after closure, a new Work should be created.
+If significant additional engineering work becomes necessary after closure, a new Work SHOULD be created.
 
 ------
 
@@ -323,7 +323,7 @@ Core Runtime Assets (preserved upon completion):
 - issues/*.md;
 - HANDOFF.md.
 
-Ephemeral Runtime Content (may be cleaned up):
+Ephemeral Runtime Content (MAY be cleaned up):
 
 - clarified requirements;
 - implementation plans;
@@ -332,7 +332,7 @@ Ephemeral Runtime Content (may be cleaned up):
 
 Artifacts may evolve while the Work remains active.
 
-Core assets are preserved upon completion (immutable business content; generated INDEX.md may be regenerated).
+Core assets are preserved upon completion (immutable business content; generated INDEX.md MAY be regenerated).
 
 ------
 
@@ -346,9 +346,11 @@ Ownership includes responsibility for:
 - initiating Knowledge Impact Analysis;
 - synchronizing repository knowledge;
 - completing validation;
-- archiving Runtime.
+- completing Runtime.
 
 Ownership concludes when the Work reaches the Closed state.
+
+Completed Runtime core assets are immutable. To correct a historical error in a completed Work, do not edit the completed Work; instead create a new Work whose relationships point to the original completed Work. Only INDEX.md MAY be regenerated; completed core content SHALL NOT be modified.
 
 ------
 
@@ -388,7 +390,7 @@ This continuous feedback loop forms the central operating model of Documentation
 
 # Runtime Invariants
 
-The following invariants shall always remain true.
+The following invariants SHALL always remain true.
 
 ## RI-1
 
@@ -398,25 +400,25 @@ Every Work possesses exactly one lifecycle state.
 
 ## RI-2
 
-Runtime shall not bypass Knowledge Impact Analysis.
+Runtime SHALL NOT bypass Knowledge Impact Analysis.
 
 ------
 
 ## RI-3
 
-Knowledge Synchronization shall precede Runtime archival.
+Knowledge Synchronization SHALL precede Runtime completion.
 
 ------
 
 ## RI-4
 
-Completed Runtime core assets shall be preserved (immutable business content; the generated INDEX.md may be regenerated).
+Completed Runtime core assets SHALL be preserved (immutable business content; the generated INDEX.md MAY be regenerated).
 
 ------
 
 ## RI-5
 
-Closed Work shall not return to Executing.
+Closed Work SHALL NOT return to Executing.
 
 Subsequent implementation requires a new Work.
 
@@ -432,11 +434,11 @@ Typical failure causes include:
 - requirements withdrawn;
 - engineering superseded.
 
-Failed Works may be completed without reaching the Closed state.
+Failed Works MAY be completed without reaching the Closed state.
 
-Repository Profiles may define additional failure handling conventions.
+Repository Profiles MAY define additional failure handling conventions.
 
-Failure shall not bypass required documentation consistency operations.
+Failure SHALL NOT bypass required documentation consistency operations.
 
 ------
 

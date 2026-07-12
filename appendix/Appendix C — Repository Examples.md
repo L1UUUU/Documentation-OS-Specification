@@ -278,11 +278,7 @@ Architecture
 
 │
 
-├── references Standards
-
-│
-
-└── references Inbox
+└── references Standards
 ```
 
 Relationships improve navigation.
@@ -359,6 +355,10 @@ Validation
 ↓
 
 Complete (completed/)
+
+↓
+
+Cleanup
 
 ↓
 
@@ -483,7 +483,7 @@ Knowledge
 
 Knowledge continually improves.
 
-Runtime continually disappears.
+Active Runtime continually leaves the active execution context. Core Runtime Assets remain preserved under completed/.
 
 ------
 
@@ -498,7 +498,7 @@ Repository implementations are encouraged to:
 - maintain stable identities for globally identified Artifacts;
 - minimize coupling between documentation categories.
 
-Individual directory names may differ provided conceptual behavior remains consistent with the Repository Profile.
+Additional directories may exist, but normative Single Repository paths and filenames SHALL remain unchanged.
 
 ------
 

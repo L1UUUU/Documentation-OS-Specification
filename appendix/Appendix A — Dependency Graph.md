@@ -29,7 +29,7 @@ Each layer depends only on lower layers.
 
 Higher layers extend lower layers.
 
-They do not redefine them; lower layers shall not contradict higher-layer normative requirements.
+They do not redefine them; lower layers SHALL NOT contradict higher-layer normative requirements.
 
 ```text
                          README
@@ -337,19 +337,19 @@ Higher-numbered layers may depend upon lower-numbered layers.
 
 ## DR-2
 
-Lower-numbered layers shall never depend upon higher-numbered layers; lower-numbered layers shall not contradict higher-layer normative requirements.
+Lower-numbered layers SHALL NOT depend upon higher-numbered layers; lower-numbered layers SHALL NOT contradict higher-layer normative requirements.
 
 ------
 
 ## DR-3
 
-Repository Profiles shall preserve conceptual semantics defined by the Model layer.
+Repository Profiles SHALL preserve conceptual semantics defined by the Model layer.
 
 ------
 
 ## DR-4
 
-Documentation Operations shall implement, but never redefine, Lifecycle behavior.
+Documentation Operations SHALL implement, but never redefine, Lifecycle behavior.
 
 ------
 

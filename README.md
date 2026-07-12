@@ -464,7 +464,7 @@ Future versions may introduce:
 - richer Documentation Engine integrations;
 - new appendices and implementation guidance.
 
-Future specifications shall preserve the conceptual models established by Documentation OS unless explicitly superseded by a later specification.
+Future specifications SHALL preserve the conceptual models established by Documentation OS unless explicitly superseded by a later specification.
 
 ------
 

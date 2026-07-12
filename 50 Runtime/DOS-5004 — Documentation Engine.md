@@ -58,15 +58,15 @@ The Documentation Engine follows the following principles.
 
 ## DE-1 Deterministic
 
-Given identical repository state and identical operation parameters, the Documentation Engine shall always produce identical results.
+Given identical repository state and identical operation parameters, the Documentation Engine SHALL always produce identical results.
 
 ------
 
 ## DE-2 Stateless
 
-The Documentation Engine should derive behavior entirely from repository contents.
+The Documentation Engine SHOULD derive behavior entirely from repository contents.
 
-Persistent external state should not be required.
+Persistent external state SHOULD NOT be required.
 
 Repository state is the source of truth.
 
@@ -76,7 +76,7 @@ Repository state is the source of truth.
 
 The Documentation Engine implements Documentation OS specifications.
 
-Implementation behavior shall never contradict specification behavior.
+Implementation behavior SHALL NOT contradict specification behavior.
 
 ------
 
@@ -98,7 +98,7 @@ All integrations interact through the same operational contract.
 
 All operations execute against the current repository.
 
-The Documentation Engine shall not depend upon cloud services unless explicitly configured by an implementation.
+The Documentation Engine SHALL NOT depend upon cloud services unless explicitly configured by an implementation.
 
 ------
 
@@ -169,26 +169,26 @@ Return Outcome
 
 The internal implementation remains implementation-defined.
 
-The observable behavior shall remain specification-compliant.
+The observable behavior SHALL remain specification-compliant.
 
 ------
 
 # Repository Discovery
 
-Before executing any operation, the Documentation Engine shall determine:
+Before executing any operation, the Documentation Engine SHALL determine:
 
 - Documentation OS version;
 - active Repository Profile;
 - repository entry points;
 - managed documentation locations.
 
-Repository discovery should be automatic.
+Repository discovery SHOULD be automatic.
 
 ------
 
 # Repository Metadata
 
-The Documentation Engine may maintain repository metadata required for deterministic operation.
+The Documentation Engine MAY maintain repository metadata required for deterministic operation.
 
 Examples include:
 
@@ -197,7 +197,11 @@ Examples include:
 - managed metadata;
 - compatibility information.
 
-Repository metadata shall remain reproducible whenever possible, with `.scratch/INDEX.md` maintained as a stateless derivative of the active and completed workstreams.
+Repository metadata SHALL remain reproducible whenever possible, with `.scratch/INDEX.md` maintained as a stateless derivative of the active and completed workstreams.
+
+## INDEX Generation Contract
+
+When generating `.scratch/INDEX.md`, the Documentation Engine SHALL produce, under "Active Works" and "Completed Works" sections, each Work's workstream slug, PRD path, HANDOFF path, and each Issue listed as `NN-<slug>.md [status] <title>`, reading status and title from Issue front matter. INDEX SHALL remain reproducible from repository state alone.
 
 ------
 
@@ -235,13 +239,13 @@ Repository Profiles define repository representation.
 
 The Documentation Engine interprets repository contents according to the active Repository Profile.
 
-Adding a new Repository Profile should not require changes to Documentation OS semantics.
+Adding a new Repository Profile SHOULD NOT require changes to Documentation OS semantics.
 
 ------
 
 # Error Handling
 
-The Documentation Engine shall provide explicit error reporting.
+The Documentation Engine SHALL provide explicit error reporting.
 
 Typical error categories include:
 
@@ -251,7 +255,7 @@ Typical error categories include:
 - migration failure;
 - operation failure.
 
-Errors should identify:
+Errors SHOULD identify:
 
 - operation;
 - affected artifact;
@@ -262,11 +266,11 @@ Errors should identify:
 
 # Extensibility
 
-Implementations may introduce additional Documentation Operations.
+Implementations MAY introduce additional Documentation Operations.
 
-Additional operations shall satisfy the Documentation Engine principles and remain compatible with Documentation OS.
+Additional operations SHALL satisfy the Documentation Engine principles and remain compatible with Documentation OS.
 
-Extensions shall not redefine existing specification behavior.
+Extensions SHALL NOT redefine existing specification behavior.
 
 ------
 
@@ -282,7 +286,7 @@ Valid implementations may include:
 - Python
 - other languages
 
-All implementations should expose equivalent observable behavior.
+All implementations SHOULD expose equivalent observable behavior.
 
 ------
 

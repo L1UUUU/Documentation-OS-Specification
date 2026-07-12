@@ -32,7 +32,7 @@ The purpose of the Repository Layout is to provide a deterministic directory str
 
 A repository layout is an implementation detail.
 
-It should never redefine the conceptual models established by Documentation OS.
+It does not redefine the conceptual models established by Documentation OS.
 
 ------
 
@@ -42,7 +42,7 @@ The Repository Layout follows the following principles.
 
 ## RL-1 Domain Separation
 
-Knowledge and Runtime shall occupy independent repository locations.
+Knowledge and Runtime SHALL occupy independent repository locations.
 
 Mixing persistent knowledge with temporary execution artifacts is prohibited.
 
@@ -50,15 +50,15 @@ Mixing persistent knowledge with temporary execution artifacts is prohibited.
 
 ## RL-2 Predictability
 
-Every repository using the Single Repository Profile should expose an identical documentation structure.
+Every repository using the Single Repository Profile SHOULD expose an identical documentation structure.
 
-Agents should not need repository-specific heuristics to locate documentation.
+Agents SHOULD NOT need repository-specific heuristics to locate documentation.
 
 ------
 
 ## RL-3 Minimal Top-Level Structure
 
-The repository root should contain only a small number of Documentation OS entry points.
+The repository root SHOULD contain only a small number of Documentation OS entry points.
 
 Additional documentation should be organized beneath dedicated directories.
 
@@ -66,9 +66,9 @@ Additional documentation should be organized beneath dedicated directories.
 
 ## RL-4 Stable Navigation
 
-Repository layout should change infrequently.
+Repository layout SHOULD change infrequently.
 
-Repository evolution should occur primarily within documentation content rather than directory organization.
+Repository evolution SHOULD occur primarily within documentation content rather than directory organization.
 
 ------
 
@@ -123,7 +123,7 @@ Knowledge stored here represents the long-term understanding of the repository.
 
 The directory participates in the Knowledge lifecycle.
 
-Runtime artifacts shall not be stored here.
+Runtime artifacts SHALL NOT be stored here.
 
 ------
 
@@ -177,6 +177,7 @@ For example:
 docs/
 │
 ├── AGENTS.md
+├── CLAUDE.md
 ├── architecture/
 ├── adr/
 ├── standards/
@@ -253,9 +254,9 @@ docs/
 .scratch/
 ```
 
-Implementations shall not assign unrelated responsibilities to these directories.
+Implementations SHALL NOT assign unrelated responsibilities to these directories.
 
-Additional subdirectories may be introduced beneath them.
+Additional subdirectories MAY be introduced beneath them.
 
 ------
 
@@ -318,13 +319,13 @@ These profiles remain compliant provided they preserve the conceptual models def
 
 # Compliance
 
-A compliant Single Repository implementation shall satisfy the following requirements.
+A compliant Single Repository implementation SHALL satisfy the following requirements.
 
-- The repository shall expose one Knowledge location.
-- The repository shall expose one Runtime location.
-- The repository shall expose a root Agent Entry.
-- Knowledge and Runtime shall remain physically separated.
-- Repository layout shall not redefine conceptual semantics.
+- The repository SHALL expose one Knowledge location.
+- The repository SHALL expose one Runtime location.
+- The repository SHALL expose a root Agent Entry.
+- Knowledge and Runtime SHALL remain physically separated.
+- Repository layout SHALL NOT redefine conceptual semantics.
 
 ------
 

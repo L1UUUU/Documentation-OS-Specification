@@ -327,7 +327,7 @@ Knowledge changes only when project understanding changes.
 
 # Knowledge Independence
 
-Knowledge must remain understandable without Runtime.
+Knowledge MUST remain understandable without Runtime.
 
 After all Runtime artifacts have been completed or removed, repository Knowledge should still describe:
 

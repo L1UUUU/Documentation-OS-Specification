@@ -253,7 +253,7 @@ Relationship semantics are defined separately.
 
 # Invariants
 
-The following invariants shall always remain true.
+The following invariants SHALL always remain true.
 
 ## KI-1
 
@@ -275,13 +275,13 @@ Knowledge Impact Analysis never modifies Knowledge directly.
 
 ## KI-4
 
-Every affected Knowledge Category shall be explicitly identified.
+Every affected Knowledge Category SHALL be explicitly identified.
 
 ------
 
 ## KI-5
 
-No Runtime artifact shall be completed before Knowledge Impact Analysis has completed.
+No Runtime artifact SHALL be completed before Knowledge Impact Analysis has completed.
 
 ------
 
@@ -294,7 +294,7 @@ Documentation Operations may assist Knowledge Impact Analysis by:
 - validating references;
 - generating impact reports.
 
-Documentation Operations shall not determine engineering impact autonomously.
+Documentation Operations SHALL NOT determine engineering impact autonomously.
 
 Engineering judgement remains the responsibility of humans or AI agents.
 
@@ -308,7 +308,7 @@ Knowledge Impact Analysis may conclude that:
 - synchronization cannot proceed;
 - additional engineering clarification is required.
 
-In such cases, the Work shall not bypass the remaining lifecycle.
+In such cases, the Work SHALL NOT bypass the remaining lifecycle.
 
 Failure should remain explicit.
 
