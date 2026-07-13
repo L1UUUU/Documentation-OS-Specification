@@ -270,7 +270,7 @@ Runtime and Knowledge serve complementary purposes.
 | Execution          | Understanding       |
 | Mutable            | Stable              |
 | Work-Oriented      | Repository-Oriented |
-| Produces Knowledge | Preserves Knowledge |
+| Synchronizes Knowledge | Preserves Knowledge |
 
 Neither domain replaces the other.
 
@@ -336,12 +336,14 @@ Completion therefore represents a terminal transition rather than successful cod
 
 # Repository Independence
 
-The Runtime Model intentionally avoids specifying:
+The Runtime Model intentionally avoids specifying the following as normative requirements:
 
 - repository directories;
 - file names;
 - document templates;
 - implementation tooling.
+
+The `active/<workstream-slug>/` and `completed/<workstream-slug>/` paths referenced earlier in this specification are the Single Repository Profile's concrete realization (DOS-2004); they illustrate that profile and are not normative Model-layer requirements.
 
 These concerns belong to Repository Profiles.
 
@@ -359,7 +361,7 @@ A Documentation OS implementation SHALL satisfy the following requirements.
 - Runtime SHALL support explicit Work.
 - Runtime SHALL participate in lifecycle transitions.
 - Runtime SHALL eventually leave the active execution context.
-- Runtime SHALL produce Knowledge through Knowledge Synchronization.
+- Runtime SHALL complete Knowledge Synchronization, which either updates persistent Knowledge or records an explicit no-change result.
 - Active Runtime SHALL NOT become permanent repository storage.
 - Completed Runtime core assets SHALL be preserved.
 - Knowledge SHALL NOT depend upon Runtime.

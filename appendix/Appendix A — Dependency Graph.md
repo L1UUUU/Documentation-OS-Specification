@@ -337,7 +337,7 @@ Higher-numbered layers may depend upon lower-numbered layers.
 
 ## DR-2
 
-Lower-numbered layers SHALL NOT depend upon higher-numbered layers; lower-numbered layers SHALL NOT contradict higher-layer normative requirements.
+Lower-numbered layers SHALL NOT depend upon higher-numbered layers. For the purpose of this rule, "depend" means a normative or implementation dependency on higher-layer concepts or behavior; an informative reference (for example, citing a category list) is not a dependency. Lower-numbered layers SHALL NOT contradict higher-layer normative requirements.
 
 ------
 

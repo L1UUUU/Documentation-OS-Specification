@@ -131,6 +131,8 @@ Implementations MAY introduce additional validation categories.
 
 Identity Validation applies exclusively to Knowledge artifacts (ARCH, ADR, STD) that possess identity-managed front matter.
 
+A pre-integration draft placeholder (for example `ADR-DRAFT-<local-slug>.md`) is not an identity-managed Knowledge artifact and is exempt from Identity Validation until the Documentation Engine allocates its final identifier (DOS-2005).
+
 Identity Validation verifies:
 
 - identity uniqueness;

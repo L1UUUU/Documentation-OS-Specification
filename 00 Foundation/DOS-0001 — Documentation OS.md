@@ -152,7 +152,7 @@ Each layer builds upon the previous one.
 
 Higher layers may depend on lower layers.
 
-Lower layers MUST never depend on higher layers.
+Lower layers MUST never depend on higher layers. For the purpose of this rule, "depend" means a normative or implementation dependency on concepts or behavior defined at a higher layer; an informative reference from a lower layer to a higher layer (for example, citing a category list) is not a dependency.
 
 ------
 

@@ -296,6 +296,26 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v11 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking refinement — layer-dependency rule reconciled with the bidirectional conformance model; the no-change Knowledge Synchronization result propagated to the remaining "Runtime produces Knowledge" statements; ADR draft placeholder boundary with Identity Validation made explicit; no conceptual architecture change.
+
+### Fixed
+
+- Layer-dependency rule reconciled across DOS-0001, DOS-0004, and Appendix A: "Lower layers MUST never depend on higher layers" now clarifies that "depend" means a normative or implementation dependency on higher-layer concepts or behavior, and that an informative cross-layer reference (for example, citing a category list) is not a dependency; the DOS-0004 reference to DOS-4001's operation categories is correspondingly labelled an informative cross-layer reference. This resolves the literal conflict between DOS-0001 and the bidirectional conformance model in DOS-6002/README (DOS-0001, DOS-0004, Appendix A).
+- "Runtime produces Knowledge" SHALL-level contradiction with the no-change result eliminated: DOS-1003 Compliance and the Runtime/Knowledge comparison table, DOS-3002 Lifecycle Principles, and DOS-2004 RM-4 and Summary now state that Runtime completes Knowledge Synchronization, which either updates persistent Knowledge or records an explicit no-change result (DOS-1003, DOS-3002, DOS-2004).
+- ADR draft placeholder boundary with Identity Validation made explicit: a draft placeholder (e.g. `ADR-DRAFT-<local-slug>.md`) is a pre-integration artifact that is not yet identity-managed; Identity Validation treats it as exempt until the Documentation Engine allocates the final identifier at integration time (DOS-2005, DOS-4002).
+- DOS-3002 main lifecycle diagrams and the Implemented phase description now mark Implemented as conditional (MAY be partial or absent for a non-succeeded outcome), matching DOS-1003 (DOS-3002).
+
+### Clarified
+
+- DOS-1003 Repository Independence no longer self-contradicts: the `active/<workstream-slug>/` and `completed/<workstream-slug>/` paths referenced in the Runtime Model are explicitly identified as the Single Repository Profile's concrete realization (DOS-2004), not normative Model-layer requirements (DOS-1003).
+- DOS-2001 lowercase `shall` in the Repository Responsibilities section rewritten as declarative statements, so that only uppercase SHALL defines normative requirements per DOS-6002 (DOS-2001).
+
+------
+
 ## Documentation OS Specification 1.0 — v10 Revision
 
 **Status:** Draft

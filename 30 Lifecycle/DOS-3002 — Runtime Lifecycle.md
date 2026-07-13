@@ -61,7 +61,7 @@ The Runtime Lifecycle follows the principles established by:
 In particular:
 
 - Runtime is temporary.
-- Runtime produces Knowledge.
+- Runtime completes Knowledge Synchronization, which either updates Knowledge or records an explicit no-change result.
 - Knowledge MUST be synchronized before Runtime is completed.
 - Runtime SHALL NOT become long-term repository storage.
 
@@ -90,7 +90,7 @@ Executing
 
 ↓
 
-Implemented
+Implemented  (MAY be partial or absent for a non-succeeded outcome)
 
 ↓
 
@@ -192,6 +192,8 @@ It does **not** indicate that the Work has completed.
 
 Additional lifecycle stages remain mandatory.
 
+For a non-succeeded outcome (`cancelled`, `superseded`, `failed`), a Work MAY enter Knowledge Impact Analysis from any earlier active phase, and implementation completion is not required (see Failure Handling; DOS-1003, DOS-3004).
+
 ------
 
 ## Knowledge Impact Analysed
@@ -270,7 +272,7 @@ Executing
 
 ↓
 
-Implemented
+Implemented  (MAY be partial or absent for a non-succeeded outcome)
 
 ↓
 

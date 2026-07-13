@@ -214,7 +214,7 @@ Runtime Mapping is specified separately.
 
 # Repository Responsibilities
 
-The repository shall satisfy the following responsibilities.
+The repository satisfies the following responsibilities.
 
 ## Repository stores Knowledge.
 
@@ -236,7 +236,7 @@ Agents should be able to initialize repository understanding from the Agent Entr
 
 ## Repository supports deterministic Documentation Operations.
 
-Operations shall function without requiring external persistent state.
+Operations function without requiring external persistent state.
 
 ------
 

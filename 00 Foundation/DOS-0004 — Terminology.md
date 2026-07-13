@@ -304,7 +304,7 @@ Multiple implementations may satisfy the same specification.
 
 A deterministic operation that maintains repository consistency.
 
-See DOS-4001 for the normative categories:
+The normative categories are defined in DOS-4001 — Documentation Operations (an informative cross-layer reference; not a normative dependency on a higher layer, see DOS-0001):
 
 - Generate
 - Synchronize

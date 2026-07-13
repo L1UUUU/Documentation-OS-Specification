@@ -102,6 +102,8 @@ Allocated numbers SHALL NOT be reused.
 
 A Knowledge artifact (for example an ADR) MAY be authored as a draft while its Work is active. To avoid numbering collisions between parallel Works, a draft artifact SHALL NOT pre-allocate a final identifier; it uses a non-final local placeholder (for example `ADR-DRAFT`, or a Work-scoped working name) until integration.
 
+A draft placeholder (for example `ADR-DRAFT-<local-slug>.md`) is a pre-integration artifact. It is not yet an identity-managed Knowledge artifact; Identity Validation (DOS-4002) SHALL treat it as exempt until the Documentation Engine allocates its final identifier at integration time. Only after final identifier allocation does the artifact become subject to Identity Validation.
+
 Draft placeholders SHALL be unique within their Work, so that multiple drafts in the same Work do not collide on disk. A Work generating more than one draft artifact in a category SHALL distinguish them with a Work-local slug, for example:
 
 ```text

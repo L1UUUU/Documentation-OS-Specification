@@ -65,11 +65,11 @@ An agent should not need to infer missing planning information.
 
 ------
 
-## RM-4 Runtime Produces Knowledge
+## RM-4 Runtime Synchronizes Knowledge
 
 Runtime itself is temporary.
 
-The understanding created during Runtime becomes permanent Knowledge through Knowledge Synchronization.
+The understanding created during Runtime is transferred into permanent Knowledge through Knowledge Synchronization, or Knowledge Synchronization records an explicit no-change result where no Knowledge edits were required.
 
 ------
 
@@ -449,4 +449,4 @@ Each Work contains:
 - Handoff (cross-context transfer);
 - Ephemeral Runtime Content (temporary, disposable).
 
-Runtime exists solely to complete implementation and produce new repository knowledge before leaving the active execution domain.
+Runtime exists solely to complete implementation and synchronize Knowledge (updating it or recording an explicit no-change result) before leaving the active execution domain.
