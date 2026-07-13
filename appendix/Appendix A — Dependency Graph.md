@@ -25,11 +25,11 @@ Its purpose is to help readers understand:
 
 Documentation OS follows a layered architecture.
 
-Each layer depends only on lower layers.
+Concept-definition dependencies flow from lower layers to higher layers.
 
-Higher layers extend lower layers.
+Higher layers extend lower layers and SHALL NOT redefine them.
 
-They do not redefine them; lower layers SHALL NOT contradict higher-layer normative requirements.
+Lower layers SHALL NOT contradict higher-layer normative requirements.
 
 ```text
                          README
@@ -337,7 +337,13 @@ Higher-numbered layers may depend upon lower-numbered layers.
 
 ## DR-2
 
-Lower-numbered layers SHALL NOT depend upon higher-numbered layers. For the purpose of this rule, "depend" means a normative or implementation dependency on higher-layer concepts or behavior; an informative reference (for example, citing a category list) is not a dependency. Lower-numbered layers SHALL NOT contradict higher-layer normative requirements.
+Concept-definition dependencies flow from lower-numbered layers to higher-numbered layers.
+
+Higher-numbered layers SHALL NOT redefine lower-layer concepts.
+
+Lower-numbered layers SHALL NOT contradict higher-layer normative requirements.
+
+Normative conformance constraints may flow in either direction. An informative reference (for example, citing a category list) is not a dependency.
 
 ------
 

@@ -150,9 +150,13 @@ Documentation OS
 
 Each layer builds upon the previous one.
 
-Higher layers may depend on lower layers.
+Concept-definition dependencies flow from lower layers to higher layers.
 
-Lower layers MUST never depend on higher layers. For the purpose of this rule, "depend" means a normative or implementation dependency on concepts or behavior defined at a higher layer; an informative reference from a lower layer to a higher layer (for example, citing a category list) is not a dependency.
+Higher layers SHALL NOT redefine lower-layer concepts.
+
+Lower layers SHALL NOT contradict higher-layer normative requirements.
+
+Normative conformance constraints may flow in either direction. An informative reference (for example, citing a category list) is not a dependency.
 
 ------
 

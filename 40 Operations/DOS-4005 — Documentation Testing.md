@@ -344,6 +344,13 @@ The following scenarios SHALL be covered by the conformance tests required in th
 - Expected state: each ADR receives a distinct, atomically allocated `ADR-NNNN`; any collision from concurrent integration is resolved by re-numbering the later integration and regenerating its managed references.
 - Expected diagnostics: Success; no duplicate or reused ADR numbers.
 
+## Scenario 14 — ADR draft allocation, reference regeneration, and Validation gate
+
+- Initial state: a Work carries a draft ADR using a non-final placeholder name; Identity Validation treats it as exempt.
+- Operation: integrate the Work; the Documentation Engine allocates a final ADR-NNNN, regenerates managed references, then runs Identity Validation and Relationship Validation.
+- Expected state: the artifact carries its final identifier; all managed references resolve; both validations pass.
+- Expected diagnostics: Success. If either validation fails after allocation, the integration is rolled back or corrected before retrying.
+
 ------
 
 # Expected Results

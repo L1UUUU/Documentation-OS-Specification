@@ -66,11 +66,11 @@ Runtime exists specifically to isolate temporary information.
 
 ------
 
-## RT-5 Produce Better Knowledge
+## RT-5 Synchronize Knowledge
 
-Runtime is valuable because it creates new understanding.
+Runtime is valuable because it may produce or affect project understanding.
 
-Successful Runtime should improve the project's Knowledge through Knowledge Synchronization.
+Successful Runtime synchronizes Knowledge through Knowledge Synchronization, or records an explicit no-change result where no Knowledge edits are required.
 
 ------
 
@@ -161,11 +161,11 @@ Preservation of active Runtime is not the primary objective; Knowledge extractio
 
 ------
 
-## Knowledge-Producing
+## Knowledge-Synchronizing
 
-Runtime is expected to generate new project understanding.
+Runtime is expected to produce or affect project understanding.
 
-That understanding is transferred into the Knowledge domain through Knowledge Synchronization.
+That understanding is transferred into the Knowledge domain through Knowledge Synchronization, or an explicit no-change result is recorded where no Knowledge edits are required.
 
 ------
 
@@ -408,6 +408,6 @@ It is:
 - execution-oriented;
 - mutable;
 - disposable;
-- knowledge-producing.
+- knowledge-synchronizing.
 
-Successful Runtime concludes by transferring newly created understanding into the Knowledge domain before leaving the repository's active execution context.
+Successful Runtime concludes by synchronizing Knowledge — updating it or recording an explicit no-change result — before leaving the repository's active execution context.

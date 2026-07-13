@@ -103,14 +103,16 @@ Standards describe expected future behavior.
 
 # Principle 5 — Knowledge Synchronization Is Mandatory
 
-Implementation frequently produces new knowledge.
+Implementation or execution activity frequently produces new knowledge.
 
 Whenever implementation changes project understanding, that knowledge SHALL be synchronized before Runtime is completed.
+Where no Knowledge edits are required, an explicit no-change result SHALL be recorded.
 
 The minimum sequence is:
 
 ```text
-Implementation
+Implementation or execution activity
+(MAY be partial or absent for a non-succeeded outcome)
 
 ↓
 
@@ -119,6 +121,8 @@ Knowledge Impact Analysis
 ↓
 
 Knowledge Synchronization
+  - update Knowledge; or
+  - record explicit no-change result
 
 ↓
 
@@ -128,7 +132,7 @@ Validation
 Complete
 ```
 
-Skipping Knowledge Synchronization violates Documentation OS.
+Skipping Knowledge Impact Analysis, Knowledge Synchronization, or Validation violates Documentation OS.
 
 ------
 

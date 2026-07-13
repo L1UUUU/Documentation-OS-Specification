@@ -259,7 +259,8 @@ For a `succeeded` Work:
 For a non-`succeeded` Work (`cancelled`, `superseded`, `failed`):
 
 - the termination reason is truthfully recorded as the Work's `outcome` in PRD front matter;
-- any Knowledge affected by the partial implementation has been analyzed and synchronized;
+- Knowledge Impact Analysis has completed;
+- Knowledge Synchronization has completed, including an explicit no-change result where no Knowledge edits were required;
 - Validation succeeds;
 - the Complete stage has moved the Work to `completed/`;
 - `PRD.md`, `issues/`, and `HANDOFF.md` are present.

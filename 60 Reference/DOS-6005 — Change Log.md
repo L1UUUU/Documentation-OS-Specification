@@ -296,6 +296,28 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v12 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking refinement — layer-dependency rule replaced with explicit bidirectional model; Foundation Principle 5 and Execution Contract non-succeeded Completion aligned with no-change synchronization; ADR integration Validation gate added; knowledge-producing terminology replaced across Runtime Model and Runtime Lifecycle; no-change result minimum observable output defined; no conceptual architecture change.
+
+### Fixed
+
+- Layer-dependency rule unified across DOS-0001, Appendix A, and README: the absolute "Lower layers MUST never depend on higher layers" replaced by "Concept-definition dependencies flow from lower layers to higher layers; Higher layers SHALL NOT redefine lower-layer concepts; Lower layers SHALL NOT contradict higher-layer normative requirements; Normative conformance constraints may flow in either direction" (DOS-0001, Appendix A).
+- DOS-0003 Principle 5 minimum sequence now marks Implementation as conditional (MAY be partial or absent for a non-succeeded outcome) and includes the no-change synchronization branch, matching DOS-1003 and DOS-3002 (DOS-0003).
+- DOS-5003 non-succeeded Completion now explicitly requires Knowledge Impact Analysis and Knowledge Synchronization (including an explicit no-change result where no Knowledge edits were required), closing the gap where a cancelled Work could be interpreted as not requiring synchronization (DOS-5003).
+- DOS-2005 now requires Identity Validation and Relationship Validation to succeed after final identifier allocation and managed-reference regeneration before integration is accepted (DOS-2005).
+- Conformance Scenario 14 added: ADR draft allocation, reference regeneration, and Validation gate (DOS-4005).
+
+### Clarified
+
+- DOS-3002 Abstract, Purpose, and Summary no longer assume implementation always produces new Knowledge; updated to cover no-change and non-succeeded outcomes (DOS-3002).
+- DOS-1003 RT-5, Knowledge-Producing characteristic, and Summary updated from "knowledge-producing" to "knowledge-synchronizing" to reflect the no-change result (DOS-1003).
+- DOS-3003 now defines the minimum observable output for an explicit no-change result: SHALL be exposed as deterministic Documentation Operation output (DOS-3003).
+
+------
+
 ## Documentation OS Specification 1.0 — v11 Revision
 
 **Status:** Draft

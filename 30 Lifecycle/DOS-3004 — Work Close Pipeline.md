@@ -16,7 +16,7 @@ Implementation completion alone does not complete a Work.
 
 A Work reaches the **Completed** terminal state only after repository Knowledge has been synchronized, repository consistency has been validated, and the Complete stage has moved the Work to `completed/` and released lifecycle ownership. The Cleanup stage then finalizes repository state; it is mandatory but may be retried independently without affecting the already-established Completed state.
 
-The Work Close Pipeline guarantees that every completed Work permanently improves repository quality.
+The Work Close Pipeline guarantees that every completed Work leaves repository Knowledge synchronized, whether through Knowledge updates or an explicit no-change result.
 
 ------
 
@@ -342,4 +342,4 @@ A Work reaches the Completed terminal state when:
 
 The subsequent Cleanup stage finalizes repository state (regenerating `.scratch/INDEX.md`); it is mandatory but idempotent and may be retried independently without affecting the already-established Completed state.
 
-This pipeline ensures that every completed Work leaves the repository in a consistent, maintainable, and knowledge-rich state.
+This pipeline ensures that every completed Work leaves the repository in a consistent and synchronized state.

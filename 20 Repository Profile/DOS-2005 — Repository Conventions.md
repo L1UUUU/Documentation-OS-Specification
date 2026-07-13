@@ -118,6 +118,8 @@ Final identifier allocation SHALL be performed by the Documentation Engine at in
 
 If two integrations collide (concurrent branches each produced an artifact in the same category), the later integration SHALL receive a newly allocated number; the Documentation Engine SHALL regenerate all managed references to the renamed artifact so that long-lived identity references remain valid.
 
+After final identifier allocation and managed-reference regeneration, Identity Validation and Relationship Validation SHALL succeed before the integration is accepted. If either validation fails, the integration SHALL be rolled back or corrected before retrying.
+
 ------
 
 # Identifier Format

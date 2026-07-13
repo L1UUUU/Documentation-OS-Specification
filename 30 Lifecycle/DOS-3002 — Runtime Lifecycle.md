@@ -10,11 +10,11 @@
 
 This specification defines the lifecycle of Runtime within Documentation OS.
 
-Unlike the Document Lifecycle, which applies to all managed documentation artifacts, the Runtime Lifecycle describes how a unit of work evolves from an accepted implementation effort into completed repository knowledge.
+Unlike the Document Lifecycle, which applies to all managed documentation artifacts, the Runtime Lifecycle describes how a unit of work progresses from an accepted implementation effort to a synchronized terminal state, updating repository knowledge or recording an explicit no-change result.
 
 The Runtime Lifecycle is the execution lifecycle of Documentation OS.
 
-Its purpose is not merely to complete implementation, but to ensure that implementation permanently improves the repository.
+Its purpose is to ensure that ended Work activity is analysed, that affected Knowledge is synchronized, and that an explicit no-change result is recorded when no Knowledge update is required.
 
 ------
 
@@ -482,7 +482,7 @@ These concerns remain outside Documentation OS.
 
 # Summary
 
-The Runtime Lifecycle defines how every Work evolves from accepted implementation to completed repository knowledge.
+The Runtime Lifecycle defines how every Work progresses from accepted implementation to a synchronized terminal state.
 
 Implementation alone does not complete a Work.
 
@@ -493,4 +493,4 @@ A Work is complete only after:
 - the repository has been validated;
 - Runtime has been completed.
 
-This lifecycle ensures that every implementation leaves the repository with greater long-term understanding than before the Work began.
+This lifecycle ensures that every Work leaves the repository in a synchronized state, whether through updated Knowledge or an explicit no-change result.

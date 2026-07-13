@@ -193,6 +193,8 @@ Multiple outcomes may occur within a single Work.
 
 The Knowledge Synchronization stage is mandatory for every completed Work and SHALL NOT be skipped (DOS-3004). A no-impact KIA result therefore yields a no-change synchronization run — the stage is executed and records an explicit no-change result — rather than a skipped stage.
 
+An explicit no-change result SHALL be exposed as deterministic Documentation Operation output, so that a no-change Work is observable rather than silent. Repository Profiles or implementations MAY additionally persist it in HANDOFF.md or another defined Runtime record.
+
 ------
 
 # Responsibilities
