@@ -195,10 +195,7 @@ The first profile is:
 
 - Single Repository Profile
 
-Future profiles may include:
-
-- Workspace Profile
-- Multi Repository Profile
+Future Repository Profiles may be defined by future specifications. They are outside the scope of Version 1.0.
 
 ------
 

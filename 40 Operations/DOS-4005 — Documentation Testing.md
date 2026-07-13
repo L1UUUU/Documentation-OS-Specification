@@ -318,7 +318,7 @@ The following scenarios SHALL be covered by the conformance tests required in th
 
 ## Scenario 10 — A `cancelled` Work reaches Completed through the standard pipeline
 
-- Initial state: an active Work whose requirements were withdrawn before its implementation objectives were achieved; the PRD carries no `outcome`; Knowledge Impact Analysis produced no Knowledge impact.
+- Initial state: an active Work whose requirements were withdrawn before its implementation objectives were achieved; the PRD carries no `outcome`; Knowledge Impact Analysis produced no Knowledge impact; the no-change Knowledge Synchronization stage has completed (recording that no Knowledge edits were required); repository Validation has passed; all Complete preconditions are satisfied.
 - Operation: invoke the Complete operation with `outcome=cancelled`.
 - Expected state: the Work moves to `.scratch/completed/<slug>/`; the PRD front matter records `outcome: cancelled`; Core Runtime Assets are preserved; `.scratch/INDEX.md` is regenerated (Cleanup) and surfaces the `cancelled` outcome.
 - Expected diagnostics: Success.

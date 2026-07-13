@@ -14,7 +14,7 @@ A Repository Profile maps the abstract models defined by Documentation OS into c
 
 This specification is the reference implementation profile for Documentation OS v1.
 
-Future profiles (such as Workspace Profile or Multi-Repository Profile) SHALL preserve the conceptual models while providing alternative repository organizations.
+Future Repository Profiles SHALL preserve the conceptual models while providing alternative repository organizations.
 
 ------
 
@@ -269,14 +269,9 @@ Additional repository content MAY exist provided these guarantees remain valid.
 
 # Future Profiles
 
-Future Documentation OS profiles may include:
+Future Repository Profiles may be defined by future specifications. They are outside the scope of Version 1.0, which defines only the Single Repository Profile.
 
-- Workspace Profile
-- Monorepo Profile
-- Multi-Repository Profile
-- Cloud Documentation Profile
-
-These profiles SHALL preserve the semantics defined by the Model layer.
+Any future profile SHALL preserve the semantics defined by the Model layer.
 
 Only repository representation may differ.
 

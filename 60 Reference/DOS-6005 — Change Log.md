@@ -296,6 +296,31 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v10 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking refinement — the non-succeeded termination model propagated from the Lifecycle layer to the Foundation, Model, and Conformance layers; no-impact Knowledge Synchronization reconciled with the mandatory pipeline; Repository Profile scope narrowed to Version 1.0; no conceptual architecture change.
+
+### Changed
+
+- Runtime Completion (DOS-1003) restated as outcome-conditional: `succeeded` requires implementation objectives complete; `cancelled`, `superseded`, and `failed` require only that the Work's implementation or execution activity has ended, and Knowledge Synchronization completion now explicitly includes a no-change result. The conceptual lifecycle diagram marks Implementation as conditional (MAY be partial or absent) for non-succeeded outcomes (DOS-1003).
+- KIA decision matrix (DOS-3003) row "No Knowledge Synchronization required" replaced with a mandatory no-change synchronization run that records no Knowledge edits, resolving the SHALL-level contradiction with DOS-3004 "Stages SHALL NOT be skipped" (DOS-3003, DOS-3004).
+- KIA and Knowledge Synchronization definitions (DOS-0004), the KIA Purpose/Objectives/Summary (DOS-3003), and the Runtime Lifecycle Compliance and phase descriptions (DOS-3002) generalized from "implementation" to "implementation or execution activity", completing propagation of the non-succeeded termination model to the terminology single source of truth.
+
+### Fixed
+
+- DOS-3002 internal contradiction removed: Compliance no longer states "Knowledge Impact Analysis occurs after implementation" while Failure Handling permits termination before the Implemented phase (DOS-3002).
+- Conformance Scenario 10 (DOS-4005) initial state now states that the no-change Knowledge Synchronization stage completed and repository Validation passed, preventing a "KIA → Complete" misreading of the cancelled-Work path (DOS-4005).
+- Repository Effects (DOS-3004) and the Knowledge Synchronized phase description (DOS-3002) no longer assume "completed implementation"; they reflect the completed or terminated Work activity, including an explicit no-change result where applicable (DOS-3002, DOS-3004).
+
+### Clarified
+
+- Version 1.0 scope: concrete future Repository Profile names (Workspace, Monorepo, Multi-Repository, Cloud) removed throughout the specification and README, replaced with a generic "future Repository Profiles may be defined by future specifications; outside the scope of Version 1.0" statement (DOS-0001, DOS-0004, DOS-1001, DOS-1004, DOS-2001, DOS-2002, DOS-4004, DOS-6004, README).
+- ADR draft placeholders SHALL be unique within their Work; multiple drafts in the same Work disambiguate with a Work-local slug, for example `ADR-DRAFT-<local-slug>.md` (DOS-2005).
+
+------
+
 ## Documentation OS Specification 1.0 — v9 Revision
 
 **Status:** Draft

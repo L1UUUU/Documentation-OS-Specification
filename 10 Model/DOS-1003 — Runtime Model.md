@@ -235,7 +235,7 @@ Planning
 
 ↓
 
-Implementation
+Implementation  (MAY be partial or absent for a non-succeeded outcome)
 
 ↓
 
@@ -253,6 +253,8 @@ Validation
 
 Completed
 ```
+
+The Implementation stage is conditional. For an outcome of `cancelled`, `superseded`, or `failed`, a Work MAY enter Knowledge Impact Analysis from any earlier active phase, and implementation completion is not required (see DOS-3002, DOS-3004). The Knowledge Impact Analysis → Knowledge Synchronization → Validation → Completed sequence remains mandatory for every outcome.
 
 Repository Profiles may implement this lifecycle differently while preserving identical semantics.
 
@@ -309,19 +311,26 @@ Knowledge ownership then continues independently.
 
 # Runtime Completion
 
-Runtime completion does not occur when implementation finishes.
+Runtime completion does not occur merely because implementation finishes.
 
-Runtime completion occurs when:
+Runtime completion occurs when the Work's terminal `outcome` has been decided and the following conditions hold.
 
-1. implementation is complete;
+For every outcome:
+
+1. the Work's implementation or execution activity has ended;
 2. Knowledge Impact Analysis has been performed;
-3. Knowledge Synchronization has finished;
+3. Knowledge Synchronization has finished — including an explicit no-change result where no Knowledge edits were required;
 4. repository validation succeeds;
 5. The Work directory has moved from active/<workstream-slug>/ to completed/<workstream-slug>/.
 
+The implementation-completion requirement is outcome-dependent:
+
+- For outcome=succeeded, the implementation objectives SHALL be complete.
+- For outcome=cancelled, superseded, or failed, implementation completion is not required; only the ending of the Work's execution activity is required.
+
 The Work is considered Completed upon completion of the Complete stage (directory movement). INDEX.md regeneration belongs to the subsequent Cleanup stage, which is idempotent and may be retried independently; it is not a precondition for Runtime Completion.
 
-Completion therefore represents successful transition rather than successful coding.
+Completion therefore represents a terminal transition rather than successful coding.
 
 ------
 

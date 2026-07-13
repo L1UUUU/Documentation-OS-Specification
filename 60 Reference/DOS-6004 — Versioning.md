@@ -159,10 +159,6 @@ Examples include:
 Single Repository Profile
 
 v1
-
-Workspace Profile
-
-v1
 ```
 
 Repository Profiles evolve independently from the Documentation OS Specification provided they preserve normative semantics.

@@ -293,31 +293,9 @@ Stable layout improves:
 
 # Compatibility
 
-Future Repository Profiles may implement different layouts.
+Future Repository Profiles may be defined by future specifications. They are outside the scope of Version 1.0, which defines only the Single Repository Profile.
 
-Examples include:
-
-Workspace Profile
-
-```text
-workspace/
-
-projects/
-
-shared-docs/
-```
-
-Cloud Profile
-
-```text
-knowledge/
-
-runtime/
-
-agents/
-```
-
-These profiles remain compliant provided they preserve the conceptual models defined by Documentation OS.
+Any future profile remains compliant provided it preserves the conceptual models defined by Documentation OS.
 
 ------
 

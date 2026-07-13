@@ -102,6 +102,12 @@ Allocated numbers SHALL NOT be reused.
 
 A Knowledge artifact (for example an ADR) MAY be authored as a draft while its Work is active. To avoid numbering collisions between parallel Works, a draft artifact SHALL NOT pre-allocate a final identifier; it uses a non-final local placeholder (for example `ADR-DRAFT`, or a Work-scoped working name) until integration.
 
+Draft placeholders SHALL be unique within their Work, so that multiple drafts in the same Work do not collide on disk. A Work generating more than one draft artifact in a category SHALL distinguish them with a Work-local slug, for example:
+
+```text
+ADR-DRAFT-<local-slug>.md
+```
+
 Final identifier allocation SHALL be performed by the Documentation Engine at integration time (PR preparation or the equivalent merge-to-trunk step), against the integration target repository state. Allocation SHALL be:
 
 - atomic — a single deterministic step assigns the next available number to one artifact at a time;

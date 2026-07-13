@@ -117,7 +117,7 @@ Temporary execution context.
 
 Active Runtime exists only while Work remains active.
 
-Runtime leaves the active execution context after implementation, transferring new understanding into Knowledge. Core Runtime Assets (PRD, Issues, Handoff) are preserved upon Work completion; only temporary Runtime content is disposable.
+Runtime leaves the active execution context after the Work's implementation or execution activity has ended, transferring new understanding into Knowledge or recording an explicit no-change result. Core Runtime Assets (PRD, Issues, Handoff) are preserved upon Work completion; only temporary Runtime content is disposable.
 
 ------
 
@@ -372,11 +372,7 @@ Version 1.0 defines one normative profile:
 
 - Single Repository Profile
 
-Future versions may define additional profiles such as:
-
-- Workspace Profile;
-- Monorepo Profile;
-- Multi-Repository Profile.
+Future Repository Profiles may be defined by future specifications. They are outside the scope of Version 1.0.
 
 All Repository Profiles preserve the same conceptual semantics.
 

@@ -247,10 +247,7 @@ Examples:
 
 - Single Repository Profile
 
-Future profiles may include:
-
-- Workspace Profile
-- Multi Repository Profile
+Future Repository Profiles may be defined by future specifications. They are outside the scope of Version 1.0.
 
 ------
 
@@ -390,13 +387,13 @@ Health does not replace Validation.
 
 ## Definition
 
-The process of determining how implementation affects project knowledge.
+The process of determining how a Work's implementation or execution activity affects project knowledge.
 
 Knowledge Impact Analysis identifies:
 
 - affected Knowledge;
-- required synchronization;
-- documentation updates.
+- required synchronization actions;
+- an explicit no-change result where no Knowledge edits are required.
 
 Knowledge Impact Analysis precedes Knowledge Synchronization.
 
@@ -406,9 +403,9 @@ Knowledge Impact Analysis precedes Knowledge Synchronization.
 
 ## Definition
 
-The process of updating persistent Knowledge after implementation.
+The process of updating persistent Knowledge after a Work's implementation or execution activity has ended, or recording an explicit no-change result where no Knowledge edits are required.
 
-Knowledge Synchronization transfers newly created understanding from Runtime into the Knowledge domain.
+Knowledge Synchronization transfers newly created understanding from Runtime into the Knowledge domain, or records that no Knowledge edits were required.
 
 ------
 

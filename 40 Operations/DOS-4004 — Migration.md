@@ -143,8 +143,7 @@ Repository Profile Migration changes the repository profile implementation.
 Examples include:
 
 - Single Repository Profile
-- Workspace Profile
-- Future repository profiles
+- future Repository Profiles (outside the scope of Version 1.0)
 
 Repository Profiles may differ in layout.
 

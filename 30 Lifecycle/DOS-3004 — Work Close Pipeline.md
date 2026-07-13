@@ -284,7 +284,7 @@ Engineering decisions remain the responsibility of humans or AI agents.
 Successful completion of the Work Close Pipeline guarantees:
 
 - Runtime has left the active execution domain;
-- repository Knowledge reflects completed implementation;
+- repository Knowledge reflects the completed or terminated Work activity, including an explicit no-change result where applicable;
 - repository consistency has been verified;
 - lifecycle ownership has concluded.
 

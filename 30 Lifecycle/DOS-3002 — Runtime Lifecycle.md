@@ -196,7 +196,7 @@ Additional lifecycle stages remain mandatory.
 
 ## Knowledge Impact Analysed
 
-The completed implementation has been evaluated to determine whether repository knowledge requires updating.
+The Work's implementation or execution activity has been evaluated to determine whether repository knowledge requires updating.
 
 Typical questions include:
 
@@ -205,17 +205,17 @@ Typical questions include:
 - Do Standards need revision?
 - Should Inbox observations be created?
 
-Knowledge Impact Analysis determines what repository knowledge must evolve.
+Knowledge Impact Analysis determines what repository knowledge must evolve, or records an explicit no-change result where no Knowledge edits are required.
 
 ------
 
 ## Knowledge Synchronized
 
-Required Knowledge has been updated.
+Required Knowledge has been updated, or an explicit no-change result has been recorded where no Knowledge edits were required.
 
 Synchronization transfers newly created understanding from Runtime into the Knowledge domain.
 
-At this point the repository accurately reflects the completed implementation.
+At this point the repository accurately reflects the Work's completed or terminated activity, including any no-change result.
 
 ------
 
@@ -447,7 +447,7 @@ A compliant Documentation OS implementation SHALL ensure:
 
 - every Work follows the Runtime Lifecycle;
 - lifecycle transitions are explicit;
-- Knowledge Impact Analysis occurs after implementation;
+- Knowledge Impact Analysis occurs after the Work's implementation or execution activity has ended;
 - Knowledge Synchronization precedes completion;
 - completed Runtime core assets remain preserved.
 

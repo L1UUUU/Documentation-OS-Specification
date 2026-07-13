@@ -20,9 +20,9 @@ Knowledge Impact Analysis is mandatory for every completed Work.
 
 # Purpose
 
-Implementation frequently changes repository understanding.
+A Work's implementation or execution activity frequently changes repository understanding.
 
-However, not every implementation requires documentation updates.
+However, not every Work requires documentation updates.
 
 Knowledge Impact Analysis exists to answer one fundamental question:
 
@@ -36,7 +36,7 @@ Only after this question has been answered can Knowledge Synchronization occur.
 
 Knowledge Impact Analysis applies to every Work whose implementation or execution activity has ended (achieved, abandoned, or superseded), including a Work being terminated before its objectives were reached.
 
-It evaluates the impact of implementation on the Knowledge domain.
+It evaluates the impact of the Work's implementation or execution activity on the Knowledge domain.
 
 It does **not** perform documentation updates.
 
@@ -51,7 +51,7 @@ It produces a structured impact assessment that becomes the input to Knowledge S
 Knowledge Impact Analysis occupies the following position within the Runtime Lifecycle.
 
 ```text
-Implementation
+Implementation  (MAY be partial or absent for a non-succeeded outcome)
 
 ↓
 
@@ -66,7 +66,7 @@ Knowledge Synchronization
 Validation
 ```
 
-Knowledge Impact Analysis SHALL occur exactly once for every completed Work.
+Implementation MAY be partial or absent for a Work terminated before its objectives were reached; Knowledge Impact Analysis then evaluates whatever activity did occur (frequently no impact). Knowledge Impact Analysis SHALL occur exactly once for every completed Work.
 
 ------
 
@@ -76,7 +76,7 @@ Knowledge Impact Analysis has four primary objectives.
 
 ## KIA-1 Detect Knowledge Changes
 
-Determine whether implementation has changed repository understanding.
+Determine whether the Work's implementation or execution activity has changed repository understanding.
 
 ------
 
@@ -90,13 +90,13 @@ Possible categories include:
 - ADR
 - Standards
 
-Implementation may also surface unresolved concerns that do not fit any category; these are recorded as Inbox staging items rather than Knowledge.
+A Work's implementation or execution activity may also surface unresolved concerns that do not fit any category; these are recorded as Inbox staging items rather than Knowledge.
 
 ------
 
 ## KIA-3 Prevent Documentation Drift
 
-Ensure that repository Knowledge remains synchronized with implementation.
+Ensure that repository Knowledge remains synchronized with the Work's implementation or execution activity.
 
 ------
 
@@ -104,7 +104,7 @@ Ensure that repository Knowledge remains synchronized with implementation.
 
 Documentation should only change when repository understanding changes.
 
-Cosmetic implementation changes should not trigger unnecessary documentation updates.
+Cosmetic implementation or execution changes should not trigger unnecessary documentation updates.
 
 ------
 
@@ -157,7 +157,7 @@ If yes:
 
 ## Standards
 
-Did implementation introduce or modify engineering conventions?
+Did the Work's implementation or execution activity introduce or modify engineering conventions?
 
 If yes:
 
@@ -167,7 +167,7 @@ If yes:
 
 ## Inbox (Staging Output)
 
-Did implementation discover unresolved repository concerns?
+Did the Work's implementation or execution activity discover unresolved repository concerns?
 
 If yes:
 
@@ -181,15 +181,17 @@ Knowledge Impact Analysis determines required synchronization actions.
 
 Typical outcomes include:
 
-| Observation                         | Action                                |
-| ----------------------------------- | ------------------------------------- |
-| No repository understanding changed | No Knowledge Synchronization required |
-| Architecture changed                | Update Architecture                   |
-| Significant design decision         | Create or update ADR                  |
-| Engineering convention changed      | Update Standards                      |
-| New unresolved concern discovered   | Record Inbox staging item             |
+| Observation                         | Action                                                                                                            |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| No repository understanding changed | Execute Knowledge Synchronization as a no-change operation; record that no Knowledge edits were required         |
+| Architecture changed                | Update Architecture                                                                                               |
+| Significant design decision         | Create or update ADR                                                                                              |
+| Engineering convention changed      | Update Standards                                                                                                  |
+| New unresolved concern discovered   | Record Inbox staging item                                                                                         |
 
 Multiple outcomes may occur within a single Work.
+
+The Knowledge Synchronization stage is mandatory for every completed Work and SHALL NOT be skipped (DOS-3004). A no-impact KIA result therefore yields a no-change synchronization run — the stage is executed and records an explicit no-change result — rather than a skipped stage.
 
 ------
 
@@ -354,7 +356,7 @@ These concerns are specified separately.
 
 Knowledge Impact Analysis is the bridge between Runtime and Knowledge.
 
-It evaluates what implementation has taught the repository, determines which Knowledge Categories require synchronization, and prepares the repository for the Knowledge Synchronization stage.
+It evaluates what a Work's implementation or execution activity has taught the repository, determines which Knowledge Categories require synchronization (or records an explicit no-change result), and prepares the repository for the Knowledge Synchronization stage.
 
 Knowledge Impact Analysis never modifies documentation directly.
 

@@ -313,10 +313,7 @@ Examples include:
 
 - Single Repository Profile
 
-Future profiles may include:
-
-- Workspace Profile
-- Multi Repository Profile
+Future Repository Profiles may be defined by future specifications. They are outside the scope of Version 1.0.
 
 Profiles SHALL preserve the semantics defined by this Information Model.
 

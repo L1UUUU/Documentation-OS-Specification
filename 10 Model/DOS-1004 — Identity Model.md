@@ -277,7 +277,7 @@ to
 docs/adr/0007-runtime-model.md
 ```
 
-A future Workspace Profile may map the same identity elsewhere without affecting documentation semantics.
+A future Repository Profile may map the same identity elsewhere without affecting documentation semantics.
 
 ------
 
