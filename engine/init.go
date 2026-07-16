@@ -71,19 +71,21 @@ func (e *Engine) ensureMirror(canonicalRelative, mirrorRelative string, defaultC
 		}
 		return nil
 	}
-	if !canonicalExists && mirrorExists {
-		canonical = mirror
-	}
-	if !canonicalExists {
-		canonical = defaultContent
-	}
-	if !canonicalExists || !bytes.Equal(canonical, mirror) {
+	canonicalMissing := !canonicalExists
+	if canonicalMissing {
+		if mirrorExists {
+			canonical = mirror
+		} else {
+			canonical = defaultContent
+		}
 		if err := writeAtomic(canonicalPath, canonical, 0o644); err != nil {
 			return fmt.Errorf("write %s: %w", canonicalRelative, err)
 		}
 	}
-	if err := writeAtomic(mirrorPath, canonical, 0o644); err != nil {
-		return fmt.Errorf("write %s: %w", mirrorRelative, err)
+	if !mirrorExists || canonicalMissing || !bytes.Equal(canonical, mirror) {
+		if err := writeAtomic(mirrorPath, canonical, 0o644); err != nil {
+			return fmt.Errorf("write %s: %w", mirrorRelative, err)
+		}
 	}
 	return nil
 }

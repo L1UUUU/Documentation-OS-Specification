@@ -57,6 +57,22 @@ func TestGenerateWorkDuplicateLeavesRepositoryUnchanged(t *testing.T) {
 	assertFileExists(t, filepath.Join(engine.Root, ".scratch", "active", "duplicate-work", "PRD.md"))
 }
 
+// TestInitializeRepairsMissingCanonicalMirror verifies existing guidance is preserved.
+func TestInitializeRepairsMissingCanonicalMirror(t *testing.T) {
+	root := t.TempDir()
+	writeText(t, filepath.Join(root, "CLAUDE.md"), "custom entry\n")
+	engine, err := New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := engine.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	if got := readText(t, filepath.Join(root, "AGENTS.md")); got != "custom entry\n" {
+		t.Fatalf("AGENTS.md = %q, want existing CLAUDE.md content", got)
+	}
+}
+
 // TestValidateAllowsActiveWorkWithEmptyIssues verifies the active Work exception.
 func TestValidateAllowsActiveWorkWithEmptyIssues(t *testing.T) {
 	engine := newTestEngine(t)
