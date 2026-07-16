@@ -2,6 +2,7 @@
 package engine
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -34,26 +35,28 @@ func (e *Engine) GenerateWork(slug string) (WorkResult, error) {
 	if err != nil {
 		return WorkResult{}, fmt.Errorf("read existing INDEX: %w", err)
 	}
-	rollback := func() {
-		_ = os.RemoveAll(activePath)
-		_ = restoreFile(indexPath, previousIndex, indexExisted)
+	rollbackFailure := func(stage string, operationErr error) (WorkResult, error) {
+		rollbackErr := errors.Join(
+			os.RemoveAll(activePath),
+			restoreFile(indexPath, previousIndex, indexExisted),
+		)
+		if rollbackErr != nil {
+			return WorkResult{}, fmt.Errorf("%s: %w", stage, errors.Join(operationErr, fmt.Errorf("rollback workspace and INDEX: %w", rollbackErr)))
+		}
+		return WorkResult{}, fmt.Errorf("%s; workspace and INDEX rolled back: %w", stage, operationErr)
 	}
 	if err := os.MkdirAll(filepath.Join(activePath, "issues"), 0o755); err != nil {
-		rollback()
-		return WorkResult{}, fmt.Errorf("create Work workspace: %w", err)
+		return rollbackFailure("create Work workspace", err)
 	}
 	prd := []byte("---\nrelationships: []\n---\n\n# " + titleFromSlug(slug) + "\n\n## Objective\n\n<!-- Define the Work objective and constraints. -->\n")
-	if err := writeAtomic(filepath.Join(activePath, "PRD.md"), prd, 0o644); err != nil {
-		rollback()
-		return WorkResult{}, fmt.Errorf("create PRD.md: %w", err)
+	if err := e.writeFileAtomic(filepath.Join(activePath, "PRD.md"), prd, 0o644); err != nil {
+		return rollbackFailure("create PRD.md", err)
 	}
-	if err := writeAtomic(filepath.Join(activePath, "HANDOFF.md"), nil, 0o644); err != nil {
-		rollback()
-		return WorkResult{}, fmt.Errorf("create HANDOFF.md: %w", err)
+	if err := e.writeFileAtomic(filepath.Join(activePath, "HANDOFF.md"), nil, 0o644); err != nil {
+		return rollbackFailure("create HANDOFF.md", err)
 	}
 	if _, err := e.GenerateIndex(); err != nil {
-		rollback()
-		return WorkResult{}, fmt.Errorf("generate INDEX after Work creation: %w", err)
+		return rollbackFailure("generate INDEX after Work creation", err)
 	}
 	return WorkResult{Slug: slug, Path: activePath, IndexPath: e.relativePath(indexPath)}, nil
 }

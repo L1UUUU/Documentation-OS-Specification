@@ -4,6 +4,7 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 )
@@ -52,6 +53,7 @@ type Profile struct {
 	RuntimeRoot      string
 	ActiveRoot       string
 	CompletedRoot    string
+	LockRoot         string
 	IndexPath        string
 	RootAgents       string
 	RootClaude       string
@@ -73,6 +75,7 @@ func DefaultProfile() Profile {
 		RuntimeRoot:     ".scratch",
 		ActiveRoot:      ".scratch/active",
 		CompletedRoot:   ".scratch/completed",
+		LockRoot:        ".scratch/.locks",
 		IndexPath:       ".scratch/INDEX.md",
 		RootAgents:      "AGENTS.md",
 		RootClaude:      "CLAUDE.md",
@@ -88,8 +91,10 @@ func DefaultProfile() Profile {
 
 // Engine executes deterministic operations against one repository root.
 type Engine struct {
-	Root    string
-	Profile Profile
+	Root            string
+	Profile         Profile
+	renameFile      func(string, string) error
+	writeFileAtomic func(string, []byte, os.FileMode) error
 }
 
 // ValidationIssue describes one deterministic repository validation observation.

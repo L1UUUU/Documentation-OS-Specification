@@ -35,6 +35,7 @@ func (e *Engine) Initialize() error {
 		e.Profile.RuntimeRoot,
 		e.Profile.ActiveRoot,
 		e.Profile.CompletedRoot,
+		e.Profile.LockRoot,
 	}
 	for _, relative := range directories {
 		if err := os.MkdirAll(e.path(relative), 0o755); err != nil {

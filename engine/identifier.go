@@ -2,6 +2,7 @@
 package engine
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,7 +14,7 @@ import (
 var finalIdentifierPattern = regexp.MustCompile(`^(ARCH|ADR|STD)-([0-9]{4})$`)
 
 // AllocateKnowledgeIdentifier integrates one Work-local draft into a final Knowledge artifact.
-func (e *Engine) AllocateKnowledgeIdentifier(categoryName, draftRelativePath string) (AllocationResult, error) {
+func (e *Engine) AllocateKnowledgeIdentifier(categoryName, draftRelativePath string) (result AllocationResult, returnErr error) {
 	category, err := e.resolveCategory(categoryName)
 	if err != nil {
 		return AllocationResult{}, err
@@ -40,6 +41,21 @@ func (e *Engine) AllocateKnowledgeIdentifier(categoryName, draftRelativePath str
 	if _, err := os.Stat(draftPath); err != nil {
 		return AllocationResult{}, fmt.Errorf("read draft %s: %w", e.relativePath(draftPath), err)
 	}
+	lockPath := e.path(filepath.ToSlash(filepath.Join(e.Profile.LockRoot, strings.ToLower(category.Prefix)+"-identity.lock")))
+	releaseLock, err := acquireRepositoryLock(lockPath)
+	if err != nil {
+		return AllocationResult{}, fmt.Errorf("acquire %s identity allocation lock: %w", category.Prefix, err)
+	}
+	defer func() {
+		if err := releaseLock(); err != nil {
+			lockErr := fmt.Errorf("release %s identity allocation lock: %w", category.Prefix, err)
+			if returnErr == nil {
+				returnErr = lockErr
+				return
+			}
+			returnErr = errors.Join(returnErr, lockErr)
+		}
+	}()
 	next, err := e.nextKnowledgeNumber(category)
 	if err != nil {
 		return AllocationResult{}, err

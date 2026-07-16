@@ -87,7 +87,7 @@ func (e *Engine) Complete(slug, outcome string) (CompleteResult, error) {
 		_ = restoreCompleteTransaction(activePath, prdPath, originalPRD, backups)
 		return CompleteResult{}, fmt.Errorf("Complete cleanup before move: %w", err)
 	}
-	if err := os.Rename(activePath, completedPath); err != nil {
+	if err := e.renameFile(activePath, completedPath); err != nil {
 		_ = restoreCompleteTransaction(activePath, prdPath, originalPRD, backups)
 		return CompleteResult{}, fmt.Errorf("Complete stage move %s to %s: %w", e.relativePath(activePath), e.relativePath(completedPath), err)
 	}

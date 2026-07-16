@@ -76,9 +76,12 @@ func TestInitializeRepairsMissingCanonicalMirror(t *testing.T) {
 // TestValidateAllowsActiveWorkWithEmptyIssues verifies the active Work exception.
 func TestValidateAllowsActiveWorkWithEmptyIssues(t *testing.T) {
 	engine := newTestEngine(t)
-	if _, err := engine.GenerateWork("empty-issues"); err != nil {
+	work, err := engine.GenerateWork("empty-issues")
+	if err != nil {
 		t.Fatalf("GenerateWork() error = %v", err)
 	}
+	prdBefore := readText(t, filepath.Join(work.Path, "PRD.md"))
+	indexBefore := readText(t, filepath.Join(engine.Root, ".scratch", "INDEX.md"))
 
 	report, err := engine.Validate()
 	if err != nil {
@@ -86,6 +89,12 @@ func TestValidateAllowsActiveWorkWithEmptyIssues(t *testing.T) {
 	}
 	if !report.Passed() {
 		t.Fatalf("active Work with empty issues should pass, got:\n%s", report)
+	}
+	if prdAfter := readText(t, filepath.Join(work.Path, "PRD.md")); prdAfter != prdBefore {
+		t.Fatal("Validation changed the active PRD")
+	}
+	if indexAfter := readText(t, filepath.Join(engine.Root, ".scratch", "INDEX.md")); indexAfter != indexBefore {
+		t.Fatal("Validation changed INDEX")
 	}
 }
 

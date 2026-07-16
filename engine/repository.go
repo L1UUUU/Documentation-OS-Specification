@@ -24,7 +24,12 @@ func New(root string) (*Engine, error) {
 	if !info.IsDir() {
 		return nil, fmt.Errorf("repository root %q is not a directory", abs)
 	}
-	return &Engine{Root: filepath.Clean(abs), Profile: DefaultProfile()}, nil
+	return &Engine{
+		Root:            filepath.Clean(abs),
+		Profile:         DefaultProfile(),
+		renameFile:      os.Rename,
+		writeFileAtomic: writeAtomic,
+	}, nil
 }
 
 // path resolves a profile-relative path beneath the repository root.
