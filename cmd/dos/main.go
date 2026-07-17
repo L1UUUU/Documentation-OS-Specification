@@ -69,7 +69,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 	case "migrate":
 		return runMigrate(instance, commandArgs[1:], stdout, stderr, jsonOutput)
 	default:
-		writeCLIError(stderr, jsonOutput, fmt.Errorf("unknown command %q", commandArgs[0]))
+		writeCLIError(stderr, jsonOutput, invalidInput("unknown command %q", commandArgs[0]))
 		return 2
 	}
 }
@@ -77,7 +77,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 // runSynchronize requires the caller to declare the Work's Knowledge impact.
 func runSynchronize(instance *engine.Engine, args []string, stdout, stderr io.Writer, jsonOutput bool) int {
 	if len(args) == 0 {
-		writeCLIError(stderr, jsonOutput, errors.New("sync requires --knowledge-impact=changed|no-change"))
+		writeCLIError(stderr, jsonOutput, invalidInput("sync requires --knowledge-impact=changed|no-change"))
 		return 2
 	}
 	impact := ""
@@ -87,10 +87,10 @@ func runSynchronize(instance *engine.Engine, args []string, stdout, stderr io.Wr
 		impact = strings.TrimPrefix(args[0], "--knowledge-impact=")
 	}
 	if impact == "" {
-		writeCLIError(stderr, jsonOutput, errors.New("--knowledge-impact requires changed or no-change"))
+		writeCLIError(stderr, jsonOutput, invalidInput("--knowledge-impact requires changed or no-change"))
 		return 2
 	}
-	result, err := instance.Synchronize(engine.SyncInput{KnowledgeImpact: impact})
+	result, err := instance.Synchronize(engine.SyncInput{KnowledgeImpact: engine.KnowledgeImpact(impact)})
 	return finishResult(result, err, stdout, stderr, jsonOutput, 1)
 }
 
@@ -106,7 +106,7 @@ func parseGlobalOptions(args []string) (string, bool, []string, error) {
 			jsonOutput = true
 		case arg == "--root":
 			if index+1 >= len(args) {
-				return root, jsonOutput, nil, errors.New("--root requires a path")
+				return root, jsonOutput, nil, invalidInput("--root requires a path")
 			}
 			root = args[index+1]
 			index++
@@ -122,7 +122,7 @@ func parseGlobalOptions(args []string) (string, bool, []string, error) {
 // runGenerate dispatches the Generate command category.
 func runGenerate(instance *engine.Engine, args []string, stdout, stderr io.Writer, jsonOutput bool) int {
 	if len(args) < 2 {
-		writeCLIError(stderr, jsonOutput, errors.New("generate requires `work <slug>` or `id <category> <draft-path>"))
+		writeCLIError(stderr, jsonOutput, invalidInput("generate requires `work <slug>` or `id <category> <draft-path>"))
 		return 2
 	}
 	switch args[0] {
@@ -131,13 +131,13 @@ func runGenerate(instance *engine.Engine, args []string, stdout, stderr io.Write
 		return finishResult(result, err, stdout, stderr, jsonOutput, 1)
 	case "id":
 		if len(args) < 3 {
-			writeCLIError(stderr, jsonOutput, errors.New("generate id requires a category and draft path"))
+			writeCLIError(stderr, jsonOutput, invalidInput("generate id requires a category and draft path"))
 			return 2
 		}
 		result, err := instance.AllocateKnowledgeIdentifier(args[1], args[2])
 		return finishResult(result, err, stdout, stderr, jsonOutput, 1)
 	default:
-		writeCLIError(stderr, jsonOutput, fmt.Errorf("unknown generate category %q", args[0]))
+		writeCLIError(stderr, jsonOutput, invalidInput("unknown generate category %q", args[0]))
 		return 2
 	}
 }
@@ -145,7 +145,7 @@ func runGenerate(instance *engine.Engine, args []string, stdout, stderr io.Write
 // runComplete parses caller-supplied outcome and delegates Complete.
 func runComplete(instance *engine.Engine, args []string, stdout, stderr io.Writer, jsonOutput bool) int {
 	if len(args) == 0 {
-		writeCLIError(stderr, jsonOutput, errors.New("complete requires a Work slug and --outcome"))
+		writeCLIError(stderr, jsonOutput, invalidInput("complete requires a Work slug and --outcome"))
 		return 2
 	}
 	slug := args[0]
@@ -159,7 +159,7 @@ func runComplete(instance *engine.Engine, args []string, stdout, stderr io.Write
 		}
 	}
 	if outcome == "" {
-		writeCLIError(stderr, jsonOutput, errors.New("complete requires --outcome=succeeded|cancelled|superseded|failed"))
+		writeCLIError(stderr, jsonOutput, invalidInput("complete requires --outcome=succeeded|cancelled|superseded|failed"))
 		return 2
 	}
 	result, err := instance.Complete(slug, outcome)
@@ -168,6 +168,11 @@ func runComplete(instance *engine.Engine, args []string, stdout, stderr io.Write
 		return 1
 	}
 	return writeOutput(stdout, jsonOutput, result, fmt.Sprintf("Completed Work %s (%s)", slug, outcome))
+}
+
+// invalidInput classifies CLI usage errors without exposing message parsing as API.
+func invalidInput(format string, args ...any) error {
+	return fmt.Errorf("%w: %s", engine.ErrInvalidInput, fmt.Sprintf(format, args...))
 }
 
 // runMigrate dispatches the supported migration target.
@@ -191,17 +196,12 @@ func runMigrate(instance *engine.Engine, args []string, stdout, stderr io.Writer
 
 // writeVersion emits independent version dimensions without requiring a valid repository.
 func writeVersion(root string, jsonOutput bool, stdout, stderr io.Writer) int {
-	result := map[string]string{
-		"specification_version": engine.SpecificationVersion,
-		"engine_version":        engine.EngineVersion,
-		"cli_version":           engine.EngineVersion,
-		"repository_profile":    engine.ProfileName,
-	}
+	result := engine.Compatibility()
 	if instance, err := engine.New(root); err == nil {
-		info := instance.Version()
-		result["repository_version"] = info.RepositoryVersion
+		result = instance.Version()
 	}
-	if err := writeOutput(stdout, jsonOutput, result, fmt.Sprintf("Documentation OS %s; engine %s", engine.SpecificationVersion, engine.EngineVersion)); err != 0 {
+	human := fmt.Sprintf("Documentation OS Specification %s-%s.%s; profile %s %s; engine %s; CLI %s", result.SpecificationVersion, result.SpecificationStatus, result.SpecificationRevision, result.RepositoryProfile, result.RepositoryProfileVersion, result.EngineVersion, result.CLIVersion)
+	if err := writeOutput(stdout, jsonOutput, result, human); err != 0 {
 		writeCLIError(stderr, jsonOutput, errors.New("write version output"))
 		return 1
 	}
@@ -227,7 +227,7 @@ func humanResult(result any) string {
 	case engine.IndexResult:
 		return fmt.Sprintf("INDEX regenerated: %s", value.Path)
 	case engine.SyncResult:
-		if !value.NoKnowledgeChange {
+		if value.KnowledgeImpact == engine.KnowledgeImpactChanged {
 			return fmt.Sprintf("Synchronization complete; Knowledge edits declared; INDEX: %s", value.Index.Path)
 		}
 		return fmt.Sprintf("Synchronization complete; no Knowledge edits required; INDEX: %s", value.Index.Path)
@@ -262,7 +262,7 @@ func writeOutput(stdout io.Writer, jsonOutput bool, value any, human string) int
 // writeCLIError emits a deterministic CLI error representation.
 func writeCLIError(stderr io.Writer, jsonOutput bool, err error) {
 	if jsonOutput {
-		_ = json.NewEncoder(stderr).Encode(map[string]string{"error": err.Error()})
+		_ = json.NewEncoder(stderr).Encode(map[string]string{"code": string(engine.ErrorCodeOf(err)), "error": err.Error()})
 		return
 	}
 	_, _ = fmt.Fprintln(stderr, "error:", err)

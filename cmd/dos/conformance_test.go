@@ -21,7 +21,7 @@ func TestCLIConformanceFullLifecycle(t *testing.T) {
 	}
 
 	syncOutput := runCLI(t, root, "--json", "sync", "--knowledge-impact", "no-change")
-	if !strings.Contains(syncOutput, `"no_knowledge_change": true`) {
+	if !strings.Contains(syncOutput, `"knowledge_impact": "no-change"`) || !strings.Contains(syncOutput, `"no_knowledge_change": true`) {
 		t.Fatalf("sync JSON output = %s", syncOutput)
 	}
 	validateOutput := runCLI(t, root, "--json", "validate")

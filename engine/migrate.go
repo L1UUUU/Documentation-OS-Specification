@@ -12,12 +12,24 @@ var versionPattern = regexp.MustCompile(`(?m)(?:Documentation OS Specification|\
 
 // Version reports specification, profile, repository, engine, and CLI versions.
 func (e *Engine) Version() VersionInfo {
+	result := Compatibility()
+	result.RepositoryVersion = e.repositoryVersion()
+	result.RepositoryProfile = e.Profile.Name
+	result.RepositoryProfileVersion = e.Profile.Version
+	return result
+}
+
+// Compatibility reports repository-independent public contract versions.
+func Compatibility() VersionInfo {
 	return VersionInfo{
-		SpecificationVersion: SpecificationVersion,
-		RepositoryVersion:    e.repositoryVersion(),
-		RepositoryProfile:    e.Profile.Name,
-		EngineVersion:        EngineVersion,
-		CLIVersion:           EngineVersion,
+		SpecificationVersion:     SpecificationVersion,
+		SpecificationStatus:      SpecificationStatus,
+		SpecificationRevision:    SpecificationRevision,
+		RepositoryVersion:        "unknown",
+		RepositoryProfile:        ProfileName,
+		RepositoryProfileVersion: RepositoryProfileVersion,
+		EngineVersion:            EngineVersion,
+		CLIVersion:               CLIVersion,
 	}
 }
 

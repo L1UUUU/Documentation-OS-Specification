@@ -53,8 +53,16 @@ func (e *Engine) Complete(slug, outcome string) (CompleteResult, error) {
 		if info, err := os.Stat(completedPath); err != nil || !info.IsDir() {
 			return CompleteResult{}, fmt.Errorf("%w: completed Work path %q is occupied by a non-directory", ErrPreflight, slug)
 		}
+		persistedOutcome, err := completedWorkOutcome(completedPath)
+		result := CompleteResult{Slug: slug, Completed: true, RetriedCleanup: true, Outcome: persistedOutcome}
+		if err != nil {
+			return result, err
+		}
+		if persistedOutcome != outcome {
+			return result, fmt.Errorf("%w: completed Work %q records outcome %q, retry requested %q", ErrConflict, slug, persistedOutcome, outcome)
+		}
 		index, err := e.GenerateIndex()
-		result := CompleteResult{Slug: slug, Completed: true, CleanupCompleted: err == nil, RetriedCleanup: true, Outcome: outcome}
+		result.CleanupCompleted = err == nil
 		if err != nil {
 			return result, fmt.Errorf("cleanup completed Work %q: %w", slug, err)
 		}
@@ -97,6 +105,19 @@ func (e *Engine) Complete(slug, outcome string) (CompleteResult, error) {
 	}
 	result.CleanupCompleted = true
 	return result, nil
+}
+
+// completedWorkOutcome reads the authoritative outcome recorded by Complete.
+func completedWorkOutcome(workPath string) (string, error) {
+	data, err := os.ReadFile(filepath.Join(workPath, "PRD.md"))
+	if err != nil {
+		return "", fmt.Errorf("%w: read completed PRD.md: %v", ErrInvalidRepository, err)
+	}
+	front, err := parseFrontMatter(data)
+	if err != nil || !front.Present || !validOutcome(front.Outcome) {
+		return "", fmt.Errorf("%w: completed PRD.md must declare a valid outcome", ErrInvalidRepository)
+	}
+	return front.Outcome, nil
 }
 
 // completePreflight validates all conditions that must hold before mutation.

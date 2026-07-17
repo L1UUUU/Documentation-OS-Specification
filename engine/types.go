@@ -1,4 +1,3 @@
-// Package engine contains the deterministic Documentation OS repository engine.
 package engine
 
 import (
@@ -12,8 +11,16 @@ import (
 const (
 	// SpecificationVersion is the Documentation OS specification version implemented here.
 	SpecificationVersion = "1.0"
+	// SpecificationStatus is the maturity of the supported specification revision.
+	SpecificationStatus = "draft"
+	// SpecificationRevision identifies the exact Draft semantics implemented here.
+	SpecificationRevision = "12"
+	// RepositoryProfileVersion is the supported Single Repository Profile version.
+	RepositoryProfileVersion = "1.0"
 	// EngineVersion is the implementation version exposed by the engine and CLI.
-	EngineVersion = "0.1.0"
+	EngineVersion = "0.1.0-rc.1"
+	// CLIVersion is the command-line contract version.
+	CLIVersion = "0.1.0-rc.1"
 	// ProfileName is the repository profile implemented by this engine.
 	ProfileName = "Single Repository"
 
@@ -25,11 +32,6 @@ const (
 	OutcomeSuperseded = "superseded"
 	// OutcomeFailed records a Work that could not be completed.
 	OutcomeFailed = "failed"
-
-	// KnowledgeImpactChanged declares that the caller changed persistent Knowledge.
-	KnowledgeImpactChanged = "changed"
-	// KnowledgeImpactNoChange declares that no persistent Knowledge edits were required.
-	KnowledgeImpactNoChange = "no-change"
 )
 
 var (
@@ -39,6 +41,20 @@ var (
 	ErrInvalidRepository = errors.New("invalid Documentation OS repository")
 	// ErrIdentityConflict identifies an Identity assigned to distinct artifacts across worktrees.
 	ErrIdentityConflict = errors.New("identity conflict")
+	// ErrInvalidInput identifies a public operation input outside its contract.
+	ErrInvalidInput = errors.New("invalid input")
+	// ErrConflict identifies a retry that contradicts persisted repository state.
+	ErrConflict = errors.New("operation conflicts with persisted state")
+)
+
+// KnowledgeImpact is the required result of Knowledge Impact Analysis.
+type KnowledgeImpact string
+
+const (
+	// KnowledgeImpactChanged declares that the caller changed persistent Knowledge.
+	KnowledgeImpactChanged KnowledgeImpact = "changed"
+	// KnowledgeImpactNoChange declares that no persistent Knowledge edits were required.
+	KnowledgeImpactNoChange KnowledgeImpact = "no-change"
 )
 
 // KnowledgeCategory describes one identity-managed Knowledge directory.
@@ -73,7 +89,7 @@ type Profile struct {
 func DefaultProfile() Profile {
 	return Profile{
 		Name:            ProfileName,
-		Version:         SpecificationVersion,
+		Version:         RepositoryProfileVersion,
 		KnowledgeRoot:   "docs",
 		ArchitectureDir: "docs/architecture",
 		ADRDir:          "docs/adr",
@@ -202,11 +218,14 @@ type InspectReport struct {
 
 // VersionInfo exposes the independent Documentation OS version dimensions.
 type VersionInfo struct {
-	SpecificationVersion string `json:"specification_version"`
-	RepositoryVersion    string `json:"repository_version"`
-	RepositoryProfile    string `json:"repository_profile"`
-	EngineVersion        string `json:"engine_version"`
-	CLIVersion           string `json:"cli_version"`
+	SpecificationVersion     string `json:"specification_version"`
+	SpecificationStatus      string `json:"specification_status"`
+	SpecificationRevision    string `json:"specification_revision"`
+	RepositoryVersion        string `json:"repository_version"`
+	RepositoryProfile        string `json:"repository_profile"`
+	RepositoryProfileVersion string `json:"repository_profile_version"`
+	EngineVersion            string `json:"engine_version"`
+	CLIVersion               string `json:"cli_version"`
 }
 
 // WorkResult describes a generated Work workspace.
@@ -241,13 +260,14 @@ type AllocationResult struct {
 
 // SyncInput carries the caller's Knowledge Impact Analysis declaration.
 type SyncInput struct {
-	KnowledgeImpact string `json:"knowledge_impact"`
+	KnowledgeImpact KnowledgeImpact `json:"knowledge_impact"`
 }
 
 // SyncResult makes the caller's Knowledge synchronization declaration observable.
 type SyncResult struct {
-	NoKnowledgeChange bool        `json:"no_knowledge_change"`
-	Index             IndexResult `json:"index"`
+	KnowledgeImpact   KnowledgeImpact `json:"knowledge_impact"`
+	NoKnowledgeChange bool            `json:"no_knowledge_change"`
+	Index             IndexResult     `json:"index"`
 }
 
 // HealthCategory is one advisory Health assessment category.

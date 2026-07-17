@@ -3,11 +3,30 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"strings"
 	"testing"
 
 	"github.com/L1UUUU/Documentation-OS-Specification/engine"
 )
+
+// TestRunVersionJSONReturnsCompatibilityMatrix verifies machine-readable version negotiation.
+func TestRunVersionJSONReturnsCompatibilityMatrix(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--json", "version"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+	var got engine.VersionInfo
+	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
+		t.Fatalf("decode version JSON: %v; output = %s", err, stdout.String())
+	}
+	if got.SpecificationStatus != engine.SpecificationStatus || got.SpecificationRevision != engine.SpecificationRevision || got.RepositoryProfileVersion != engine.RepositoryProfileVersion {
+		t.Fatalf("version matrix = %+v", got)
+	}
+	if got.EngineVersion != engine.EngineVersion || got.CLIVersion != engine.CLIVersion {
+		t.Fatalf("version matrix = %+v", got)
+	}
+}
 
 // TestRunValidateJSON verifies command-local JSON output and engine delegation.
 func TestRunValidateJSON(t *testing.T) {
@@ -59,6 +78,15 @@ func TestRunSyncRequiresKnowledgeImpact(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := run([]string{"--root", root, "sync"}, &stdout, &stderr)
 	if code != 2 || !strings.Contains(stderr.String(), "--knowledge-impact") {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+}
+
+// TestRunSyncMissingKnowledgeImpactHasStableJSONCode verifies CLI usage classification.
+func TestRunSyncMissingKnowledgeImpactHasStableJSONCode(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--json", "sync"}, &stdout, &stderr)
+	if code != 2 || !strings.Contains(stderr.String(), `"code":"invalid-input"`) {
 		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
 	}
 }
@@ -152,7 +180,7 @@ func TestRunSyncRejectsInvalidKnowledgeImpact(t *testing.T) {
 	}
 	var stdout, stderr bytes.Buffer
 	code := run([]string{"--root", root, "--json", "sync", "--knowledge-impact=unknown"}, &stdout, &stderr)
-	if code != 1 || !strings.Contains(stderr.String(), `"error":"invalid Knowledge impact`) {
+	if code != 1 || !strings.Contains(stderr.String(), `"code":"invalid-input"`) || !strings.Contains(stderr.String(), `invalid Knowledge impact`) {
 		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
 	}
 }

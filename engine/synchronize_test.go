@@ -2,6 +2,7 @@
 package engine
 
 import (
+	"errors"
 	"os"
 	"testing"
 )
@@ -14,8 +15,8 @@ func TestSynchronizeAcceptsKnowledgeChangeDeclaration(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Synchronize() error = %v", err)
 	}
-	if result.NoKnowledgeChange {
-		t.Fatal("Synchronize() reported no Knowledge change for a changed declaration")
+	if result.KnowledgeImpact != KnowledgeImpactChanged || result.NoKnowledgeChange {
+		t.Fatalf("Synchronize() result = %+v, want explicit changed declaration", result)
 	}
 }
 
@@ -26,38 +27,25 @@ func TestSynchronizeRejectsInvalidKnowledgeImpact(t *testing.T) {
 		t.Fatalf("remove INDEX before test: %v", err)
 	}
 
-	if _, err := instance.Synchronize(SyncInput{KnowledgeImpact: "unknown"}); err == nil {
+	if _, err := instance.Synchronize(SyncInput{KnowledgeImpact: KnowledgeImpact("unknown")}); err == nil {
 		t.Fatal("Synchronize() should reject an unknown Knowledge impact declaration")
+	} else if !errors.Is(err, ErrInvalidInput) || ErrorCodeOf(err) != ErrorCodeInvalidInput {
+		t.Fatalf("Synchronize() error = %v, code = %q", err, ErrorCodeOf(err))
 	}
 	if _, err := os.Stat(instance.path(instance.Profile.IndexPath)); !os.IsNotExist(err) {
 		t.Fatalf("invalid declaration changed INDEX, stat error = %v", err)
 	}
 }
 
-// TestSynchronizePreservesNoChangeCompatibility verifies explicit and legacy no-change calls.
-func TestSynchronizePreservesNoChangeCompatibility(t *testing.T) {
+// TestSynchronizeRequiresExplicitNoChange verifies the explicit no-change result.
+func TestSynchronizeRequiresExplicitNoChange(t *testing.T) {
 	instance := newTestEngine(t)
 
 	explicit, err := instance.Synchronize(SyncInput{KnowledgeImpact: KnowledgeImpactNoChange})
 	if err != nil {
 		t.Fatalf("Synchronize(no-change) error = %v", err)
 	}
-	if !explicit.NoKnowledgeChange {
-		t.Fatal("Synchronize(no-change) did not report the explicit no-change result")
-	}
-
-	legacy, err := instance.Synchronize()
-	if err != nil {
-		t.Fatalf("legacy Synchronize() error = %v", err)
-	}
-	if !legacy.NoKnowledgeChange {
-		t.Fatal("legacy Synchronize() no longer preserves the no-change result")
-	}
-
-	if _, err := instance.Synchronize(
-		SyncInput{KnowledgeImpact: KnowledgeImpactChanged},
-		SyncInput{KnowledgeImpact: KnowledgeImpactNoChange},
-	); err == nil {
-		t.Fatal("Synchronize() should reject multiple Knowledge impact declarations")
+	if explicit.KnowledgeImpact != KnowledgeImpactNoChange || !explicit.NoKnowledgeChange {
+		t.Fatalf("Synchronize(no-change) result = %+v, want explicit no-change", explicit)
 	}
 }

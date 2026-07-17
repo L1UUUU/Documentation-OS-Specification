@@ -254,6 +254,48 @@ func TestCompletedWorkResumesCleanup(t *testing.T) {
 	assertFileExists(t, filepath.Join(engine.Root, ".scratch", "INDEX.md"))
 }
 
+// TestCompletedWorkRejectsConflictingOutcome verifies retries honor the persisted outcome.
+func TestCompletedWorkRejectsConflictingOutcome(t *testing.T) {
+	engine := newTestEngine(t)
+	work, err := engine.GenerateWork("retry-conflict")
+	if err != nil {
+		t.Fatalf("GenerateWork() error = %v", err)
+	}
+	writeText(t, filepath.Join(work.Path, "issues", "01-finish.md"), "---\nstatus: done\n---\n")
+	if _, err := engine.Complete("retry-conflict", OutcomeSucceeded); err != nil {
+		t.Fatalf("initial Complete() error = %v", err)
+	}
+
+	result, err := engine.Complete("retry-conflict", OutcomeFailed)
+	if !errors.Is(err, ErrConflict) {
+		t.Fatalf("conflicting Complete() error = %v, want ErrConflict", err)
+	}
+	if ErrorCodeOf(err) != ErrorCodeConflict {
+		t.Fatalf("conflicting Complete() code = %q, want %q", ErrorCodeOf(err), ErrorCodeConflict)
+	}
+	if result.Outcome != OutcomeSucceeded {
+		t.Fatalf("conflicting Complete() result outcome = %q, want persisted %q", result.Outcome, OutcomeSucceeded)
+	}
+}
+
+// TestVersionReportsCompatibilityMatrix verifies all independent version dimensions.
+func TestVersionReportsCompatibilityMatrix(t *testing.T) {
+	compatibility := Compatibility()
+	if compatibility.RepositoryVersion != "unknown" {
+		t.Fatalf("repository-independent compatibility = %+v", compatibility)
+	}
+	info := newTestEngine(t).Version()
+	if info.SpecificationVersion != SpecificationVersion || info.SpecificationStatus != SpecificationStatus || info.SpecificationRevision != SpecificationRevision {
+		t.Fatalf("specification compatibility = %+v", info)
+	}
+	if info.RepositoryProfile != ProfileName || info.RepositoryProfileVersion != RepositoryProfileVersion {
+		t.Fatalf("profile compatibility = %+v", info)
+	}
+	if info.EngineVersion != EngineVersion || info.CLIVersion != CLIVersion {
+		t.Fatalf("implementation compatibility = %+v", info)
+	}
+}
+
 // TestValidateRejectsActiveOutcome verifies the observable lifecycle invariant.
 func TestValidateRejectsActiveOutcome(t *testing.T) {
 	engine := newTestEngine(t)

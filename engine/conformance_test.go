@@ -233,7 +233,7 @@ func TestConformanceCancelledWorkCompletesStandardPipeline(t *testing.T) {
 		t.Fatalf("GenerateWork() error = %v", err)
 	}
 	writeText(t, filepath.Join(work.Path, "issues", "01-withdrawn.md"), "---\nstatus: in-progress\ntitle: Withdrawn work\n---\n")
-	if _, err := engine.Synchronize(); err != nil {
+	if _, err := engine.Synchronize(SyncInput{KnowledgeImpact: KnowledgeImpactNoChange}); err != nil {
 		t.Fatalf("Synchronize() error = %v", err)
 	}
 	if report, err := engine.Validate(); err != nil || !report.Passed() {

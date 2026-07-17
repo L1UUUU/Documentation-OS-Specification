@@ -171,26 +171,21 @@ func (e *Engine) GenerateIndex() (IndexResult, error) {
 }
 
 // Synchronize refreshes generated metadata and records the caller's Knowledge impact declaration.
-func (e *Engine) Synchronize(inputs ...SyncInput) (SyncResult, error) {
-	if len(inputs) > 1 {
-		return SyncResult{}, fmt.Errorf("synchronize accepts at most one Knowledge impact declaration")
-	}
-	noKnowledgeChange := true
-	if len(inputs) == 1 {
-		switch inputs[0].KnowledgeImpact {
-		case KnowledgeImpactChanged:
-			noKnowledgeChange = false
-		case KnowledgeImpactNoChange:
-			noKnowledgeChange = true
-		default:
-			return SyncResult{}, fmt.Errorf("invalid Knowledge impact %q: use %q or %q", inputs[0].KnowledgeImpact, KnowledgeImpactChanged, KnowledgeImpactNoChange)
-		}
+func (e *Engine) Synchronize(input SyncInput) (SyncResult, error) {
+	var noKnowledgeChange bool
+	switch input.KnowledgeImpact {
+	case KnowledgeImpactChanged:
+		noKnowledgeChange = false
+	case KnowledgeImpactNoChange:
+		noKnowledgeChange = true
+	default:
+		return SyncResult{}, fmt.Errorf("%w: invalid Knowledge impact %q: use %q or %q", ErrInvalidInput, input.KnowledgeImpact, KnowledgeImpactChanged, KnowledgeImpactNoChange)
 	}
 	index, err := e.GenerateIndex()
 	if err != nil {
 		return SyncResult{}, err
 	}
-	return SyncResult{NoKnowledgeChange: noKnowledgeChange, Index: index}, nil
+	return SyncResult{KnowledgeImpact: input.KnowledgeImpact, NoKnowledgeChange: noKnowledgeChange, Index: index}, nil
 }
 
 // Inspect returns a repository summary without modifying repository state.
