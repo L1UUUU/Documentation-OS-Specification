@@ -18,9 +18,9 @@ const (
 	// RepositoryProfileVersion is the supported Single Repository Profile version.
 	RepositoryProfileVersion = "1.0"
 	// EngineVersion is the implementation version exposed by the engine and CLI.
-	EngineVersion = "0.1.0-rc.1"
+	EngineVersion = "0.1.0-rc.2"
 	// CLIVersion is the command-line contract version.
-	CLIVersion = "0.1.0-rc.1"
+	CLIVersion = "0.1.0-rc.2"
 	// ProfileName is the repository profile implemented by this engine.
 	ProfileName = "Single Repository"
 
