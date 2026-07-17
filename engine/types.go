@@ -25,6 +25,11 @@ const (
 	OutcomeSuperseded = "superseded"
 	// OutcomeFailed records a Work that could not be completed.
 	OutcomeFailed = "failed"
+
+	// KnowledgeImpactChanged declares that the caller changed persistent Knowledge.
+	KnowledgeImpactChanged = "changed"
+	// KnowledgeImpactNoChange declares that no persistent Knowledge edits were required.
+	KnowledgeImpactNoChange = "no-change"
 )
 
 var (
@@ -32,6 +37,8 @@ var (
 	ErrPreflight = errors.New("complete preflight failed")
 	// ErrInvalidRepository identifies a repository that cannot be operated on.
 	ErrInvalidRepository = errors.New("invalid Documentation OS repository")
+	// ErrIdentityConflict identifies an Identity assigned to distinct artifacts across worktrees.
+	ErrIdentityConflict = errors.New("identity conflict")
 )
 
 // KnowledgeCategory describes one identity-managed Knowledge directory.
@@ -162,14 +169,23 @@ func (r *ValidationReport) sortIssues() {
 	}
 }
 
+// IssueSummary describes one Issue returned by repository inspection.
+type IssueSummary struct {
+	Name   string `json:"name"`
+	Path   string `json:"path"`
+	Title  string `json:"title"`
+	Status string `json:"status"`
+}
+
 // WorkSummary describes one Work for inspection and health reports.
 type WorkSummary struct {
-	Slug        string `json:"slug"`
-	State       string `json:"state"`
-	PRDPath     string `json:"prd_path"`
-	HANDOFFPath string `json:"handoff_path"`
-	IssueCount  int    `json:"issue_count"`
-	Outcome     string `json:"outcome,omitempty"`
+	Slug        string         `json:"slug"`
+	State       string         `json:"state"`
+	PRDPath     string         `json:"prd_path"`
+	HANDOFFPath string         `json:"handoff_path"`
+	IssueCount  int            `json:"issue_count"`
+	Issues      []IssueSummary `json:"issues"`
+	Outcome     string         `json:"outcome,omitempty"`
 }
 
 // InspectReport summarizes repository state without modifying it.
@@ -223,7 +239,12 @@ type AllocationResult struct {
 	References int    `json:"references_updated"`
 }
 
-// SyncResult makes a no-change synchronization operation observable.
+// SyncInput carries the caller's Knowledge Impact Analysis declaration.
+type SyncInput struct {
+	KnowledgeImpact string `json:"knowledge_impact"`
+}
+
+// SyncResult makes the caller's Knowledge synchronization declaration observable.
 type SyncResult struct {
 	NoKnowledgeChange bool        `json:"no_knowledge_change"`
 	Index             IndexResult `json:"index"`

@@ -41,7 +41,10 @@ func (e *Engine) AllocateKnowledgeIdentifier(categoryName, draftRelativePath str
 	if _, err := os.Stat(draftPath); err != nil {
 		return AllocationResult{}, fmt.Errorf("read draft %s: %w", e.relativePath(draftPath), err)
 	}
-	lockPath := e.path(filepath.ToSlash(filepath.Join(e.Profile.LockRoot, strings.ToLower(category.Prefix)+"-identity.lock")))
+	lockPath, worktreeRoots, err := e.identityAllocationScope(category)
+	if err != nil {
+		return AllocationResult{}, fmt.Errorf("resolve %s identity allocation scope: %w", category.Prefix, err)
+	}
 	releaseLock, err := acquireRepositoryLock(lockPath)
 	if err != nil {
 		return AllocationResult{}, fmt.Errorf("acquire %s identity allocation lock: %w", category.Prefix, err)
@@ -56,7 +59,7 @@ func (e *Engine) AllocateKnowledgeIdentifier(categoryName, draftRelativePath str
 			returnErr = errors.Join(returnErr, lockErr)
 		}
 	}()
-	next, err := e.nextKnowledgeNumber(category)
+	next, err := e.nextKnowledgeNumberAcrossWorktrees(category, worktreeRoots)
 	if err != nil {
 		return AllocationResult{}, err
 	}
@@ -120,6 +123,56 @@ func (e *Engine) AllocateKnowledgeIdentifier(categoryName, draftRelativePath str
 	return AllocationResult{Identifier: identifier, OldPath: e.relativePath(draftPath), NewPath: e.relativePath(newPath), References: updatedReferences}, nil
 }
 
+// nextKnowledgeNumberAcrossWorktrees finds the next number and rejects visible Identity conflicts.
+func (e *Engine) nextKnowledgeNumberAcrossWorktrees(category KnowledgeCategory, roots []string) (int, error) {
+	max := 0
+	pathsByIdentity := map[string]string{}
+	for _, root := range roots {
+		categoryPath := filepath.Join(root, filepath.FromSlash(category.Directory))
+		err := filepath.WalkDir(categoryPath, func(path string, entry os.DirEntry, walkErr error) error {
+			if walkErr != nil {
+				return walkErr
+			}
+			if entry.IsDir() || filepath.Ext(entry.Name()) != ".md" || draftFilenamePattern.MatchString(entry.Name()) {
+				return nil
+			}
+			data, readErr := os.ReadFile(path)
+			if readErr != nil {
+				return readErr
+			}
+			front, parseErr := parseFrontMatter(data)
+			if parseErr == nil {
+				if match := finalIdentifierPattern.FindStringSubmatch(front.ID); len(match) == 3 && match[1] == category.Prefix {
+					value, _ := strconv.Atoi(match[2])
+					if value > max {
+						max = value
+					}
+					relativePath, _ := filepath.Rel(categoryPath, path)
+					relativePath = filepath.ToSlash(relativePath)
+					if existing, found := pathsByIdentity[front.ID]; found && existing != relativePath {
+						return fmt.Errorf("%w: %s is assigned to both %s and %s across Git worktrees; rebase, reallocate the later integration, and retry", ErrIdentityConflict, front.ID, existing, relativePath)
+					}
+					pathsByIdentity[front.ID] = relativePath
+				}
+			}
+			if match := knowledgeFilenamePattern.FindStringSubmatch(entry.Name()); len(match) == 2 {
+				value, _ := strconv.Atoi(match[1])
+				if value > max {
+					max = value
+				}
+			}
+			return nil
+		})
+		if os.IsNotExist(err) {
+			continue
+		}
+		if err != nil {
+			return 0, fmt.Errorf("scan %s identifiers in worktree %s: %w", category.Directory, root, err)
+		}
+	}
+	return max + 1, nil
+}
+
 // resolveCategory resolves a profile category name or prefix.
 func (e *Engine) resolveCategory(name string) (KnowledgeCategory, error) {
 	normalized := strings.ToLower(strings.TrimSpace(name))
@@ -129,43 +182,6 @@ func (e *Engine) resolveCategory(name string) (KnowledgeCategory, error) {
 		}
 	}
 	return KnowledgeCategory{}, fmt.Errorf("unknown Knowledge category %q", name)
-}
-
-// nextKnowledgeNumber finds the next monotonic category number from repository state.
-func (e *Engine) nextKnowledgeNumber(category KnowledgeCategory) (int, error) {
-	max := 0
-	err := filepath.WalkDir(e.path(category.Directory), func(path string, entry os.DirEntry, walkErr error) error {
-		if walkErr != nil {
-			return walkErr
-		}
-		if entry.IsDir() || filepath.Ext(entry.Name()) != ".md" || draftFilenamePattern.MatchString(entry.Name()) {
-			return nil
-		}
-		data, readErr := os.ReadFile(path)
-		if readErr != nil {
-			return readErr
-		}
-		front, parseErr := parseFrontMatter(data)
-		if parseErr == nil {
-			if match := finalIdentifierPattern.FindStringSubmatch(front.ID); len(match) == 3 && match[1] == category.Prefix {
-				value, _ := strconv.Atoi(match[2])
-				if value > max {
-					max = value
-				}
-			}
-		}
-		if match := knowledgeFilenamePattern.FindStringSubmatch(entry.Name()); len(match) == 2 {
-			value, _ := strconv.Atoi(match[1])
-			if value > max {
-				max = value
-			}
-		}
-		return nil
-	})
-	if err != nil {
-		return 0, fmt.Errorf("scan %s identifiers: %w", category.Directory, err)
-	}
-	return max + 1, nil
 }
 
 // findManagedReferenceChanges snapshots Markdown files containing the draft marker.

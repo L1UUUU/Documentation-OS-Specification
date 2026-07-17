@@ -20,7 +20,7 @@ func TestCLIConformanceFullLifecycle(t *testing.T) {
 		t.Fatalf("write Issue fixture: %v", err)
 	}
 
-	syncOutput := runCLI(t, root, "--json", "sync")
+	syncOutput := runCLI(t, root, "--json", "sync", "--knowledge-impact", "no-change")
 	if !strings.Contains(syncOutput, `"no_knowledge_change": true`) {
 		t.Fatalf("sync JSON output = %s", syncOutput)
 	}

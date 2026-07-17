@@ -9,13 +9,6 @@ import (
 	"strings"
 )
 
-// issueRecord contains only the fields needed by INDEX.md.
-type issueRecord struct {
-	Name   string
-	Status string
-	Title  string
-}
-
 // workRecord is the engine's filesystem-derived view of one Work.
 type workRecord struct {
 	Slug      string
@@ -24,7 +17,7 @@ type workRecord struct {
 	PRD       FrontMatter
 	PRDExists bool
 	HANDOFF   string
-	Issues    []issueRecord
+	Issues    []IssueSummary
 }
 
 // listWorks reads active and completed Work directories in deterministic order.
@@ -91,8 +84,9 @@ func (e *Engine) readWorkRecord(path, slug, state string) (workRecord, error) {
 		if entry.IsDir() {
 			continue
 		}
-		issue := issueRecord{Name: entry.Name(), Status: "unknown", Title: entry.Name()}
-		data, readErr := os.ReadFile(filepath.Join(issuesPath, entry.Name()))
+		issuePath := filepath.Join(issuesPath, entry.Name())
+		issue := IssueSummary{Name: entry.Name(), Path: e.relativePath(issuePath), Status: "unknown", Title: entry.Name()}
+		data, readErr := os.ReadFile(issuePath)
 		if readErr == nil {
 			if front, parseErr := parseFrontMatter(data); parseErr == nil {
 				if front.Status != "" {
@@ -176,13 +170,27 @@ func (e *Engine) GenerateIndex() (IndexResult, error) {
 	return IndexResult{Path: e.relativePath(path), Changed: !existed || string(previous) != string(data)}, nil
 }
 
-// Synchronize refreshes generated metadata and records an explicit no-change Knowledge result.
-func (e *Engine) Synchronize() (SyncResult, error) {
+// Synchronize refreshes generated metadata and records the caller's Knowledge impact declaration.
+func (e *Engine) Synchronize(inputs ...SyncInput) (SyncResult, error) {
+	if len(inputs) > 1 {
+		return SyncResult{}, fmt.Errorf("synchronize accepts at most one Knowledge impact declaration")
+	}
+	noKnowledgeChange := true
+	if len(inputs) == 1 {
+		switch inputs[0].KnowledgeImpact {
+		case KnowledgeImpactChanged:
+			noKnowledgeChange = false
+		case KnowledgeImpactNoChange:
+			noKnowledgeChange = true
+		default:
+			return SyncResult{}, fmt.Errorf("invalid Knowledge impact %q: use %q or %q", inputs[0].KnowledgeImpact, KnowledgeImpactChanged, KnowledgeImpactNoChange)
+		}
+	}
 	index, err := e.GenerateIndex()
 	if err != nil {
 		return SyncResult{}, err
 	}
-	return SyncResult{NoKnowledgeChange: true, Index: index}, nil
+	return SyncResult{NoKnowledgeChange: noKnowledgeChange, Index: index}, nil
 }
 
 // Inspect returns a repository summary without modifying repository state.
@@ -199,6 +207,7 @@ func (e *Engine) Inspect() (InspectReport, error) {
 			PRDPath:     e.relativePath(filepath.Join(record.Path, "PRD.md")),
 			HANDOFFPath: e.relativePath(record.HANDOFF),
 			IssueCount:  len(record.Issues),
+			Issues:      record.Issues,
 			Outcome:     record.PRD.Outcome,
 		}
 		summaries = append(summaries, summary)

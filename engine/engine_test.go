@@ -41,6 +41,33 @@ func TestGenerateWorkCreatesCoreAssetsAndDeterministicIndex(t *testing.T) {
 	}
 }
 
+// TestInspectReturnsIssueSummaries verifies callers can inspect Issue identity, title, and DOS status.
+func TestInspectReturnsIssueSummaries(t *testing.T) {
+	engine := newTestEngine(t)
+	work, err := engine.GenerateWork("inspect-issues")
+	if err != nil {
+		t.Fatalf("GenerateWork() error = %v", err)
+	}
+	writeText(t, filepath.Join(work.Path, "issues", "01-query-engine.md"), "---\nstatus: in-progress\ntitle: Query the engine\n---\n")
+
+	report, err := engine.Inspect()
+	if err != nil {
+		t.Fatalf("Inspect() error = %v", err)
+	}
+	if len(report.Works) != 1 {
+		t.Fatalf("Inspect() returned %d Works, want 1", len(report.Works))
+	}
+	want := IssueSummary{
+		Name:   "01-query-engine.md",
+		Path:   ".scratch/active/inspect-issues/issues/01-query-engine.md",
+		Title:  "Query the engine",
+		Status: "in-progress",
+	}
+	if len(report.Works[0].Issues) != 1 || report.Works[0].Issues[0] != want {
+		t.Fatalf("Inspect() Issues = %+v, want [%+v]", report.Works[0].Issues, want)
+	}
+}
+
 // TestGenerateWorkDuplicateLeavesRepositoryUnchanged verifies Generate rollback on preflight failure.
 func TestGenerateWorkDuplicateLeavesRepositoryUnchanged(t *testing.T) {
 	engine := newTestEngine(t)

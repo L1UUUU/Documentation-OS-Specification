@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"documentation-os/engine"
+	"github.com/L1UUUU/Documentation-OS-Specification/engine"
 )
 
 // main executes the CLI and returns its deterministic exit status to the shell.
@@ -61,8 +61,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 		result, err := instance.Health()
 		return finishResult(result, err, stdout, stderr, jsonOutput, 1)
 	case "sync":
-		result, err := instance.Synchronize()
-		return finishResult(result, err, stdout, stderr, jsonOutput, 1)
+		return runSynchronize(instance, commandArgs[1:], stdout, stderr, jsonOutput)
 	case "generate":
 		return runGenerate(instance, commandArgs[1:], stdout, stderr, jsonOutput)
 	case "complete":
@@ -73,6 +72,26 @@ func run(args []string, stdout, stderr io.Writer) int {
 		writeCLIError(stderr, jsonOutput, fmt.Errorf("unknown command %q", commandArgs[0]))
 		return 2
 	}
+}
+
+// runSynchronize requires the caller to declare the Work's Knowledge impact.
+func runSynchronize(instance *engine.Engine, args []string, stdout, stderr io.Writer, jsonOutput bool) int {
+	if len(args) == 0 {
+		writeCLIError(stderr, jsonOutput, errors.New("sync requires --knowledge-impact=changed|no-change"))
+		return 2
+	}
+	impact := ""
+	if len(args) == 2 && args[0] == "--knowledge-impact" && args[1] != "" {
+		impact = args[1]
+	} else if len(args) == 1 && strings.HasPrefix(args[0], "--knowledge-impact=") {
+		impact = strings.TrimPrefix(args[0], "--knowledge-impact=")
+	}
+	if impact == "" {
+		writeCLIError(stderr, jsonOutput, errors.New("--knowledge-impact requires changed or no-change"))
+		return 2
+	}
+	result, err := instance.Synchronize(engine.SyncInput{KnowledgeImpact: impact})
+	return finishResult(result, err, stdout, stderr, jsonOutput, 1)
 }
 
 // parseGlobalOptions extracts options that are shared by every command.
@@ -208,6 +227,9 @@ func humanResult(result any) string {
 	case engine.IndexResult:
 		return fmt.Sprintf("INDEX regenerated: %s", value.Path)
 	case engine.SyncResult:
+		if !value.NoKnowledgeChange {
+			return fmt.Sprintf("Synchronization complete; Knowledge edits declared; INDEX: %s", value.Index.Path)
+		}
 		return fmt.Sprintf("Synchronization complete; no Knowledge edits required; INDEX: %s", value.Index.Path)
 	case engine.WorkResult:
 		return fmt.Sprintf("Generated Work %s at %s", value.Slug, value.Path)
@@ -257,7 +279,7 @@ Commands:
   inspect
   validate
   health
-  sync
+  sync --knowledge-impact <changed|no-change>
   generate work <slug>
   generate id <category> <draft-path>
   complete <slug> --outcome <succeeded|cancelled|superseded|failed>

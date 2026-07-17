@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"documentation-os/engine"
+	"github.com/L1UUUU/Documentation-OS-Specification/engine"
 )
 
 // TestRunValidateJSON verifies command-local JSON output and engine delegation.
@@ -43,5 +43,128 @@ func TestRunCompleteRequiresCallerOutcome(t *testing.T) {
 	code := run([]string{"complete", "missing", "--root", root}, &stdout, &stderr)
 	if code != 2 || !strings.Contains(stderr.String(), "--outcome") {
 		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+}
+
+// TestRunSyncRequiresKnowledgeImpact verifies automation cannot omit the caller declaration.
+func TestRunSyncRequiresKnowledgeImpact(t *testing.T) {
+	root := t.TempDir()
+	instance, err := engine.New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := instance.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--root", root, "sync"}, &stdout, &stderr)
+	if code != 2 || !strings.Contains(stderr.String(), "--knowledge-impact") {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+}
+
+// TestRunSyncReportsChangedKnowledgeImpact verifies JSON exposes the caller declaration.
+func TestRunSyncReportsChangedKnowledgeImpact(t *testing.T) {
+	root := t.TempDir()
+	instance, err := engine.New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := instance.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--root", root, "--json", "sync", "--knowledge-impact", "changed"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), `"no_knowledge_change": false`) {
+		t.Fatalf("sync JSON output = %s", stdout.String())
+	}
+}
+
+// TestRunSyncAcceptsEqualsStyleNoChange verifies compatibility with existing option syntax.
+func TestRunSyncAcceptsEqualsStyleNoChange(t *testing.T) {
+	root := t.TempDir()
+	instance, err := engine.New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := instance.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--root", root, "--json", "sync", "--knowledge-impact=no-change"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), `"no_knowledge_change": true`) {
+		t.Fatalf("sync JSON output = %s", stdout.String())
+	}
+}
+
+// TestRunSyncRejectsMissingKnowledgeImpactValue verifies malformed options are usage errors.
+func TestRunSyncRejectsMissingKnowledgeImpactValue(t *testing.T) {
+	root := t.TempDir()
+	instance, err := engine.New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := instance.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--root", root, "sync", "--knowledge-impact"}, &stdout, &stderr)
+	if code != 2 || !strings.Contains(stderr.String(), "requires changed or no-change") {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+}
+
+// TestRunSyncHumanOutputDistinguishesChangedKnowledge verifies interactive output is truthful.
+func TestRunSyncHumanOutputDistinguishesChangedKnowledge(t *testing.T) {
+	root := t.TempDir()
+	instance, err := engine.New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := instance.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--root", root, "sync", "--knowledge-impact=changed"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "Knowledge edits declared") || strings.Contains(stdout.String(), "no Knowledge edits required") {
+		t.Fatalf("sync human output = %s", stdout.String())
+	}
+}
+
+// TestRunSyncRejectsInvalidKnowledgeImpact verifies Engine validation reaches CLI callers.
+func TestRunSyncRejectsInvalidKnowledgeImpact(t *testing.T) {
+	root := t.TempDir()
+	instance, err := engine.New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := instance.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--root", root, "--json", "sync", "--knowledge-impact=unknown"}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), `"error":"invalid Knowledge impact`) {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+}
+
+// TestCLIUsageDocumentsSyncKnowledgeImpact verifies the required declaration is discoverable.
+func TestCLIUsageDocumentsSyncKnowledgeImpact(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("run() code = %d, stderr = %s", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "sync --knowledge-impact <changed|no-change>") {
+		t.Fatalf("CLI usage = %s", stdout.String())
 	}
 }
