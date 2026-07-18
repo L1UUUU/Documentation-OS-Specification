@@ -10,6 +10,33 @@
   unmaterialized worktrees remain a consumer policy decision.
 - Cleanup failure remains retriable and is now explicitly reported as the
   `cleanup` stage after terminal Work state has been persisted.
+- `Complete` now recovers when a process stops after the active PRD durably
+  records its terminal outcome but before the Work directory moves to
+  `completed`. A retry with the same outcome resumes cleanup and movement; a
+  retry with a different outcome returns `conflict`.
+- Added a deterministic post-outcome interruption checkpoint to the Engine's
+  package-level conformance harness. This simulates the non-returning crash
+  boundary without exposing a new public API or weakening normal rollback.
+- Added a published external-consumer smoke command. It creates a fresh module
+  outside this repository, forces `GOWORK=off`, rejects any `replace`
+  resolution, and compiles the published Engine. CI runs it on Linux, Windows,
+  and macOS; a local Windows run against `v0.1.0-rc.3` passed.
+
+## v0.1.0 release readiness audit (2026-07-18)
+
+**Decision: NO-GO.** Do not create or push a stable tag or GitHub release yet.
+
+| Gate | Evidence | Decision |
+| --- | --- | --- |
+| KB-04 real Demand cohort | Kanban commit `1b49150` adds lifecycle evidence logging, but the available `.kanban/runtime` contains one skill-materialization run and no lifecycle attempt log. No repository `daemon.log` is available. Verifiable real lifecycle cohorts: **0**; verifiable real `succeeded`, `cancelled`, `superseded`, `failed`, or crash-recovery closures: **0**. Unit/integration fixtures are not counted as real Demands. | **Blocking** |
+| Complete hard-crash window | A conformance test interrupts immediately after outcome persistence. The retry now resumes the active transaction for the same outcome and rejects a conflicting outcome. Full Engine tests and vet pass on Windows. | Cleared locally |
+| Published external module | A fresh external module resolves `engine@v0.1.0-rc.3` with `GOWORK=off`, no `replace`, and passes `go test` on Windows. The same command is present in the three-platform CI matrix. | Implementation cleared; require green CI runs before release |
+
+Stable release requires a recorded KB-04 cohort with the planned sample size,
+all four terminal outcomes, and real retry/reconcile evidence. It also requires
+green Linux, Windows, and macOS runs of the external-consumer smoke. Synthetic
+conformance tests establish deterministic Engine behavior but do not substitute
+for production dogfood evidence.
 
 # Documentation Engine v0.1.0-rc.3
 

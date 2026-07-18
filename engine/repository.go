@@ -25,10 +25,11 @@ func New(root string) (*Engine, error) {
 		return nil, fmt.Errorf("%w: repository root %q is not a directory", ErrInvalidRepository, abs)
 	}
 	return &Engine{
-		Root:            filepath.Clean(abs),
-		Profile:         DefaultProfile(),
-		renameFile:      os.Rename,
-		writeFileAtomic: writeAtomic,
+		Root:                  filepath.Clean(abs),
+		Profile:               DefaultProfile(),
+		renameFile:            os.Rename,
+		writeFileAtomic:       writeAtomic,
+		afterOutcomePersisted: func() error { return nil },
 	}, nil
 }
 

@@ -79,7 +79,8 @@ func (e *Engine) complete(slug, outcome string) (CompleteResult, error) {
 	if !activeExists {
 		return CompleteResult{}, fmt.Errorf("%w: active Work %q does not exist", ErrPreflight, slug)
 	}
-	if err := e.completePreflight(activePath, outcome); err != nil {
+	recovering, err := e.completePreflight(activePath, outcome)
+	if err != nil {
 		return CompleteResult{}, err
 	}
 	prdPath := filepath.Join(activePath, "PRD.md")
@@ -91,12 +92,19 @@ func (e *Engine) complete(slug, outcome string) (CompleteResult, error) {
 	if err != nil {
 		return CompleteResult{}, fmt.Errorf("prepare Complete rollback: %w", err)
 	}
-	updatedPRD, err := setFrontMatterField(originalPRD, "outcome", outcome)
-	if err != nil {
-		return CompleteResult{}, fmt.Errorf("%w: record outcome in PRD.md: %v", ErrPreflight, err)
-	}
-	if err := writeAtomic(prdPath, updatedPRD, 0o644); err != nil {
-		return CompleteResult{}, fmt.Errorf("record Work outcome: %w", err)
+	if !recovering {
+		updatedPRD, err := setFrontMatterField(originalPRD, "outcome", outcome)
+		if err != nil {
+			return CompleteResult{}, fmt.Errorf("%w: record outcome in PRD.md: %v", ErrPreflight, err)
+		}
+		if err := writeAtomic(prdPath, updatedPRD, 0o644); err != nil {
+			return CompleteResult{}, fmt.Errorf("record Work outcome: %w", err)
+		}
+		if e.afterOutcomePersisted != nil {
+			if err := e.afterOutcomePersisted(); err != nil {
+				return CompleteResult{}, fmt.Errorf("Complete interrupted after persisting Work outcome: %w", err)
+			}
+		}
 	}
 	if err := removeEphemeralFiles(activePath); err != nil {
 		_ = restoreCompleteTransaction(activePath, prdPath, originalPRD, backups)
@@ -128,22 +136,22 @@ func completedWorkOutcome(workPath string) (string, error) {
 }
 
 // completePreflight validates all conditions that must hold before mutation.
-func (e *Engine) completePreflight(workPath, outcome string) error {
+func (e *Engine) completePreflight(workPath, outcome string) (bool, error) {
 	for _, relative := range []string{"PRD.md", "issues", "HANDOFF.md"} {
 		info, err := os.Stat(filepath.Join(workPath, relative))
 		if err != nil {
-			return fmt.Errorf("%w: missing Core Runtime Asset %s: %v", ErrPreflight, relative, err)
+			return false, fmt.Errorf("%w: missing Core Runtime Asset %s: %v", ErrPreflight, relative, err)
 		}
 		if relative == "issues" && !info.IsDir() {
-			return fmt.Errorf("%w: issues is not a directory", ErrPreflight)
+			return false, fmt.Errorf("%w: issues is not a directory", ErrPreflight)
 		}
 		if relative != "issues" && info.IsDir() {
-			return fmt.Errorf("%w: %s is a directory", ErrPreflight, relative)
+			return false, fmt.Errorf("%w: %s is a directory", ErrPreflight, relative)
 		}
 	}
 	issueEntries, err := os.ReadDir(filepath.Join(workPath, "issues"))
 	if err != nil {
-		return fmt.Errorf("%w: read issues directory: %v", ErrPreflight, err)
+		return false, fmt.Errorf("%w: read issues directory: %v", ErrPreflight, err)
 	}
 	var issueNames []string
 	for _, entry := range issueEntries {
@@ -153,39 +161,46 @@ func (e *Engine) completePreflight(workPath, outcome string) error {
 	}
 	sort.Strings(issueNames)
 	if len(issueNames) == 0 {
-		return fmt.Errorf("%w: issues directory must contain at least one Issue before Complete", ErrPreflight)
+		return false, fmt.Errorf("%w: issues directory must contain at least one Issue before Complete", ErrPreflight)
 	}
 	prd, err := os.ReadFile(filepath.Join(workPath, "PRD.md"))
 	if err != nil {
-		return fmt.Errorf("%w: read PRD.md: %v", ErrPreflight, err)
+		return false, fmt.Errorf("%w: read PRD.md: %v", ErrPreflight, err)
 	}
 	front, err := parseFrontMatter(prd)
 	if err != nil || !front.Present {
-		return fmt.Errorf("%w: PRD.md must contain valid YAML front matter", ErrPreflight)
+		return false, fmt.Errorf("%w: PRD.md must contain valid YAML front matter", ErrPreflight)
 	}
+	recovering := false
 	if frontMatterFieldPresent(front, "outcome") {
-		return fmt.Errorf("%w: active Work already declares an outcome", ErrPreflight)
+		if !validOutcome(front.Outcome) {
+			return false, fmt.Errorf("%w: active Work declares invalid outcome %q", ErrPreflight, front.Outcome)
+		}
+		if front.Outcome != outcome {
+			return false, fmt.Errorf("%w: active Work records outcome %q, retry requested %q", ErrConflict, front.Outcome, outcome)
+		}
+		recovering = true
 	}
 	for _, name := range issueNames {
 		if !issueFilenamePattern.MatchString(name) {
-			return fmt.Errorf("%w: Issue filename %q must match NN-<slug>.md", ErrPreflight, name)
+			return false, fmt.Errorf("%w: Issue filename %q must match NN-<slug>.md", ErrPreflight, name)
 		}
 		data, readErr := os.ReadFile(filepath.Join(workPath, "issues", name))
 		if readErr != nil {
-			return fmt.Errorf("%w: read Issue %s: %v", ErrPreflight, name, readErr)
+			return false, fmt.Errorf("%w: read Issue %s: %v", ErrPreflight, name, readErr)
 		}
 		issue, parseErr := parseFrontMatter(data)
 		if parseErr != nil || !issue.Present || issue.Status == "" {
-			return fmt.Errorf("%w: Issue %s must declare a status", ErrPreflight, name)
+			return false, fmt.Errorf("%w: Issue %s must declare a status", ErrPreflight, name)
 		}
 		if !issueStatuses[issue.Status] {
-			return fmt.Errorf("%w: Issue %s has invalid status %q", ErrPreflight, name, issue.Status)
+			return false, fmt.Errorf("%w: Issue %s has invalid status %q", ErrPreflight, name, issue.Status)
 		}
 		if outcome == OutcomeSucceeded && nonTerminalIssueStatuses[issue.Status] {
-			return fmt.Errorf("%w: succeeded Work has non-terminal Issue %s with status %s", ErrPreflight, name, issue.Status)
+			return false, fmt.Errorf("%w: succeeded Work has non-terminal Issue %s with status %s", ErrPreflight, name, issue.Status)
 		}
 	}
-	return nil
+	return recovering, nil
 }
 
 // pathExists distinguishes an absent path from filesystem errors.

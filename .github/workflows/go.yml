@@ -28,6 +28,8 @@ jobs:
         run: go vet ./...
       - name: Build CLI
         run: go build ./cmd/dos
+      - name: Published external consumer smoke (no replace)
+        run: go run ./scripts/external-consumer-smoke -version v0.1.0-rc.3
 
   race:
     name: Race detector

@@ -114,10 +114,11 @@ func DefaultProfile() Profile {
 
 // Engine executes deterministic operations against one repository root.
 type Engine struct {
-	Root            string
-	Profile         Profile
-	renameFile      func(string, string) error
-	writeFileAtomic func(string, []byte, os.FileMode) error
+	Root                  string
+	Profile               Profile
+	renameFile            func(string, string) error
+	writeFileAtomic       func(string, []byte, os.FileMode) error
+	afterOutcomePersisted func() error
 }
 
 // ValidationIssue describes one deterministic repository validation observation.

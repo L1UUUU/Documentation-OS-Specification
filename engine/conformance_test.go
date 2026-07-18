@@ -41,6 +41,51 @@ func TestConformanceCompleteRollsBackWhenMoveFails(t *testing.T) {
 	}
 }
 
+// TestConformanceCompleteRecoversAfterOutcomePersistenceCrash verifies that
+// retrying Complete resumes an interrupted transaction whose durable outcome
+// was written before the active Work could move to completed.
+func TestConformanceCompleteRecoversAfterOutcomePersistenceCrash(t *testing.T) {
+	instance := newTestEngine(t)
+	work, err := instance.GenerateWork("recover-outcome-crash")
+	if err != nil {
+		t.Fatalf("GenerateWork() error = %v", err)
+	}
+	writeText(t, filepath.Join(work.Path, "issues", "01-finish.md"), "---\nstatus: done\ntitle: Finish\n---\n")
+	writeText(t, filepath.Join(work.Path, "notes.md"), "ephemeral context\n")
+
+	interrupted := true
+	instance.afterOutcomePersisted = func() error {
+		if interrupted {
+			interrupted = false
+			return errors.New("injected hard crash after outcome persistence")
+		}
+		return nil
+	}
+
+	if _, err := instance.Complete("recover-outcome-crash", OutcomeSucceeded); err == nil {
+		t.Fatal("Complete() should report the injected interruption")
+	}
+	activePath := filepath.Join(instance.Root, ".scratch", "active", "recover-outcome-crash")
+	if prd := readText(t, filepath.Join(activePath, "PRD.md")); !strings.Contains(prd, "outcome: succeeded") {
+		t.Fatalf("interrupted Complete() did not persist its recovery marker:\n%s", prd)
+	}
+	if _, err := instance.Complete("recover-outcome-crash", OutcomeFailed); !errors.Is(err, ErrConflict) {
+		t.Fatalf("Complete() conflicting recovery error = %v, want ErrConflict", err)
+	}
+
+	result, err := instance.Complete("recover-outcome-crash", OutcomeSucceeded)
+	if err != nil {
+		t.Fatalf("Complete() recovery error = %v", err)
+	}
+	if !result.Completed || !result.CleanupCompleted || result.Outcome != OutcomeSucceeded {
+		t.Fatalf("Complete() recovery result = %+v", result)
+	}
+	completedPath := filepath.Join(instance.Root, ".scratch", "completed", "recover-outcome-crash")
+	assertFileExists(t, filepath.Join(completedPath, "PRD.md"))
+	assertFileNotExists(t, activePath)
+	assertFileNotExists(t, filepath.Join(completedPath, "notes.md"))
+}
+
 // TestConformanceGenerateWorkRollsBackMidCreationFailure verifies DOS-4005 scenario 4.
 func TestConformanceGenerateWorkRollsBackMidCreationFailure(t *testing.T) {
 	engine := newTestEngine(t)
