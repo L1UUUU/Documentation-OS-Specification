@@ -17,20 +17,30 @@
 - Added a deterministic post-outcome interruption checkpoint to the Engine's
   package-level conformance harness. This simulates the non-returning crash
   boundary without exposing a new public API or weakening normal rollback.
-- Added a published external-consumer smoke command. It creates a fresh module
-  outside this repository, forces `GOWORK=off`, rejects any `replace`
-  resolution, and compiles the published Engine. CI runs it on Linux, Windows,
-  and macOS; a local Windows run against `v0.1.0-rc.3` passed.
+- Added an external-consumer smoke command for published Engine versions. It
+  creates a fresh module outside this repository, forces `GOWORK=off`, rejects any `replace`
+  resolution, and compiles the selected published Engine version. Branch CI
+  defaults to the latest published RC (`v0.1.0-rc.3`); manual and reusable
+  workflow runs accept an explicit version; an `engine/v*` tag run derives the
+  module version from that tag. A local Windows run against rc.3 passed.
+
+The smoke test validates what an external consumer can download, not
+unpublished branch contents. A candidate version cannot pass this remote,
+no-`replace` check before its `engine/v*` tag exists upstream. Therefore tag
+validation runs after the tag is pushed; a successful tag workflow is required
+before creating the corresponding GitHub release or promoting the version to
+the branch default.
 
 ## v0.1.0 release readiness audit (2026-07-18)
 
-**Decision: NO-GO.** Do not create or push a stable tag or GitHub release yet.
+**Decision: NO-GO.** The verifiable real lifecycle cohort remains **0**. Do not
+create or push a stable tag or GitHub release yet.
 
 | Gate | Evidence | Decision |
 | --- | --- | --- |
 | KB-04 real Demand cohort | Kanban commit `1b49150` adds lifecycle evidence logging, but the available `.kanban/runtime` contains one skill-materialization run and no lifecycle attempt log. No repository `daemon.log` is available. Verifiable real lifecycle cohorts: **0**; verifiable real `succeeded`, `cancelled`, `superseded`, `failed`, or crash-recovery closures: **0**. Unit/integration fixtures are not counted as real Demands. | **Blocking** |
 | Complete hard-crash window | A conformance test interrupts immediately after outcome persistence. The retry now resumes the active transaction for the same outcome and rejects a conflicting outcome. Full Engine tests and vet pass on Windows. | Cleared locally |
-| Published external module | A fresh external module resolves `engine@v0.1.0-rc.3` with `GOWORK=off`, no `replace`, and passes `go test` on Windows. The same command is present in the three-platform CI matrix. | Implementation cleared; require green CI runs before release |
+| Published external module | A fresh external module resolves `engine@v0.1.0-rc.3` with `GOWORK=off`, no `replace`, and passes `go test` on Windows. The three-platform CI matrix defaults to this latest published RC on branches and can select a published version for manual, reusable, or tag validation. This proves the published package only; it does not prove Unreleased branch APIs. | Implementation cleared; require green tag-version CI runs before release |
 
 Stable release requires a recorded KB-04 cohort with the planned sample size,
 all four terminal outcomes, and real retry/reconcile evidence. It also requires

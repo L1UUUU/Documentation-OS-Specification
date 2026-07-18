@@ -4,6 +4,18 @@ name: Go conformance
 on:
   push:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      engine_version:
+        description: Published Engine module version to smoke test (for example v0.1.0-rc.3)
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      engine_version:
+        description: Published Engine module version to smoke test
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -28,8 +40,26 @@ jobs:
         run: go vet ./...
       - name: Build CLI
         run: go build ./cmd/dos
+      - name: Select published Engine version
+        id: engine-version
+        shell: pwsh
+        env:
+          REQUESTED_VERSION: ${{ inputs.engine_version }}
+          REF_NAME: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+        run: |
+          if ($env:REQUESTED_VERSION) {
+            $version = $env:REQUESTED_VERSION
+          } elseif ($env:REF_TYPE -eq 'tag' -and $env:REF_NAME.StartsWith('engine/v')) {
+            $version = $env:REF_NAME.Substring('engine/'.Length)
+          } else {
+            # Branch and pull-request CI verify the latest version already
+            # published to the Go module proxy, not unpublished branch code.
+            $version = 'v0.1.0-rc.3'
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
       - name: Published external consumer smoke (no replace)
-        run: go run ./scripts/external-consumer-smoke -version v0.1.0-rc.3
+        run: go run ./scripts/external-consumer-smoke -version '${{ steps.engine-version.outputs.version }}'
 
   race:
     name: Race detector

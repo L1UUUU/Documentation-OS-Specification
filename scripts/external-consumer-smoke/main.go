@@ -13,8 +13,10 @@ import (
 
 const engineModule = "github.com/L1UUUU/Documentation-OS-Specification/engine"
 
+const defaultPublishedVersion = "v0.1.0-rc.3"
+
 func main() {
-	version := flag.String("version", "v0.1.0-rc.3", "published Engine module version to verify")
+	version := flag.String("version", defaultPublishedVersion, "published Engine module version to verify")
 	flag.Parse()
 	if strings.TrimSpace(*version) == "" {
 		fatalf("version must not be empty")

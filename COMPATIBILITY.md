@@ -33,7 +33,7 @@ Consumers should call `Engine.Version()` or `dos --json version` and compare
 all independent dimensions. A matching specification number without a
 matching status and revision is not a compatibility guarantee.
 
-## Public contract policy
+## Published v0.1.0-rc.3 contract
 
 - `BeginWork(BeginInput)` atomically creates caller-defined core Work assets.
   An identical active retry returns the persisted result without writing;
@@ -42,11 +42,22 @@ matching status and revision is not a compatibility guarantee.
 - Completed Work retries must repeat the persisted terminal outcome.
 - Use `errors.Is` with exported sentinel errors for control flow.
 - Use `engine.ErrorCodeOf` or CLI JSON `code` values at integration boundaries.
-- Use `engine.FailureStageOf` for stable lifecycle stage values (`begin`,
-  `synchronize`, `validate`, `complete`, or `cleanup`). A failed
-  `ValidationReport` remains data from `Validate`; workflow gates can call
-  `ValidationReport.Failure()` to enter the same error contract.
 - Do not parse human-readable error messages.
+
+`v0.1.0-rc.3` does **not** include `LifecycleStage`, `LifecycleError`,
+`FailureStageOf`, or `ValidationReport.Failure`. Those APIs are Unreleased and
+are candidates for the next Engine release; consumers must not rely on them
+while pinned to rc.3.
+
+## Unreleased next-candidate contract
+
+The current branch adds `LifecycleStage`, `LifecycleError`, and
+`FailureStageOf` for stable lifecycle stage values (`begin`, `synchronize`,
+`validate`, `complete`, or `cleanup`). A failed `ValidationReport` remains data
+from `Validate`; workflow gates can call `ValidationReport.Failure()` to enter
+the same error contract. These additions become a published consumer contract
+only after a new `engine/v*` tag is pushed and the module can be resolved
+without a `replace` directive.
 
 Repository construction is not a lifecycle stage. `New` classifies a missing
 or non-directory root as `invalid-repository` while retaining the underlying
