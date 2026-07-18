@@ -18,9 +18,9 @@ const (
 	// RepositoryProfileVersion is the supported Single Repository Profile version.
 	RepositoryProfileVersion = "1.0"
 	// EngineVersion is the implementation version exposed by the engine and CLI.
-	EngineVersion = "0.1.0-rc.2"
+	EngineVersion = "0.1.0-rc.3"
 	// CLIVersion is the command-line contract version.
-	CLIVersion = "0.1.0-rc.2"
+	CLIVersion = "0.1.0-rc.3"
 	// ProfileName is the repository profile implemented by this engine.
 	ProfileName = "Single Repository"
 
@@ -233,6 +233,20 @@ type WorkResult struct {
 	Slug      string `json:"slug"`
 	Path      string `json:"path"`
 	IndexPath string `json:"index_path"`
+}
+
+// BeginInput describes the caller-owned identity and initial plan for a new Work.
+type BeginInput struct {
+	Slug   string       `json:"slug"`
+	Title  string       `json:"title"`
+	Issues []BeginIssue `json:"issues"`
+}
+
+// BeginIssue describes one initial Issue created with a Work.
+type BeginIssue struct {
+	Slug   string `json:"slug"`
+	Title  string `json:"title"`
+	Status string `json:"status"`
 }
 
 // IndexResult describes generated derived Runtime metadata.

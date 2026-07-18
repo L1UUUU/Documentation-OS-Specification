@@ -6,8 +6,329 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
+	"time"
 )
+
+// TestBeginWorkCreatesCallerDefinedCoreAssets verifies the public Begin Work contract.
+func TestBeginWorkCreatesCallerDefinedCoreAssets(t *testing.T) {
+	instance := newTestEngine(t)
+
+	result, err := instance.BeginWork(BeginInput{
+		Slug:  "write-lifecycle",
+		Title: "Write lifecycle",
+		Issues: []BeginIssue{
+			{Slug: "implement-adapter", Title: "Implement adapter", Status: "open"},
+			{Slug: "verify-recovery", Title: "Verify recovery", Status: "in-progress"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BeginWork() error = %v", err)
+	}
+	if result.Slug != "write-lifecycle" || result.Path == "" || result.IndexPath != ".scratch/INDEX.md" {
+		t.Fatalf("BeginWork() result = %+v", result)
+	}
+
+	prd := readText(t, filepath.Join(result.Path, "PRD.md"))
+	if !strings.Contains(prd, "# Write lifecycle") {
+		t.Fatalf("PRD does not contain caller title:\n%s", prd)
+	}
+	firstIssue := readText(t, filepath.Join(result.Path, "issues", "01-implement-adapter.md"))
+	if !strings.Contains(firstIssue, "status: open") || !strings.Contains(firstIssue, `title: "Implement adapter"`) {
+		t.Fatalf("first Issue does not contain caller fields:\n%s", firstIssue)
+	}
+	secondIssue := readText(t, filepath.Join(result.Path, "issues", "02-verify-recovery.md"))
+	if !strings.Contains(secondIssue, "status: in-progress") || !strings.Contains(secondIssue, `title: "Verify recovery"`) {
+		t.Fatalf("second Issue does not contain caller fields:\n%s", secondIssue)
+	}
+	assertFileExists(t, filepath.Join(result.Path, "HANDOFF.md"))
+	if index := readText(t, filepath.Join(instance.Root, ".scratch", "INDEX.md")); !strings.Contains(index, "### write-lifecycle") || !strings.Contains(index, "01-implement-adapter.md [open] Implement adapter") {
+		t.Fatalf("INDEX does not contain begun Work:\n%s", index)
+	}
+	if report, validateErr := instance.Validate(); validateErr != nil || !report.Passed() {
+		t.Fatalf("begun Work should validate, error = %v, report = %s", validateErr, report)
+	}
+}
+
+// TestBeginWorkSameInputRetryIsIdempotent verifies retries return persisted Work without writes.
+func TestBeginWorkSameInputRetryIsIdempotent(t *testing.T) {
+	instance := newTestEngine(t)
+	input := BeginInput{
+		Slug:  "retry-begin",
+		Title: "Retry begin",
+		Issues: []BeginIssue{
+			{Slug: "implement", Title: "Implement", Status: "open"},
+		},
+	}
+	first, err := instance.BeginWork(input)
+	if err != nil {
+		t.Fatalf("first BeginWork() error = %v", err)
+	}
+	paths := []string{
+		filepath.Join(first.Path, "PRD.md"),
+		filepath.Join(first.Path, "HANDOFF.md"),
+		filepath.Join(first.Path, "issues", "01-implement.md"),
+		filepath.Join(instance.Root, ".scratch", "INDEX.md"),
+	}
+	type fileState struct {
+		content string
+		modTime time.Time
+	}
+	before := map[string]fileState{}
+	for _, path := range paths {
+		info, statErr := os.Stat(path)
+		if statErr != nil {
+			t.Fatalf("stat %s: %v", path, statErr)
+		}
+		before[path] = fileState{content: readText(t, path), modTime: info.ModTime()}
+	}
+	time.Sleep(20 * time.Millisecond)
+
+	retry, err := instance.BeginWork(input)
+	if err != nil {
+		t.Fatalf("retry BeginWork() error = %v", err)
+	}
+	if retry != first {
+		t.Fatalf("retry BeginWork() result = %+v, want persisted %+v", retry, first)
+	}
+	for _, path := range paths {
+		info, statErr := os.Stat(path)
+		if statErr != nil {
+			t.Fatalf("stat retried %s: %v", path, statErr)
+		}
+		if got := readText(t, path); got != before[path].content {
+			t.Errorf("retry changed %s content", path)
+		}
+		if !info.ModTime().Equal(before[path].modTime) {
+			t.Errorf("retry rewrote %s", path)
+		}
+	}
+}
+
+// TestBeginWorkDifferentInputRetryConflicts verifies persisted Begin input is authoritative.
+func TestBeginWorkDifferentInputRetryConflicts(t *testing.T) {
+	instance := newTestEngine(t)
+	input := BeginInput{Slug: "conflicting-begin", Title: "Original title"}
+	if _, err := instance.BeginWork(input); err != nil {
+		t.Fatalf("first BeginWork() error = %v", err)
+	}
+	before := readText(t, filepath.Join(instance.Root, ".scratch", "active", input.Slug, "PRD.md"))
+
+	_, err := instance.BeginWork(BeginInput{Slug: input.Slug, Title: "Different title"})
+	if !errors.Is(err, ErrConflict) {
+		t.Fatalf("conflicting BeginWork() error = %v, want ErrConflict", err)
+	}
+	if code := ErrorCodeOf(err); code != ErrorCodeConflict {
+		t.Fatalf("conflicting BeginWork() code = %q, want %q", code, ErrorCodeConflict)
+	}
+	if after := readText(t, filepath.Join(instance.Root, ".scratch", "active", input.Slug, "PRD.md")); after != before {
+		t.Fatal("conflicting BeginWork() changed persisted Work")
+	}
+}
+
+// TestBeginWorkRollsBackInitialIssueFailure verifies the creation transaction spans initial Issues.
+func TestBeginWorkRollsBackInitialIssueFailure(t *testing.T) {
+	instance := newTestEngine(t)
+	indexPath := filepath.Join(instance.Root, ".scratch", "INDEX.md")
+	indexBefore := readText(t, indexPath)
+	originalWrite := instance.writeFileAtomic
+	instance.writeFileAtomic = func(path string, data []byte, mode os.FileMode) error {
+		if filepath.Base(path) == "02-fail.md" {
+			return errors.New("injected initial Issue failure")
+		}
+		return originalWrite(path, data, mode)
+	}
+
+	_, err := instance.BeginWork(BeginInput{
+		Slug:  "rollback-begin",
+		Title: "Rollback begin",
+		Issues: []BeginIssue{
+			{Slug: "created", Title: "Created before failure", Status: "open"},
+			{Slug: "fail", Title: "Injected failure", Status: "open"},
+		},
+	})
+	if err == nil {
+		t.Fatal("BeginWork() should report the injected initial Issue failure")
+	}
+	assertFileNotExists(t, filepath.Join(instance.Root, ".scratch", "active", "rollback-begin"))
+	if indexAfter := readText(t, indexPath); indexAfter != indexBefore {
+		t.Fatal("failed BeginWork() did not restore INDEX")
+	}
+}
+
+// TestBeginWorkRollsBackIndexFailure verifies the final generated artifact is in the transaction.
+func TestBeginWorkRollsBackIndexFailure(t *testing.T) {
+	instance := newTestEngine(t)
+	indexPath := filepath.Join(instance.Root, ".scratch", "INDEX.md")
+	indexBefore := readText(t, indexPath)
+	originalWrite := instance.writeFileAtomic
+	instance.writeFileAtomic = func(path string, data []byte, mode os.FileMode) error {
+		if path == indexPath {
+			return errors.New("injected INDEX failure")
+		}
+		return originalWrite(path, data, mode)
+	}
+
+	_, err := instance.BeginWork(BeginInput{Slug: "rollback-index", Title: "Rollback index"})
+	if err == nil {
+		t.Fatal("BeginWork() should report the injected INDEX failure")
+	}
+	assertFileNotExists(t, filepath.Join(instance.Root, ".scratch", "active", "rollback-index"))
+	if indexAfter := readText(t, indexPath); indexAfter != indexBefore {
+		t.Fatal("failed BeginWork() did not restore INDEX after generated artifact failure")
+	}
+}
+
+// TestBeginWorkConcurrentSameInputIsIdempotent verifies concurrent callers publish one complete Work.
+func TestBeginWorkConcurrentSameInputIsIdempotent(t *testing.T) {
+	instance := newTestEngine(t)
+	input := BeginInput{
+		Slug:  "concurrent-same-begin",
+		Title: "Concurrent same begin",
+		Issues: []BeginIssue{
+			{Slug: "implement", Title: "Implement", Status: "open"},
+		},
+	}
+	const callers = 8
+	start := make(chan struct{})
+	results := make(chan WorkResult, callers)
+	errorsFound := make(chan error, callers)
+	var workers sync.WaitGroup
+	for index := 0; index < callers; index++ {
+		workers.Add(1)
+		go func() {
+			defer workers.Done()
+			<-start
+			result, err := instance.BeginWork(input)
+			results <- result
+			errorsFound <- err
+		}()
+	}
+	close(start)
+	workers.Wait()
+	close(results)
+	close(errorsFound)
+
+	for err := range errorsFound {
+		if err != nil {
+			t.Errorf("concurrent same-input BeginWork() error = %v", err)
+		}
+	}
+	var expected WorkResult
+	for result := range results {
+		if expected == (WorkResult{}) {
+			expected = result
+			continue
+		}
+		if result != expected {
+			t.Errorf("concurrent BeginWork() result = %+v, want %+v", result, expected)
+		}
+	}
+	assertFileExists(t, filepath.Join(instance.Root, ".scratch", "active", input.Slug, "PRD.md"))
+	assertFileExists(t, filepath.Join(instance.Root, ".scratch", "active", input.Slug, "HANDOFF.md"))
+	assertFileExists(t, filepath.Join(instance.Root, ".scratch", "active", input.Slug, "issues", "01-implement.md"))
+	if report, err := instance.Validate(); err != nil || !report.Passed() {
+		t.Fatalf("concurrent BeginWork left invalid repository, error = %v, report = %s", err, report)
+	}
+}
+
+// TestBeginWorkConcurrentDifferentInputConflictsWithoutOverwriting verifies the winner remains authoritative.
+func TestBeginWorkConcurrentDifferentInputConflictsWithoutOverwriting(t *testing.T) {
+	instance := newTestEngine(t)
+	inputs := []BeginInput{
+		{Slug: "concurrent-different-begin", Title: "First title", Issues: []BeginIssue{{Slug: "first", Title: "First", Status: "open"}}},
+		{Slug: "concurrent-different-begin", Title: "Second title", Issues: []BeginIssue{{Slug: "second", Title: "Second", Status: "open"}}},
+	}
+	type attempt struct {
+		input  BeginInput
+		result WorkResult
+		err    error
+	}
+	start := make(chan struct{})
+	attempts := make(chan attempt, len(inputs))
+	var workers sync.WaitGroup
+	for _, input := range inputs {
+		input := input
+		workers.Add(1)
+		go func() {
+			defer workers.Done()
+			<-start
+			result, err := instance.BeginWork(input)
+			attempts <- attempt{input: input, result: result, err: err}
+		}()
+	}
+	close(start)
+	workers.Wait()
+	close(attempts)
+
+	var winner *attempt
+	conflicts := 0
+	for current := range attempts {
+		if current.err == nil {
+			copy := current
+			winner = &copy
+			continue
+		}
+		if !errors.Is(current.err, ErrConflict) || ErrorCodeOf(current.err) != ErrorCodeConflict {
+			t.Errorf("concurrent different-input BeginWork() error = %v, want stable conflict", current.err)
+			continue
+		}
+		conflicts++
+	}
+	if winner == nil || conflicts != 1 {
+		t.Fatalf("concurrent attempts winner = %+v, conflicts = %d", winner, conflicts)
+	}
+	prd := readText(t, filepath.Join(winner.result.Path, "PRD.md"))
+	if !strings.Contains(prd, "# "+winner.input.Title) {
+		t.Fatalf("persisted Work does not match winning input:\n%s", prd)
+	}
+	assertFileExists(t, filepath.Join(winner.result.Path, "issues", "01-"+winner.input.Issues[0].Slug+".md"))
+	if report, err := instance.Validate(); err != nil || !report.Passed() {
+		t.Fatalf("different-input race left invalid repository, error = %v, report = %s", err, report)
+	}
+}
+
+// TestBeginWorkIgnoresCrashedStaging verifies a partial staging tree is never exposed as active Work.
+func TestBeginWorkIgnoresCrashedStaging(t *testing.T) {
+	instance := newTestEngine(t)
+	orphan := filepath.Join(instance.Root, ".scratch", ".begin-staging", "crashed-call")
+	writeText(t, filepath.Join(orphan, "PRD.md"), "partial staging content\n")
+	if report, err := instance.Inspect(); err != nil || report.ActiveWorks != 0 {
+		t.Fatalf("Inspect() exposed crashed staging, error = %v, report = %+v", err, report)
+	}
+	assertFileNotExists(t, filepath.Join(instance.Root, ".scratch", "active", "crashed-call"))
+
+	result, err := instance.BeginWork(BeginInput{Slug: "after-crash", Title: "After crash"})
+	if err != nil {
+		t.Fatalf("BeginWork() after crashed staging error = %v", err)
+	}
+	assertFileExists(t, filepath.Join(result.Path, "PRD.md"))
+	assertFileExists(t, filepath.Join(result.Path, "HANDOFF.md"))
+	assertFileExists(t, orphan)
+}
+
+// TestBeginWorkRetryRepairsPostPublishIndexCrash verifies recovery after rename but before INDEX update.
+func TestBeginWorkRetryRepairsPostPublishIndexCrash(t *testing.T) {
+	instance := newTestEngine(t)
+	input := BeginInput{Slug: "post-publish-crash", Title: "Post publish crash"}
+	if _, err := instance.BeginWork(input); err != nil {
+		t.Fatalf("first BeginWork() error = %v", err)
+	}
+	indexPath := filepath.Join(instance.Root, ".scratch", "INDEX.md")
+	writeText(t, indexPath, "stale index from simulated crash\n")
+
+	result, err := instance.BeginWork(input)
+	if err != nil {
+		t.Fatalf("recovery BeginWork() error = %v", err)
+	}
+	if result.Slug != input.Slug {
+		t.Fatalf("recovery BeginWork() result = %+v", result)
+	}
+	if index := readText(t, indexPath); !strings.Contains(index, "### post-publish-crash") {
+		t.Fatalf("recovery BeginWork() did not repair INDEX:\n%s", index)
+	}
+}
 
 // TestGenerateWorkCreatesCoreAssetsAndDeterministicIndex verifies Work creation and INDEX generation.
 func TestGenerateWorkCreatesCoreAssetsAndDeterministicIndex(t *testing.T) {

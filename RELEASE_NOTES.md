@@ -1,3 +1,15 @@
+# Documentation Engine v0.1.0-rc.3
+
+- Added `BeginWork(BeginInput)` for atomic creation of caller-defined PRD,
+  HANDOFF, initial Issues, and INDEX.
+- Identical active Begin retries return the persisted result without writes;
+  retries with different input return the stable `conflict` error category.
+- Work assets are prepared in an exclusive staging directory and published by
+  atomic rename under the repository lock, so concurrent calls cannot overwrite
+  or remove each other's Work.
+- A retry repairs the INDEX after interruption between Work publication and
+  INDEX generation; abandoned staging directories are never exposed as Work.
+
 # Documentation Engine v0.1.0-rc.2
 
 This release candidate freezes the first public Engine contract for consumer

@@ -2,8 +2,9 @@
 //
 // The package implements Documentation OS Specification 1.0 Draft revision 12
 // and Single Repository Profile 1.0. Callers retain responsibility for
-// engineering decisions, including the explicit KnowledgeImpact passed to
-// Synchronize and the terminal outcome passed to Complete.
+// engineering decisions. BeginWork atomically creates caller-defined Work and
+// treats an identical active retry as idempotent; callers must pass explicit
+// KnowledgeImpact to Synchronize and a terminal outcome to Complete.
 //
 // This release is an RC contract. Its exported API is intended for consumer
 // validation and may receive breaking corrections before v0.1.0. Starting with

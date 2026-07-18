@@ -164,7 +164,7 @@ func (e *Engine) GenerateIndex() (IndexResult, error) {
 	if err != nil {
 		return IndexResult{}, fmt.Errorf("read existing INDEX: %w", err)
 	}
-	if err := writeAtomic(path, data, 0o644); err != nil {
+	if err := e.writeFileAtomic(path, data, 0o644); err != nil {
 		return IndexResult{}, err
 	}
 	return IndexResult{Path: e.relativePath(path), Changed: !existed || string(previous) != string(data)}, nil

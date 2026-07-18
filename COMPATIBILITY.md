@@ -14,14 +14,14 @@ consumers should import:
 import "github.com/L1UUUU/Documentation-OS-Specification/engine"
 ```
 
-## v0.1.0-rc.1 matrix
+## v0.1.0-rc.3 matrix
 
 | Dimension | Supported value |
 | --- | --- |
 | Specification | 1.0 Draft, revision 12 |
 | Repository Profile | Single Repository Profile 1.0 |
-| Engine | 0.1.0-rc.1 |
-| CLI | 0.1.0-rc.1 |
+| Engine | 0.1.0-rc.3 |
+| CLI | 0.1.0-rc.3 |
 | Target conformance | Level 2 preview |
 | Go | 1.22 or newer |
 | CI platforms | Linux, Windows, macOS |
@@ -35,6 +35,9 @@ matching status and revision is not a compatibility guarantee.
 
 ## Public contract policy
 
+- `BeginWork(BeginInput)` atomically creates caller-defined core Work assets.
+  An identical active retry returns the persisted result without writing;
+  different input for the same slug returns `conflict`.
 - Every synchronization requires an explicit `KnowledgeImpact` value.
 - Completed Work retries must repeat the persisted terminal outcome.
 - Use `errors.Is` with exported sentinel errors for control flow.
