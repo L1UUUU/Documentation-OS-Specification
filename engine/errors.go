@@ -11,6 +11,7 @@ type LifecycleStage string
 
 const (
 	LifecycleStageBegin       LifecycleStage = "begin"
+	LifecycleStageIssue       LifecycleStage = "issue"
 	LifecycleStageSynchronize LifecycleStage = "synchronize"
 	LifecycleStageValidate    LifecycleStage = "validate"
 	LifecycleStageComplete    LifecycleStage = "complete"
@@ -60,6 +61,10 @@ const (
 	ErrorCodeInvalidRepository ErrorCode = "invalid-repository"
 	// ErrorCodeConflict means the request contradicts persisted state.
 	ErrorCodeConflict ErrorCode = "conflict"
+	// ErrorCodeWorkNotFound means the requested Work does not exist.
+	ErrorCodeWorkNotFound ErrorCode = "work-not-found"
+	// ErrorCodeCompletedWork means the requested Work is immutable Completed Runtime.
+	ErrorCodeCompletedWork ErrorCode = "completed-work"
 	// ErrorCodeInternal is the stable fallback for unclassified implementation or I/O failures.
 	ErrorCodeInternal ErrorCode = "internal"
 )
@@ -69,6 +74,10 @@ func ErrorCodeOf(err error) ErrorCode {
 	switch {
 	case errors.Is(err, ErrInvalidInput):
 		return ErrorCodeInvalidInput
+	case errors.Is(err, ErrWorkNotFound):
+		return ErrorCodeWorkNotFound
+	case errors.Is(err, ErrCompletedWork):
+		return ErrorCodeCompletedWork
 	case errors.Is(err, ErrConflict), errors.Is(err, ErrIdentityConflict):
 		return ErrorCodeConflict
 	case errors.Is(err, ErrPreflight):

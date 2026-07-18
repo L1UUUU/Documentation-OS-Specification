@@ -2,7 +2,7 @@
 
 **Version:** 1.0
 **Status:** Draft
-**Revision:** 12
+**Revision:** 13
 **Specification Series:** DOS (Documentation Operating System)
 
 Reference implementation compatibility and RC release details are documented

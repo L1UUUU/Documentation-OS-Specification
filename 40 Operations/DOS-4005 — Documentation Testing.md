@@ -128,6 +128,8 @@ Operation Tests verify individual Documentation Operations.
 Examples include:
 
 - identifier allocation;
+- Generate Issue numbering, idempotency, conflict detection, concurrency, and
+  transactional INDEX behavior;
 - generated content updates;
 - relationship synchronization;
 - complete operations (active→completed move);
@@ -351,6 +353,74 @@ The following scenarios SHALL be covered by the conformance tests required in th
 - Expected state: the artifact carries its final identifier; all managed references resolve; both validations pass.
 - Expected diagnostics: Success. If either validation fails after allocation, the integration is rolled back or corrected before retrying.
 
+## Scenario 15 — Generate Issue allocates the next Work-local number without reusing gaps
+
+- Initial state: one Active Work has an empty `issues/` directory; a second
+  Active Work contains `01-first.md` and `03-third.md`.
+- Operation: invoke Generate Issue once for each Work with valid, distinct
+  inputs.
+- Expected state: the first Work receives `01-<slug>.md`; the second receives
+  `04-<slug>.md`; each file contains the supplied title, DOS lifecycle status,
+  and body; `.scratch/INDEX.md` lists both new Issues.
+- Expected diagnostics: Success; each result exposes its number, name, path,
+  and `created=true`.
+
+## Scenario 16 — Generate Issue retry is idempotent and conflicting reuse is rejected
+
+- Initial state: an Active Work already contains an Issue created from a known
+  Work slug, Issue slug, title, status, and body; INDEX is consistent.
+- Operation: repeat the identical logical input, then repeat the same Issue slug
+  with a different title, status, or body.
+- Expected state: the identical retry neither writes nor allocates another
+  number and returns the existing Issue; the conflicting retry leaves the Issue
+  and INDEX byte-for-byte unchanged.
+- Expected diagnostics: the identical retry succeeds with `created=false`; the
+  conflicting retry returns a deterministic conflict.
+
+## Scenario 17 — Concurrent Generate Issue calls allocate safely
+
+- Initial state: an Active Work with a valid Runtime structure and an empty
+  `issues/` directory.
+- Operation: concurrently invoke Generate Issue with multiple distinct valid
+  slugs, including at least two concurrent invocations of one identical logical
+  input.
+- Expected state: each distinct input has exactly one Issue, all allocated
+  numbers are unique, the identical calls converge on one Issue, and INDEX is
+  consistent with the final `issues/` directory.
+- Expected diagnostics: all non-conflicting calls succeed; exactly one result
+  for each logical input reports `created=true`, and identical followers report
+  `created=false`.
+
+## Scenario 18 — Generate Issue rejects Completed or invalid Work state
+
+- Initial state: one Work exists only under `.scratch/completed/`; another slug
+  is missing; a third appears under both `active/` and `completed/`.
+- Operation: invoke Generate Issue for each slug.
+- Expected state: no Issue or INDEX change occurs in any case.
+- Expected diagnostics: deterministic failures distinguish immutable Completed
+  Work, missing Work, and inconsistent repository state.
+
+## Scenario 19 — Generate Issue and INDEX publication are transactional
+
+- Initial state: an Active Work with a consistent INDEX; arrange for INDEX
+  publication to fail after the Issue has been staged or published.
+- Operation: invoke Generate Issue, then remove the failure and retry the same
+  logical input.
+- Expected state: after the returned failure, neither the new Issue nor an INDEX
+  change remains; after retry, exactly one Issue exists and INDEX lists it.
+- Expected diagnostics: the first invocation reports transaction failure and
+  rollback; the retry succeeds without a duplicate number.
+
+## Scenario 20 — Generate Issue validates its bounded input contract
+
+- Initial state: a valid Active Work, plus a valid Active Work whose greatest
+  Issue number is `99`.
+- Operation: separately request an invalid Issue slug, an unknown status, an
+  empty title, an empty body, and a new Issue after `99`.
+- Expected state: repository state and INDEX remain unchanged for every request.
+- Expected diagnostics: each request fails deterministically before mutation;
+  the capacity case reports that no Issue number is available.
+
 ------
 
 # Expected Results
@@ -438,6 +508,7 @@ A Documentation Engine claiming Documentation OS compliance SHALL provide tests 
 - Migration;
 - Repository Profile implementation;
 - operation integration.
+- Generate Issue behavior, including all normative scenarios defined above.
 
 Implementations may provide additional tests provided they remain consistent with Documentation OS specifications.
 
@@ -460,12 +531,14 @@ These concerns belong to software engineering rather than Documentation OS.
 # References
 
 - DOS-2001 — Single Repository Profile
+- DOS-2004 — Runtime Mapping
 - DOS-3001 — Document Lifecycle
 - DOS-3002 — Runtime Lifecycle
 - DOS-4001 — Documentation Operations
 - DOS-4002 — Validation
 - DOS-4003 — Health
 - DOS-4004 — Migration
+- DOS-6003 — Conformance
 
 ------
 

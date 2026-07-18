@@ -136,6 +136,9 @@ A Documentation Engine SHALL:
 - support Documentation Testing (provide the conformance tests required by DOS-4005);
 - preserve repository consistency;
 - execute deterministic operations.
+- implement Generate Issue with Active-Work enforcement, Work-local monotonic
+  numbering, the DOS Issue status vocabulary, idempotent retry, conflict
+  detection, concurrent allocation safety, and transactional INDEX maintenance.
 
 Documentation Engines SHALL implement observable behavior consistent with Documentation OS.
 
@@ -150,6 +153,8 @@ A Documentation OS-compliant AI agent SHALL:
 - respect Ownership;
 - follow lifecycle behavior;
 - invoke Documentation Operations for deterministic maintenance.
+- delegate Issue numbering, file publication, and INDEX maintenance to Generate
+  Issue rather than reproducing those behaviors manually.
 
 Agents remain responsible for engineering reasoning.
 
@@ -165,6 +170,7 @@ A Documentation OS-compliant CLI SHALL:
 - remain implementation-independent;
 - avoid embedding repository logic;
 - support deterministic execution.
+- expose Generate Issue without duplicating the Engine's repository behavior.
 
 The CLI is evaluated independently from the Documentation Engine.
 
@@ -274,6 +280,7 @@ A Documentation OS implementation should satisfy the following checklist.
 - Migration implemented.
 - Documentation Testing provided (DOS-4005).
 - Deterministic behavior verified.
+- Generate Issue conformance scenarios in DOS-4005 verified.
 
 ------
 
@@ -292,6 +299,8 @@ A Documentation OS implementation should satisfy the following checklist.
 - Repository logic delegated.
 - Automation supported.
 - Deterministic behavior preserved.
+- Generate Issue inputs and structured result exposed through Engine
+  delegation.
 
 ------
 

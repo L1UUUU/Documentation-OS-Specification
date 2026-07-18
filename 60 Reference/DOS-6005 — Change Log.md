@@ -296,6 +296,46 @@ Migration procedures are defined separately.
 
 The first Documentation OS release establishes the baseline specification.
 
+## Documentation OS Specification 1.0 — v13 Revision
+
+**Status:** Draft
+
+**Compatibility:** Draft-breaking capability addition — compliant Engines and
+CLI implementations targeting revision 13 must implement the new Generate
+Issue deterministic observable contract; no conceptual architecture change and
+no repository migration required.
+
+### Added
+
+- Generate Issue as a normative Generate operation for appending a
+  caller-authored Issue to an Active Work. The Engine owns Work-local numbering,
+  filename/front-matter construction, publication, and `.scratch/INDEX.md`
+  maintenance; callers retain engineering ownership of slug, title, DOS
+  lifecycle status, and Markdown body (DOS-2004, DOS-4001).
+- A bounded Issue naming contract: lowercase ASCII kebab-case slugs, monotonic
+  Work-local `01`–`99` allocation, no gap reuse, and slug uniqueness within the
+  Work (DOS-2004, DOS-4001).
+- Normative Generate Issue conformance scenarios covering allocation,
+  idempotent retry, conflicting slug reuse, concurrent calls, Completed Work
+  rejection, transactional INDEX rollback/retry, invalid input, and capacity
+  exhaustion (DOS-4005, DOS-6003).
+- CLI behavior for forwarding Generate Issue inputs and exposing the allocated
+  number, name, path, and `created` result without duplicating Engine logic
+  (DOS-5005, DOS-6003).
+
+### Clarified
+
+- The Issue `status` field uses only the DOS lifecycle vocabulary (`open`,
+  `in-progress`, `done`, `blocked`, `cancelled`, `superseded`); repository-local
+  workflow or triage labels must use a distinct field and do not extend the
+  generic status vocabulary (DOS-2004, DOS-4001).
+- Generate Issue publication and INDEX regeneration are one repository
+  transaction: success exposes both, returned failure exposes neither, and an
+  interrupted identical retry converges without duplicate Issue allocation
+  (DOS-4001).
+
+------
+
 ## Documentation OS Specification 1.0 — v12 Revision
 
 **Status:** Draft

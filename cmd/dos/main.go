@@ -68,10 +68,89 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runComplete(instance, commandArgs[1:], stdout, stderr, jsonOutput)
 	case "migrate":
 		return runMigrate(instance, commandArgs[1:], stdout, stderr, jsonOutput)
+	case "issue":
+		return runIssue(instance, commandArgs[1:], stdout, stderr, jsonOutput)
 	default:
 		writeCLIError(stderr, jsonOutput, invalidInput("unknown command %q", commandArgs[0]))
 		return 2
 	}
+}
+
+// runIssue dispatches Issue commands without owning repository semantics.
+func runIssue(instance *engine.Engine, args []string, stdout, stderr io.Writer, jsonOutput bool) int {
+	if len(args) == 0 || args[0] != "create" {
+		writeCLIError(stderr, jsonOutput, invalidInput("issue requires `create`"))
+		return 2
+	}
+	input, err := parseIssueCreateArgs(args[1:])
+	if err != nil {
+		writeCLIError(stderr, jsonOutput, err)
+		return 2
+	}
+	result, err := instance.CreateIssue(input)
+	return finishResult(result, err, stdout, stderr, jsonOutput, 1)
+}
+
+// parseIssueCreateArgs translates the public CLI shape into the Engine input.
+func parseIssueCreateArgs(args []string) (engine.CreateIssueInput, error) {
+	if len(args) < 2 {
+		return engine.CreateIssueInput{}, invalidInput("issue create requires a Work slug and Issue slug")
+	}
+	input := engine.CreateIssueInput{WorkSlug: args[0], Slug: args[1]}
+	bodyFile := ""
+	for index := 2; index < len(args); index++ {
+		arg := args[index]
+		switch {
+		case arg == "--title":
+			value, next, err := optionValue(args, index, "--title")
+			if err != nil {
+				return engine.CreateIssueInput{}, err
+			}
+			input.Title, index = value, next
+		case strings.HasPrefix(arg, "--title="):
+			input.Title = strings.TrimPrefix(arg, "--title=")
+		case arg == "--status":
+			value, next, err := optionValue(args, index, "--status")
+			if err != nil {
+				return engine.CreateIssueInput{}, err
+			}
+			input.Status, index = value, next
+		case strings.HasPrefix(arg, "--status="):
+			input.Status = strings.TrimPrefix(arg, "--status=")
+		case arg == "--body-file":
+			value, next, err := optionValue(args, index, "--body-file")
+			if err != nil {
+				return engine.CreateIssueInput{}, err
+			}
+			bodyFile, index = value, next
+		case strings.HasPrefix(arg, "--body-file="):
+			bodyFile = strings.TrimPrefix(arg, "--body-file=")
+		default:
+			return engine.CreateIssueInput{}, invalidInput("unknown issue create option %q", arg)
+		}
+	}
+	for _, required := range []struct {
+		name  string
+		value string
+	}{{"--title", input.Title}, {"--status", input.Status}, {"--body-file", bodyFile}} {
+		if required.value == "" {
+			return engine.CreateIssueInput{}, invalidInput("issue create requires %s", required.name)
+		}
+	}
+	body, err := os.ReadFile(bodyFile)
+	if err != nil {
+		return engine.CreateIssueInput{}, invalidInput("read --body-file %q: %v", bodyFile, err)
+	}
+	input.Body = string(body)
+	return input, nil
+}
+
+// optionValue reads one required flag value while rejecting a following flag.
+func optionValue(args []string, index int, name string) (string, int, error) {
+	if index+1 >= len(args) || args[index+1] == "" || strings.HasPrefix(args[index+1], "--") {
+		return "", index, invalidInput("%s requires a value", name)
+	}
+	return args[index+1], index + 1, nil
 }
 
 // runSynchronize requires the caller to declare the Work's Knowledge impact.
@@ -237,6 +316,11 @@ func humanResult(result any) string {
 		return fmt.Sprintf("Allocated %s: %s -> %s", value.Identifier, value.OldPath, value.NewPath)
 	case engine.MigrationReport:
 		return fmt.Sprintf("Migration %s -> %s completed", value.Before, value.After)
+	case engine.CreateIssueResult:
+		if value.Created {
+			return fmt.Sprintf("Created Issue %s at %s", value.Name, value.Path)
+		}
+		return fmt.Sprintf("Issue %s already exists at %s", value.Name, value.Path)
 	default:
 		return "success"
 	}
@@ -282,6 +366,7 @@ Commands:
   sync --knowledge-impact <changed|no-change>
   generate work <slug>
   generate id <category> <draft-path>
+  issue create <work-slug> <issue-slug> --title TITLE --status STATUS --body-file PATH
   complete <slug> --outcome <succeeded|cancelled|superseded|failed>
   migrate [--to 1.0]
 `

@@ -64,6 +64,8 @@ func TestConformanceCompleteRecoversAfterOutcomePersistenceCrash(t *testing.T) {
 
 	if _, err := instance.Complete("recover-outcome-crash", OutcomeSucceeded); err == nil {
 		t.Fatal("Complete() should report the injected interruption")
+	} else if stage, ok := FailureStageOf(err); !ok || stage != LifecycleStageComplete {
+		t.Fatalf("interrupted Complete() stage = %q, %v, want %q, true", stage, ok, LifecycleStageComplete)
 	}
 	activePath := filepath.Join(instance.Root, ".scratch", "active", "recover-outcome-crash")
 	if prd := readText(t, filepath.Join(activePath, "PRD.md")); !strings.Contains(prd, "outcome: succeeded") {
@@ -71,6 +73,8 @@ func TestConformanceCompleteRecoversAfterOutcomePersistenceCrash(t *testing.T) {
 	}
 	if _, err := instance.Complete("recover-outcome-crash", OutcomeFailed); !errors.Is(err, ErrConflict) {
 		t.Fatalf("Complete() conflicting recovery error = %v, want ErrConflict", err)
+	} else if stage, ok := FailureStageOf(err); !ok || stage != LifecycleStageComplete {
+		t.Fatalf("conflicting recovery stage = %q, %v, want %q, true", stage, ok, LifecycleStageComplete)
 	}
 
 	result, err := instance.Complete("recover-outcome-crash", OutcomeSucceeded)

@@ -174,9 +174,22 @@ Issues reside within the Work's issues directory:
 
 Where `NN` is a sequential number and `<slug>` is a kebab-case descriptor.
 
+Within one Work, Issue numbers form a monotonically increasing sequence from
+`01` through `99`. The next Issue number is one greater than the greatest
+number already present in that Work; gaps SHALL NOT be reused. If allocating
+the next number would exceed `99`, Issue creation SHALL fail without modifying
+the repository.
+
+An Issue slug SHALL match the lowercase ASCII pattern
+`[a-z0-9]+(?:-[a-z0-9]+)*`. It SHALL be unique within its Work, independent of
+the Issue number. Leading or trailing hyphens, repeated hyphens, whitespace,
+path separators, and uppercase characters are invalid.
+
 The issue's status and execution details are recorded within the issue file content.
 
-Issues SHALL declare a `status` field in front matter. Normative status values are: `open`, `in-progress`, `done`, `blocked`, `cancelled`, `superseded`. The `title` field is optional; when absent, the INDEX falls back to the issue filename. Relationship declarations remain optional.
+Issues SHALL declare a `status` field in front matter. The `title` field is
+optional; when absent, the INDEX falls back to the issue filename. Relationship
+declarations remain optional.
 
 Minimal front matter example:
 
@@ -186,6 +199,26 @@ status: in-progress
 title: <human-readable issue title>
 ---
 ```
+
+The normative Issue lifecycle status vocabulary is limited to:
+
+- `open`
+- `in-progress`
+- `done`
+- `blocked`
+- `cancelled`
+- `superseded`
+
+Repository-specific workflow or triage labels are not Issue lifecycle status
+values. A Repository Profile extension MAY record such labels in a distinct
+field, but SHALL NOT redefine the `status` field.
+
+Issue creation is a deterministic Generate operation defined by DOS-4001. It
+is the Documentation Engine's responsibility to allocate `NN`, construct the
+filename and front matter, publish the Issue, and update `.scratch/INDEX.md`.
+Agents and other callers supply the engineering content (`slug`, `title`,
+`status`, and Markdown body); they SHALL NOT pre-allocate the Issue number or
+manually reproduce the operation.
 
 ------
 
@@ -433,6 +466,7 @@ These concerns belong to engineering process rather than Documentation OS.
 - DOS-3002 — Runtime Lifecycle
 - DOS-3003 — Knowledge Impact Analysis
 - DOS-3004 — Work Close Pipeline
+- DOS-4001 — Documentation Operations
 
 ------
 

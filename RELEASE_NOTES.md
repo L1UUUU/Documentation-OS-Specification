@@ -1,8 +1,20 @@
-# Unreleased lifecycle hardening
+# Documentation Engine v0.1.0-rc.4 release candidate
+
+This candidate implements Documentation OS 1.0 Draft revision 13. It is not a
+published release until the `engine/v0.1.0-rc.4` tag is pushed and its Linux,
+Windows, and macOS tag workflow succeeds.
 
 - Added `LifecycleStage`, `LifecycleError`, and `FailureStageOf` so consumers
-  can distinguish Begin, Synchronize, Validate, Complete, and post-commit
+  can distinguish Begin, Issue, Synchronize, Validate, Complete, and post-commit
   Cleanup failures without parsing text or maintaining adapter-local names.
+- `CreateIssue` now attaches the stable `issue` stage to preflight, conflict,
+  lock, write, and INDEX failures while preserving existing sentinel
+  and error-code classification.
+- Added `CreateIssue(CreateIssueInput)` for atomic, monotonically numbered Issue
+  creation in Active Work, with identical-retry idempotency, conflicting-slug
+  rejection, rollback, and derived INDEX reconciliation.
+- Added `dos issue create` with JSON and human-readable output over the same
+  Engine contract.
 - Added `ValidationReport.Failure()` for workflow gates while preserving the
   existing `Validate` report-as-data API.
 - Missing and non-directory repository roots now use the stable
@@ -20,9 +32,10 @@
 - Added an external-consumer smoke command for published Engine versions. It
   creates a fresh module outside this repository, forces `GOWORK=off`, rejects any `replace`
   resolution, and compiles the selected published Engine version. Branch CI
-  defaults to the latest published RC (`v0.1.0-rc.3`); manual and reusable
-  workflow runs accept an explicit version; an `engine/v*` tag run derives the
-  module version from that tag. A local Windows run against rc.3 passed.
+  continues to default to the latest published RC (`v0.1.0-rc.3`) before rc.4
+  is published; manual and reusable workflow runs accept an explicit version;
+  an `engine/v*` tag run derives the module version from that tag. A local
+  Windows run against rc.3 passed.
 
 The smoke test validates what an external consumer can download, not
 unpublished branch contents. A candidate version cannot pass this remote,

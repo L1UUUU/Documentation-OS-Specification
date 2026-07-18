@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       engine_version:
-        description: Published Engine module version to smoke test (for example v0.1.0-rc.3)
+        description: Published Engine module version to smoke test (for example v0.1.0-rc.4)
         required: false
         type: string
   workflow_call:
@@ -34,10 +34,14 @@ jobs:
         with:
           go-version-file: go.mod
           cache: false
-      - name: Public API, conformance, and CLI lifecycle tests
+      - name: CLI and release tooling tests
         run: go test -count=1 ./...
-      - name: Vet
+      - name: Engine public API and conformance tests
+        run: go -C engine test -count=1 ./...
+      - name: Vet CLI and release tooling
         run: go vet ./...
+      - name: Vet Engine
+        run: go -C engine vet ./...
       - name: Build CLI
         run: go build ./cmd/dos
       - name: Select published Engine version
@@ -70,4 +74,7 @@ jobs:
         with:
           go-version-file: go.mod
           cache: false
-      - run: go test -race -count=1 ./...
+      - name: Race detector for CLI and release tooling
+        run: go test -race -count=1 ./...
+      - name: Race detector for Engine
+        run: go -C engine test -race -count=1 ./...

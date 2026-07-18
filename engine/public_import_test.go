@@ -17,6 +17,53 @@ func TestPublishedImportPathExposesEngine(t *testing.T) {
 	}
 }
 
+func TestPublishedLifecycleStageValuesAreStable(t *testing.T) {
+	stages := []struct {
+		stage engine.LifecycleStage
+		want  string
+	}{
+		{engine.LifecycleStageBegin, "begin"},
+		{engine.LifecycleStageIssue, "issue"},
+		{engine.LifecycleStageSynchronize, "synchronize"},
+		{engine.LifecycleStageValidate, "validate"},
+		{engine.LifecycleStageComplete, "complete"},
+		{engine.LifecycleStageCleanup, "cleanup"},
+	}
+	for _, test := range stages {
+		if got := string(test.stage); got != test.want {
+			t.Errorf("LifecycleStage = %q, want %q", got, test.want)
+		}
+	}
+}
+
+// TestPublishedCreateIssueContract verifies external modules can use the public Issue API.
+func TestPublishedCreateIssueContract(t *testing.T) {
+	root := t.TempDir()
+	instance, err := engine.New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := instance.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	if _, err := instance.BeginWork(engine.BeginInput{Slug: "public-issue", Title: "Public issue"}); err != nil {
+		t.Fatalf("BeginWork() error = %v", err)
+	}
+	result, err := instance.CreateIssue(engine.CreateIssueInput{
+		WorkSlug: "public-issue",
+		Slug:     "external-consumer",
+		Title:    "External consumer",
+		Status:   "open",
+		Body:     "Exercise the published API.\n",
+	})
+	if err != nil {
+		t.Fatalf("CreateIssue() error = %v", err)
+	}
+	if result.Number != 1 || result.Name != "01-external-consumer.md" || !result.Created {
+		t.Fatalf("CreateIssue() result = %+v", result)
+	}
+}
+
 // TestPublishedLifecycleFailureStageContract verifies consumers can classify
 // failures without parsing messages or defining adapter-local operation names.
 func TestPublishedLifecycleFailureStageContract(t *testing.T) {
@@ -39,6 +86,17 @@ func TestPublishedLifecycleFailureStageContract(t *testing.T) {
 	var lifecycleErr *engine.LifecycleError
 	if !errors.As(err, &lifecycleErr) {
 		t.Fatalf("BeginWork() error %T is not a LifecycleError", err)
+	}
+
+	_, err = instance.CreateIssue(engine.CreateIssueInput{})
+	if !errors.Is(err, engine.ErrInvalidInput) {
+		t.Fatalf("CreateIssue() error = %v, want ErrInvalidInput", err)
+	}
+	if code := engine.ErrorCodeOf(err); code != engine.ErrorCodeInvalidInput {
+		t.Fatalf("CreateIssue() code = %q, want %q", code, engine.ErrorCodeInvalidInput)
+	}
+	if stage, ok := engine.FailureStageOf(err); !ok || stage != engine.LifecycleStageIssue {
+		t.Fatalf("CreateIssue() stage = %q, %v, want %q, true", stage, ok, engine.LifecycleStageIssue)
 	}
 
 	_, err = instance.Synchronize(engine.SyncInput{})

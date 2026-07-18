@@ -217,6 +217,18 @@ Typical behavior includes:
 - regenerating `.scratch/INDEX.md` to reflect the newly created Work;
 - rolling back all created artifacts (including the INDEX regeneration) if creation fails.
 
+Generate commands SHALL also expose the Generate Issue operation defined in
+DOS-4001. The caller supplies an Active Work slug, Issue slug, title, DOS
+lifecycle status, and Markdown body; the CLI forwards those inputs without
+allocating a number or constructing a repository path.
+
+On success, machine-readable output SHALL expose the allocated number, Issue
+name, repository-relative path, and whether the invocation created a new Issue
+or returned an idempotent existing result. Conflicts, Completed Work rejection,
+invalid input, capacity exhaustion, and transaction failure SHALL produce a
+deterministic failure outcome. Exact command names, flags, and body-input
+mechanisms remain implementation-defined.
+
 ------
 
 # Synchronization Commands
@@ -386,6 +398,7 @@ A Documentation OS-compliant CLI SHALL:
 - avoid embedding repository logic;
 - support deterministic execution;
 - support automation.
+- expose Generate Issue by delegating to the Documentation Engine.
 
 ------
 
@@ -406,11 +419,13 @@ These concerns belong to individual CLI implementations.
 
 # References
 
+- DOS-2004 — Runtime Mapping
 - DOS-4001 — Documentation Operations
 - DOS-4002 — Validation
 - DOS-4003 — Health
 - DOS-4004 — Migration
 - DOS-5004 — Documentation Engine
+- DOS-6003 — Conformance
 
 ------
 

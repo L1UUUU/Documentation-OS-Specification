@@ -160,6 +160,94 @@ Operations include:
 
 Generate Work belongs to the Generate category and SHALL NOT introduce a new operation category.
 
+## Generate Issue
+
+Generate Issue appends one caller-authored Issue to an existing Active Work.
+The caller supplies the Work slug, Issue slug, title, lifecycle status, and
+Markdown body. The Documentation Engine supplies all deterministic repository
+representation, including numbering, filename construction, front matter, and
+INDEX maintenance. Generate Issue belongs to the Generate category and SHALL
+NOT introduce a new operation category.
+
+### Input Contract
+
+The Work slug and Issue slug SHALL satisfy the Single Repository Profile slug
+rules. The title SHALL contain non-whitespace content and SHALL be representable
+as one front-matter scalar line. The body SHALL contain non-whitespace Markdown
+content. The status SHALL be exactly one of `open`, `in-progress`, `done`,
+`blocked`, `cancelled`, or `superseded`.
+
+The caller SHALL NOT supply an Issue number or destination path. Workflow or
+triage labels defined by a particular repository are outside this operation's
+status vocabulary.
+
+### Active Work Precondition
+
+Generate Issue SHALL operate only on
+`.scratch/active/<workstream-slug>/`. If the Work exists only under
+`.scratch/completed/`, the operation SHALL reject the request because Completed
+Core Runtime Assets are immutable. If the Work is missing, appears in both
+locations, is not a directory, or lacks the required Active Work structure, the
+operation SHALL fail without modifying repository state.
+
+### Number and Name Allocation
+
+While providing repository-scoped exclusive serialization across allocation
+and publication, the operation SHALL inspect the target Work's existing Issue
+filenames. It SHALL
+allocate one greater than the greatest existing `NN`; an empty `issues/`
+directory receives `01`. Deleted-number gaps SHALL NOT be reused. The resulting
+name is `NN-<slug>.md`. Allocation SHALL fail before mutation if the next number
+would exceed `99`, if existing Issue numbers are duplicated or malformed, or if
+the requested slug is already associated with conflicting content.
+
+Concurrent Generate Issue calls for the same Work SHALL be serialized across
+number inspection, Issue publication, and INDEX update. Distinct successful
+requests SHALL receive distinct numbers. Concurrent identical requests SHALL
+converge on one Issue: one call may report creation and the others report an
+idempotent existing result.
+
+### Idempotency and Conflict
+
+The operation's logical input is the validated tuple of Work slug, Issue slug,
+title, status, and Markdown body. When an Active Work already contains the same
+Issue slug whose parsed `title` and `status` equal the validated input and whose
+Markdown body equals the supplied body, a retry
+SHALL return that Issue's existing name, number, and path and report that no new
+artifact was created. It SHALL NOT allocate another number or rewrite the
+Issue. Before returning, it SHALL verify that `.scratch/INDEX.md` lists the
+existing Issue and transactionally regenerate INDEX when an earlier
+interruption left it stale.
+
+When the same Issue slug exists with a different title, status, or body, the
+operation SHALL return a conflict and leave both the Issue and INDEX unchanged.
+Idempotency applies only while the Work is Active; a request targeting a
+Completed Work is rejected even if equivalent content exists there.
+
+### Transactional Publication
+
+Publishing the Issue file and regenerating `.scratch/INDEX.md` form one
+repository transaction. The operation SHALL stage writes and retain sufficient
+pre-operation state to provide these observable guarantees:
+
+- success exposes both the new Issue and an INDEX that lists it;
+- any returned failure exposes neither the new Issue nor an INDEX change;
+- an interruption is recoverable by retrying the same logical input, without a
+  duplicate Issue or duplicate number;
+- temporary transaction artifacts are not treated as Runtime assets.
+
+The operation SHALL restore the previous INDEX and remove the new Issue if
+INDEX publication fails. Exclusive serialization SHALL remain in effect until
+publication or rollback completes. The locking mechanism is
+implementation-defined.
+
+### Result
+
+A successful Generate Issue result SHALL expose the allocated number, Issue
+name, repository-relative path, and whether this invocation created the Issue.
+The result SHALL be identical across invocation mechanisms apart from
+presentation format.
+
 ------
 
 # Synchronize
@@ -410,7 +498,7 @@ This specification intentionally does not define:
 - API design;
 - implementation language;
 - execution environment;
-- concurrency model.
+- locking mechanism.
 
 These concerns belong to individual Documentation Engine implementations.
 
@@ -419,12 +507,14 @@ These concerns belong to individual Documentation Engine implementations.
 # References
 
 - DOS-0003 — Core Principles
+- DOS-2004 — Runtime Mapping
 - DOS-3004 — Work Close Pipeline
 - DOS-4002 — Validation
 - DOS-4003 — Health
 - DOS-4004 — Migration
 - DOS-4005 — Documentation Testing
 - DOS-5004 — Documentation Engine
+- DOS-5005 — CLI
 
 ------
 

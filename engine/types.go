@@ -14,13 +14,13 @@ const (
 	// SpecificationStatus is the maturity of the supported specification revision.
 	SpecificationStatus = "draft"
 	// SpecificationRevision identifies the exact Draft semantics implemented here.
-	SpecificationRevision = "12"
+	SpecificationRevision = "13"
 	// RepositoryProfileVersion is the supported Single Repository Profile version.
 	RepositoryProfileVersion = "1.0"
 	// EngineVersion is the implementation version exposed by the engine and CLI.
-	EngineVersion = "0.1.0-rc.3"
+	EngineVersion = "0.1.0-rc.4"
 	// CLIVersion is the command-line contract version.
-	CLIVersion = "0.1.0-rc.3"
+	CLIVersion = "0.1.0-rc.4"
 	// ProfileName is the repository profile implemented by this engine.
 	ProfileName = "Single Repository"
 
@@ -45,6 +45,10 @@ var (
 	ErrInvalidInput = errors.New("invalid input")
 	// ErrConflict identifies a retry that contradicts persisted repository state.
 	ErrConflict = errors.New("operation conflicts with persisted state")
+	// ErrWorkNotFound identifies a requested Work absent from active and completed Runtime.
+	ErrWorkNotFound = errors.New("Work not found")
+	// ErrCompletedWork identifies an Issue mutation rejected for immutable Completed Runtime.
+	ErrCompletedWork = errors.New("completed Work is immutable")
 )
 
 // KnowledgeImpact is the required result of Knowledge Impact Analysis.
@@ -258,6 +262,23 @@ type BeginIssue struct {
 	Slug   string `json:"slug"`
 	Title  string `json:"title"`
 	Status string `json:"status"`
+}
+
+// CreateIssueInput describes one caller-authored Issue for an existing Active Work.
+type CreateIssueInput struct {
+	WorkSlug string `json:"work_slug"`
+	Slug     string `json:"slug"`
+	Title    string `json:"title"`
+	Status   string `json:"status"`
+	Body     string `json:"body"`
+}
+
+// CreateIssueResult describes the deterministic repository representation of an Issue.
+type CreateIssueResult struct {
+	Number  int    `json:"number"`
+	Name    string `json:"name"`
+	Path    string `json:"path"`
+	Created bool   `json:"created"`
 }
 
 // IndexResult describes generated derived Runtime metadata.
