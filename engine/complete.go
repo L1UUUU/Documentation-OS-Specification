@@ -25,6 +25,13 @@ type ephemeralBackup struct {
 
 // Complete executes Complete and Cleanup, or resumes Cleanup for a completed Work.
 func (e *Engine) Complete(slug, outcome string) (CompleteResult, error) {
+	result, err := e.complete(slug, outcome)
+	return result, withLifecycleStage(LifecycleStageComplete, err)
+}
+
+// complete implements Complete while preserving Cleanup as the more precise
+// stage after the Work has already reached its terminal location.
+func (e *Engine) complete(slug, outcome string) (CompleteResult, error) {
 	if err := validateSlug(slug); err != nil {
 		return CompleteResult{}, fmt.Errorf("%w: %v", ErrPreflight, err)
 	}
@@ -64,7 +71,7 @@ func (e *Engine) Complete(slug, outcome string) (CompleteResult, error) {
 		index, err := e.GenerateIndex()
 		result.CleanupCompleted = err == nil
 		if err != nil {
-			return result, fmt.Errorf("cleanup completed Work %q: %w", slug, err)
+			return result, withLifecycleStage(LifecycleStageCleanup, fmt.Errorf("cleanup completed Work %q: %w", slug, err))
 		}
 		_ = index
 		return result, nil
@@ -101,7 +108,7 @@ func (e *Engine) Complete(slug, outcome string) (CompleteResult, error) {
 	}
 	result := CompleteResult{Slug: slug, Completed: true, Outcome: outcome}
 	if _, err := e.GenerateIndex(); err != nil {
-		return result, fmt.Errorf("Complete stage succeeded; Cleanup failed for %q, retry Complete to regenerate INDEX: %w", slug, err)
+		return result, withLifecycleStage(LifecycleStageCleanup, fmt.Errorf("Complete stage succeeded; Cleanup failed for %q, retry Complete to regenerate INDEX: %w", slug, err))
 	}
 	result.CleanupCompleted = true
 	return result, nil

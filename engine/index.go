@@ -172,6 +172,12 @@ func (e *Engine) GenerateIndex() (IndexResult, error) {
 
 // Synchronize refreshes generated metadata and records the caller's Knowledge impact declaration.
 func (e *Engine) Synchronize(input SyncInput) (SyncResult, error) {
+	result, err := e.synchronize(input)
+	return result, withLifecycleStage(LifecycleStageSynchronize, err)
+}
+
+// synchronize implements Synchronize before its public lifecycle stage wrapper.
+func (e *Engine) synchronize(input SyncInput) (SyncResult, error) {
 	var noKnowledgeChange bool
 	switch input.KnowledgeImpact {
 	case KnowledgeImpactChanged:

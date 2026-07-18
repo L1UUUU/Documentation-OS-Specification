@@ -20,7 +20,8 @@ func (e *Engine) GenerateWork(slug string) (WorkResult, error) {
 
 // BeginWork atomically creates a caller-defined active Work and refreshes INDEX.md.
 func (e *Engine) BeginWork(input BeginInput) (WorkResult, error) {
-	return e.beginWork(input, true)
+	result, err := e.beginWork(input, true)
+	return result, withLifecycleStage(LifecycleStageBegin, err)
 }
 
 // beginWork shares transactional creation while preserving GenerateWork's legacy duplicate behavior.

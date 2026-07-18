@@ -146,6 +146,16 @@ func (r ValidationReport) Passed() bool {
 	return true
 }
 
+// Failure converts a failed validation report into the public lifecycle error
+// contract. Validate itself continues to return findings as data; callers that
+// gate a workflow can opt into conventional error handling with this method.
+func (r ValidationReport) Failure() error {
+	if r.Passed() {
+		return nil
+	}
+	return withLifecycleStage(LifecycleStageValidate, fmt.Errorf("%w: validation report did not pass", ErrInvalidRepository))
+}
+
 // String renders a deterministic human-readable validation report.
 func (r ValidationReport) String() string {
 	var builder strings.Builder

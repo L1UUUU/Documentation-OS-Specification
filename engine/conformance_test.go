@@ -84,6 +84,9 @@ func TestConformanceCompleteCleanupFailureIsRetriable(t *testing.T) {
 	if err == nil {
 		t.Fatal("Complete() should report Cleanup failure")
 	}
+	if stage, ok := FailureStageOf(err); !ok || stage != LifecycleStageCleanup {
+		t.Fatalf("Complete() failure stage = %q, %v, want %q, true", stage, ok, LifecycleStageCleanup)
+	}
 	if !result.Completed || result.CleanupCompleted {
 		t.Fatalf("Complete() result = %+v, want Completed with Cleanup pending", result)
 	}
@@ -259,6 +262,38 @@ func TestConformanceCancelledWorkCompletesStandardPipeline(t *testing.T) {
 	}
 	if report, err := engine.Validate(); err != nil || !report.Passed() {
 		t.Fatalf("post-Complete Validate() error = %v, report = %s", err, report)
+	}
+}
+
+// TestConformanceNonSuccessOutcomesCompleteConsistently verifies every
+// exceptional terminal outcome permits unfinished Issues and remains
+// idempotent when Cleanup is retried with the persisted outcome.
+func TestConformanceNonSuccessOutcomesCompleteConsistently(t *testing.T) {
+	for _, outcome := range []string{OutcomeCancelled, OutcomeSuperseded, OutcomeFailed} {
+		t.Run(outcome, func(t *testing.T) {
+			instance := newTestEngine(t)
+			slug := outcome + "-pipeline"
+			work, err := instance.GenerateWork(slug)
+			if err != nil {
+				t.Fatalf("GenerateWork() error = %v", err)
+			}
+			writeText(t, filepath.Join(work.Path, "issues", "01-unfinished.md"), "---\nstatus: in-progress\ntitle: Unfinished\n---\n")
+
+			result, err := instance.Complete(slug, outcome)
+			if err != nil {
+				t.Fatalf("Complete() error = %v", err)
+			}
+			if result.Outcome != outcome || !result.Completed || !result.CleanupCompleted {
+				t.Fatalf("Complete() result = %+v, want terminal outcome %q", result, outcome)
+			}
+			retry, err := instance.Complete(slug, outcome)
+			if err != nil {
+				t.Fatalf("Complete() retry error = %v", err)
+			}
+			if retry.Outcome != outcome || !retry.RetriedCleanup || !retry.CleanupCompleted {
+				t.Fatalf("Complete() retry = %+v, want idempotent Cleanup for %q", retry, outcome)
+			}
+		})
 	}
 }
 

@@ -1,3 +1,16 @@
+# Unreleased lifecycle hardening
+
+- Added `LifecycleStage`, `LifecycleError`, and `FailureStageOf` so consumers
+  can distinguish Begin, Synchronize, Validate, Complete, and post-commit
+  Cleanup failures without parsing text or maintaining adapter-local names.
+- Added `ValidationReport.Failure()` for workflow gates while preserving the
+  existing `Validate` report-as-data API.
+- Missing and non-directory repository roots now use the stable
+  `invalid-repository` code and preserve their filesystem cause. Expected
+  unmaterialized worktrees remain a consumer policy decision.
+- Cleanup failure remains retriable and is now explicitly reported as the
+  `cleanup` stage after terminal Work state has been persisted.
+
 # Documentation Engine v0.1.0-rc.3
 
 - Added `BeginWork(BeginInput)` for atomic creation of caller-defined PRD,

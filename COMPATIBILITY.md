@@ -42,7 +42,16 @@ matching status and revision is not a compatibility guarantee.
 - Completed Work retries must repeat the persisted terminal outcome.
 - Use `errors.Is` with exported sentinel errors for control flow.
 - Use `engine.ErrorCodeOf` or CLI JSON `code` values at integration boundaries.
+- Use `engine.FailureStageOf` for stable lifecycle stage values (`begin`,
+  `synchronize`, `validate`, `complete`, or `cleanup`). A failed
+  `ValidationReport` remains data from `Validate`; workflow gates can call
+  `ValidationReport.Failure()` to enter the same error contract.
 - Do not parse human-readable error messages.
+
+Repository construction is not a lifecycle stage. `New` classifies a missing
+or non-directory root as `invalid-repository` while retaining the underlying
+filesystem cause. Whether an expected pre-worktree path should be opened at all
+remains consumer policy, not Engine lifecycle policy.
 
 Breaking corrections may be made between this RC and `v0.1.0`. After the
 stable release, public compatibility is governed by semantic versioning while

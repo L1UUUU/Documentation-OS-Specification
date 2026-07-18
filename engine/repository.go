@@ -19,10 +19,10 @@ func New(root string) (*Engine, error) {
 	}
 	info, err := os.Stat(abs)
 	if err != nil {
-		return nil, fmt.Errorf("stat repository root %q: %w", abs, err)
+		return nil, fmt.Errorf("%w: stat repository root %q: %w", ErrInvalidRepository, abs, err)
 	}
 	if !info.IsDir() {
-		return nil, fmt.Errorf("repository root %q is not a directory", abs)
+		return nil, fmt.Errorf("%w: repository root %q is not a directory", ErrInvalidRepository, abs)
 	}
 	return &Engine{
 		Root:            filepath.Clean(abs),
