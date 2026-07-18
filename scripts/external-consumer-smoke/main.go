@@ -13,7 +13,7 @@ import (
 
 const engineModule = "github.com/L1UUUU/Documentation-OS-Specification/engine"
 
-const defaultPublishedVersion = "v0.1.0-rc.3"
+const defaultPublishedVersion = "v0.1.0-rc.4"
 
 func main() {
 	version := flag.String("version", defaultPublishedVersion, "published Engine module version to verify")

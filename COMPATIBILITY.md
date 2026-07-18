@@ -14,7 +14,7 @@ consumers should import:
 import "github.com/L1UUUU/Documentation-OS-Specification/engine"
 ```
 
-## v0.1.0-rc.4 candidate matrix
+## v0.1.0-rc.4 matrix
 
 | Dimension | Supported value |
 | --- | --- |
@@ -26,18 +26,16 @@ import "github.com/L1UUUU/Documentation-OS-Specification/engine"
 | Go | 1.22 or newer |
 | CI platforms | Linux, Windows, macOS |
 
-This matrix describes the locally prepared rc.4 candidate. It becomes a
-published compatibility claim only after the `engine/v0.1.0-rc.4` tag is
-pushed and its three-platform tag workflow succeeds. Until then rc.3 remains
-the latest externally resolvable RC. rc.4 is intended for Kanban consumer
-validation; it does not claim complete Level 3 conformance and is not the
-stable `v0.1.0` release.
+The `engine/v0.1.0-rc.4` tag is published. Its tag workflow passed on Linux,
+Windows, and macOS, including external resolution without a `replace`
+directive. rc.4 is intended for Kanban consumer validation; it does not claim
+complete Level 3 conformance and is not the stable `v0.1.0` release.
 
 Consumers should call `Engine.Version()` or `dos --json version` and compare
 all independent dimensions. A matching specification number without a
 matching status and revision is not a compatibility guarantee.
 
-## v0.1.0-rc.4 candidate contract
+## Published v0.1.0-rc.4 contract
 
 - `BeginWork(BeginInput)` atomically creates caller-defined core Work assets.
   An identical active retry returns the persisted result without writing;
@@ -62,8 +60,7 @@ matching status and revision is not a compatibility guarantee.
   `dos issue create <work-slug> <issue-slug> --title TITLE --status STATUS --body-file PATH`.
 
 Consumers pinned to rc.3 cannot use `CreateIssue`, lifecycle-stage APIs, or
-`ValidationReport.Failure`; those APIs become externally consumable only when
-rc.4 resolves without a `replace` directive.
+`ValidationReport.Failure`; consumers can use those APIs by resolving rc.4.
 
 Repository construction is not a lifecycle stage. `New` classifies a missing
 or non-directory root as `invalid-repository` while retaining the underlying

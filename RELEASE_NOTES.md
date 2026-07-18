@@ -1,8 +1,8 @@
-# Documentation Engine v0.1.0-rc.4 release candidate
+# Documentation Engine v0.1.0-rc.4
 
-This candidate implements Documentation OS 1.0 Draft revision 13. It is not a
-published release until the `engine/v0.1.0-rc.4` tag is pushed and its Linux,
-Windows, and macOS tag workflow succeeds.
+This prerelease implements Documentation OS 1.0 Draft revision 13. The
+`engine/v0.1.0-rc.4` tag is published, and its Linux, Windows, and macOS tag
+workflow passed.
 
 - Added `LifecycleStage`, `LifecycleError`, and `FailureStageOf` so consumers
   can distinguish Begin, Issue, Synchronize, Validate, Complete, and post-commit
@@ -32,17 +32,14 @@ Windows, and macOS tag workflow succeeds.
 - Added an external-consumer smoke command for published Engine versions. It
   creates a fresh module outside this repository, forces `GOWORK=off`, rejects any `replace`
   resolution, and compiles the selected published Engine version. Branch CI
-  continues to default to the latest published RC (`v0.1.0-rc.3`) before rc.4
-  is published; manual and reusable workflow runs accept an explicit version;
-  an `engine/v*` tag run derives the module version from that tag. A local
-  Windows run against rc.3 passed.
+  defaults to the latest published RC (`v0.1.0-rc.4`); manual and reusable
+  workflow runs accept an explicit version; an `engine/v*` tag run derives the
+  module version from that tag.
 
 The smoke test validates what an external consumer can download, not
-unpublished branch contents. A candidate version cannot pass this remote,
-no-`replace` check before its `engine/v*` tag exists upstream. Therefore tag
-validation runs after the tag is pushed; a successful tag workflow is required
-before creating the corresponding GitHub release or promoting the version to
-the branch default.
+unpublished branch contents. The rc.4 tag workflow resolved the module without
+a `replace` directive and passed on Linux, Windows, and macOS before the GitHub
+prerelease was created and the branch default was promoted.
 
 ## v0.1.0 release readiness audit (2026-07-18)
 
@@ -53,7 +50,7 @@ create or push a stable tag or GitHub release yet.
 | --- | --- | --- |
 | KB-04 real Demand cohort | Kanban commit `1b49150` adds lifecycle evidence logging, but the available `.kanban/runtime` contains one skill-materialization run and no lifecycle attempt log. No repository `daemon.log` is available. Verifiable real lifecycle cohorts: **0**; verifiable real `succeeded`, `cancelled`, `superseded`, `failed`, or crash-recovery closures: **0**. Unit/integration fixtures are not counted as real Demands. | **Blocking** |
 | Complete hard-crash window | A conformance test interrupts immediately after outcome persistence. The retry now resumes the active transaction for the same outcome and rejects a conflicting outcome. Full Engine tests and vet pass on Windows. | Cleared locally |
-| Published external module | A fresh external module resolves `engine@v0.1.0-rc.3` with `GOWORK=off`, no `replace`, and passes `go test` on Windows. The three-platform CI matrix defaults to this latest published RC on branches and can select a published version for manual, reusable, or tag validation. This proves the published package only; it does not prove Unreleased branch APIs. | Implementation cleared; require green tag-version CI runs before release |
+| Published external module | Fresh external modules resolved `engine@v0.1.0-rc.4` with `GOWORK=off`, no `replace`, and passed on Linux, Windows, and macOS in tag workflow [29645240860](https://github.com/L1UUUU/Documentation-OS-Specification/actions/runs/29645240860). Branch CI now defaults to this published RC and can still select an explicit published version for manual, reusable, or tag validation. | Cleared for rc.4 |
 
 Stable release requires a recorded KB-04 cohort with the planned sample size,
 all four terminal outcomes, and real retry/reconcile evidence. It also requires
