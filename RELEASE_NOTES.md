@@ -1,3 +1,31 @@
+# Documentation Engine v0.1.0-rc.5 release candidate
+
+This candidate implements Documentation OS 1.0 Draft revision 13. It is not a
+published release until the `engine/v0.1.0-rc.5` tag is pushed and its Linux,
+Windows, and macOS tag workflow succeeds.
+
+- Bounded `CreateIssue` cross-process repository-lock contention to five seconds
+  instead of allowing a peer process to block the operation indefinitely.
+- Added `CreateIssueContext` so consumers can cancel or deadline a contended
+  Issue lock wait while preserving the atomic numbering, publication, INDEX,
+  and identical-retry contracts from rc.4.
+- Windows now polls `LockFileEx` with `LOCKFILE_FAIL_IMMEDIATELY`, retains the
+  exclusive first-byte lock, and closes the waiting handle on timeout, caller
+  cancellation, or syscall failure.
+- Unix keeps the existing blocking `flock` entry point unchanged; the new
+  context-aware Issue path uses non-blocking exclusive polling so the exported
+  cancellation contract is portable without weakening cross-process exclusion.
+- Added real child-process Windows regressions for bounded contention, caller
+  cancellation and cleanup, release-and-acquire ordering, unique allocation,
+  and idempotent retry.
+
+The smoke test validates what an external consumer can download, not
+unpublished branch contents. A candidate version cannot pass this remote,
+no-`replace` check before its `engine/v*` tag exists upstream. Therefore tag
+validation runs after the tag is pushed; a successful tag workflow is required
+before creating the corresponding GitHub prerelease or promoting the version
+to the branch default. Until then rc.4 remains the latest published RC.
+
 # Documentation Engine v0.1.0-rc.4
 
 This prerelease implements Documentation OS 1.0 Draft revision 13. The

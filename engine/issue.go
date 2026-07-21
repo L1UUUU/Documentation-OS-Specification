@@ -2,6 +2,7 @@
 package engine
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -9,16 +10,36 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var issueFilePattern = regexp.MustCompile(`^([0-9]{2})-([a-z0-9]+(?:-[a-z0-9]+)*)\.md$`)
 
+const createIssueLockWaitTimeout = 5 * time.Second
+
 // CreateIssue atomically appends one caller-authored Issue to an Active Work.
+// Lock contention is bounded so a stale or long-running peer cannot block the
+// caller indefinitely. Call CreateIssueContext when cancellation must be
+// controlled by the caller.
 func (e *Engine) CreateIssue(input CreateIssueInput) (result CreateIssueResult, returnErr error) {
+	ctx, cancel := context.WithTimeout(context.Background(), createIssueLockWaitTimeout)
+	defer cancel()
+	return e.CreateIssueContext(ctx, input)
+}
+
+// CreateIssueContext is CreateIssue with caller-controlled cancellation while
+// waiting for the cross-process repository lock.
+func (e *Engine) CreateIssueContext(ctx context.Context, input CreateIssueInput) (result CreateIssueResult, returnErr error) {
 	defer func() {
 		returnErr = withLifecycleStage(LifecycleStageIssue, returnErr)
 	}()
 
+	if ctx == nil {
+		return CreateIssueResult{}, fmt.Errorf("%w: context is nil", ErrInvalidInput)
+	}
+	if err := ctx.Err(); err != nil {
+		return CreateIssueResult{}, err
+	}
 	if err := validateCreateIssueInput(input); err != nil {
 		return CreateIssueResult{}, err
 	}
@@ -27,7 +48,7 @@ func (e *Engine) CreateIssue(input CreateIssueInput) (result CreateIssueResult, 
 	}
 
 	lockPath := e.path(filepath.ToSlash(filepath.Join(e.Profile.LockRoot, "create-issue.lock")))
-	releaseLock, err := acquireRepositoryLock(lockPath)
+	releaseLock, err := acquireRepositoryLockContext(ctx, lockPath)
 	if err != nil {
 		return CreateIssueResult{}, fmt.Errorf("acquire Create Issue lock: %w", err)
 	}
@@ -41,6 +62,9 @@ func (e *Engine) CreateIssue(input CreateIssueInput) (result CreateIssueResult, 
 			returnErr = errors.Join(returnErr, lockErr)
 		}
 	}()
+	if err := ctx.Err(); err != nil {
+		return CreateIssueResult{}, err
+	}
 
 	issuesPath, err := e.activeIssueWork(input.WorkSlug)
 	if err != nil {

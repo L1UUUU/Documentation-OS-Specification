@@ -2,6 +2,7 @@
 package engine_test
 
 import (
+	"context"
 	"errors"
 	"os"
 	"path/filepath"
@@ -61,6 +62,16 @@ func TestPublishedCreateIssueContract(t *testing.T) {
 	}
 	if result.Number != 1 || result.Name != "01-external-consumer.md" || !result.Created {
 		t.Fatalf("CreateIssue() result = %+v", result)
+	}
+	retried, err := instance.CreateIssueContext(context.Background(), engine.CreateIssueInput{
+		WorkSlug: "public-issue",
+		Slug:     "external-consumer",
+		Title:    "External consumer",
+		Status:   "open",
+		Body:     "Exercise the published API.\n",
+	})
+	if err != nil || retried.Number != 1 || retried.Created {
+		t.Fatalf("CreateIssueContext(retry) result = %+v, %v", retried, err)
 	}
 }
 

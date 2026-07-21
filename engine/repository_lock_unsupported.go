@@ -4,6 +4,7 @@
 package engine
 
 import (
+	"context"
 	"fmt"
 	"runtime"
 )
@@ -11,4 +12,11 @@ import (
 // acquireRepositoryLock rejects identity allocation where file locking is unavailable.
 func acquireRepositoryLock(_ string) (func() error, error) {
 	return nil, fmt.Errorf("repository file locking is not supported on %s", runtime.GOOS)
+}
+
+func acquireRepositoryLockContext(ctx context.Context, path string) (func() error, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	return acquireRepositoryLock(path)
 }
