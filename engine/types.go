@@ -18,9 +18,9 @@ const (
 	// RepositoryProfileVersion is the supported Single Repository Profile version.
 	RepositoryProfileVersion = "1.0"
 	// EngineVersion is the implementation version exposed by the engine and CLI.
-	EngineVersion = "0.1.0-rc.5"
+	EngineVersion = "0.1.0-rc.6"
 	// CLIVersion is the command-line contract version.
-	CLIVersion = "0.1.0-rc.5"
+	CLIVersion = "0.1.0-rc.6"
 	// ProfileName is the repository profile implemented by this engine.
 	ProfileName = "Single Repository"
 
@@ -123,6 +123,7 @@ type Engine struct {
 	renameFile            func(string, string) error
 	writeFileAtomic       func(string, []byte, os.FileMode) error
 	afterOutcomePersisted func() error
+	conformance           validationConformanceHooks
 }
 
 // ValidationIssue describes one deterministic repository validation observation.

@@ -122,7 +122,7 @@ func TestPublishedLifecycleFailureStageContract(t *testing.T) {
 	if err := os.Remove(filepath.Join(root, "AGENTS.md")); err != nil {
 		t.Fatalf("remove required file: %v", err)
 	}
-	report, err := instance.Validate()
+	report, err := instance.ValidateContext(context.Background())
 	if err != nil {
 		t.Fatalf("Validate() operational error = %v", err)
 	}
@@ -132,6 +132,31 @@ func TestPublishedLifecycleFailureStageContract(t *testing.T) {
 	}
 	if stage, ok := engine.FailureStageOf(failure); !ok || stage != engine.LifecycleStageValidate {
 		t.Fatalf("Validation stage = %q, %v, want %q, true", stage, ok, engine.LifecycleStageValidate)
+	}
+}
+
+// TestPublishedValidateWrapperContract keeps the original context-free entry
+// point available while ValidateContext gives cancellable consumers the same
+// report contract.
+func TestPublishedValidateWrapperContract(t *testing.T) {
+	root := t.TempDir()
+	instance, err := engine.New(root)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if err := instance.Initialize(); err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	wrapper, err := instance.Validate()
+	if err != nil {
+		t.Fatalf("Validate() error = %v", err)
+	}
+	contextual, err := instance.ValidateContext(context.Background())
+	if err != nil {
+		t.Fatalf("ValidateContext() error = %v", err)
+	}
+	if wrapper.Status != contextual.Status || len(wrapper.Issues) != len(contextual.Issues) {
+		t.Fatalf("Validate wrapper = %+v, ValidateContext = %+v", wrapper, contextual)
 	}
 }
 

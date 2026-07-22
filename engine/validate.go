@@ -2,6 +2,7 @@
 package engine
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -40,6 +41,21 @@ type runtimeRelationship struct {
 
 // Validate verifies repository consistency without changing any file.
 func (e *Engine) Validate() (ValidationReport, error) {
+	return e.ValidateContext(context.Background())
+}
+
+// ValidateContext verifies repository consistency while honoring cancellation.
+// It is behaviorally identical to Validate in normal builds. A conformance-tag
+// build may install the internal validation seam through NewConformance.
+func (e *Engine) ValidateContext(ctx context.Context) (ValidationReport, error) {
+	if err := ctx.Err(); err != nil {
+		return ValidationReport{}, err
+	}
+	if e.conformance != nil {
+		if err := e.conformance.BeforeValidate(ctx); err != nil {
+			return ValidationReport{}, withLifecycleStage(LifecycleStageValidate, err)
+		}
+	}
 	report := ValidationReport{Status: "passed"}
 	e.validateRepositoryStructure(&report)
 	knowledge := e.validateKnowledge(&report)

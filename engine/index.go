@@ -173,6 +173,9 @@ func (e *Engine) GenerateIndex() (IndexResult, error) {
 // Synchronize refreshes generated metadata and records the caller's Knowledge impact declaration.
 func (e *Engine) Synchronize(input SyncInput) (SyncResult, error) {
 	result, err := e.synchronize(input)
+	if err == nil && e.conformance != nil {
+		e.conformance.AfterSynchronize()
+	}
 	return result, withLifecycleStage(LifecycleStageSynchronize, err)
 }
 

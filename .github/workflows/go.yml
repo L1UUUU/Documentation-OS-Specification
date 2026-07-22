@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       engine_version:
-        description: Published Engine module version to smoke test (for example v0.1.0-rc.4)
+        description: Published Engine module version to smoke test (for example v0.1.0-rc.5)
         required: false
         type: string
   workflow_call:
@@ -59,7 +59,7 @@ jobs:
           } else {
             # Branch and pull-request CI verify the latest version already
             # published to the Go module proxy, not unpublished branch code.
-            $version = 'v0.1.0-rc.4'
+            $version = 'v0.1.0-rc.5'
           }
           "version=$version" >> $env:GITHUB_OUTPUT
       - name: Published external consumer smoke (no replace)

@@ -1,8 +1,33 @@
-# Documentation Engine v0.1.0-rc.5 release candidate
+# Documentation Engine v0.1.0-rc.6 release candidate
 
 This candidate implements Documentation OS 1.0 Draft revision 13. It is not a
-published release until the `engine/v0.1.0-rc.5` tag is pushed and its Linux,
+published release until the `engine/v0.1.0-rc.6` tag is pushed and its Linux,
 Windows, and macOS tag workflow succeeds.
+
+- Added `ValidateContext(context.Context)` with the same validation report and
+  stable lifecycle failure contract as `Validate`; `Validate` remains the
+  backward-compatible context-free wrapper.
+- Added a deterministic validate-stage fault plan only to builds compiled with
+  the `documentation_conformance` tag. The plan can target one Work and bounded
+  attempts, honors cancellation before consumption, and emits path-free audit
+  events for activation, trigger, non-trigger, and exhaustion.
+- Normal Engine and CLI builds expose neither a fault constructor nor an
+  environment/configuration trigger. The conformance seam is dependency
+  injection for controlled consumer validation, not a production capability.
+- The published external-consumer smoke now defaults to rc.5. It deliberately
+  does not try to resolve the unpublished rc.6 candidate.
+
+The smoke test validates what an external consumer can download, not
+unpublished branch contents. A candidate version cannot pass this remote,
+no-`replace` check before its `engine/v*` tag exists upstream. Therefore tag
+validation runs after the tag is pushed; a successful tag workflow is required
+before creating the corresponding GitHub prerelease or promoting the version
+to the branch default. Until then rc.5 remains the latest published RC.
+
+# Documentation Engine v0.1.0-rc.5
+
+This prerelease implements Documentation OS 1.0 Draft revision 13. The
+`engine/v0.1.0-rc.5` tag is published.
 
 - Bounded `CreateIssue` cross-process repository-lock contention to five seconds
   instead of allowing a peer process to block the operation indefinitely.
@@ -18,13 +43,6 @@ Windows, and macOS tag workflow succeeds.
 - Added real child-process Windows regressions for bounded contention, caller
   cancellation and cleanup, release-and-acquire ordering, unique allocation,
   and idempotent retry.
-
-The smoke test validates what an external consumer can download, not
-unpublished branch contents. A candidate version cannot pass this remote,
-no-`replace` check before its `engine/v*` tag exists upstream. Therefore tag
-validation runs after the tag is pushed; a successful tag workflow is required
-before creating the corresponding GitHub prerelease or promoting the version
-to the branch default. Until then rc.4 remains the latest published RC.
 
 # Documentation Engine v0.1.0-rc.4
 

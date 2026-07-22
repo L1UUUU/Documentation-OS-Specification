@@ -14,22 +14,22 @@ consumers should import:
 import "github.com/L1UUUU/Documentation-OS-Specification/engine"
 ```
 
-## v0.1.0-rc.5 candidate matrix
+## v0.1.0-rc.6 candidate matrix
 
 | Dimension | Supported value |
 | --- | --- |
 | Specification | 1.0 Draft, revision 13 |
 | Repository Profile | Single Repository Profile 1.0 |
-| Engine | 0.1.0-rc.5 |
-| CLI | 0.1.0-rc.5 |
+| Engine | 0.1.0-rc.6 |
+| CLI | 0.1.0-rc.6 |
 | Target conformance | Level 2 preview |
 | Go | 1.22 or newer |
 | CI platforms | Linux, Windows, macOS |
 
-This matrix describes the locally prepared rc.5 candidate. It becomes a
-published compatibility claim only after the `engine/v0.1.0-rc.5` tag is
-pushed and its three-platform tag workflow succeeds. Until then rc.4 remains
-the latest externally resolvable RC. rc.5 is intended for Kanban consumer
+This matrix describes the locally prepared rc.6 candidate. It becomes a
+published compatibility claim only after the `engine/v0.1.0-rc.6` tag is
+pushed and its three-platform tag workflow succeeds. Until then rc.5 remains
+the latest externally resolvable RC. rc.6 is intended for Kanban consumer
 validation; it does not claim complete Level 3 conformance and is not the
 stable `v0.1.0` release.
 
@@ -37,7 +37,7 @@ Consumers should call `Engine.Version()` or `dos --json version` and compare
 all independent dimensions. A matching specification number without a
 matching status and revision is not a compatibility guarantee.
 
-## v0.1.0-rc.5 candidate contract
+## v0.1.0-rc.6 candidate contract
 
 - `BeginWork(BeginInput)` atomically creates caller-defined core Work assets.
   An identical active retry returns the persisted result without writing;
@@ -62,12 +62,19 @@ matching status and revision is not a compatibility guarantee.
   while preserving its existing `errors.Is` and `ErrorCodeOf` classification.
 - A failed `ValidationReport` remains data from `Validate`; workflow gates can
   call `ValidationReport.Failure()` to enter the same error contract.
+- `ValidateContext(context.Context)` adds cancellation to validation while
+  preserving `Validate()` as the backward-compatible wrapper.
+- A validate-stage fault injector exists only in builds compiled with the
+  `documentation_conformance` tag. Normal builds expose no injector constructor
+  and accept no fault configuration; consumers must not treat the tagged seam
+  as a runtime or production API.
 - The CLI exposes the same Issue contract through
   `dos issue create <work-slug> <issue-slug> --title TITLE --status STATUS --body-file PATH`.
 
-Consumers pinned to rc.4 can use `CreateIssue`, lifecycle-stage APIs, and
-`ValidationReport.Failure`, but must resolve rc.5 to use `CreateIssueContext`
-and the bounded Windows lock-wait behavior.
+Consumers pinned to the published rc.5 can use `CreateIssueContext` and the
+bounded Windows lock-wait behavior, but must wait for a published rc.6 to use
+`ValidateContext`. The public-import smoke remains pinned to rc.5 while rc.6 is
+only a source candidate.
 
 Repository construction is not a lifecycle stage. `New` classifies a missing
 or non-directory root as `invalid-repository` while retaining the underlying
