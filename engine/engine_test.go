@@ -615,8 +615,8 @@ func TestVersionReportsCompatibilityMatrix(t *testing.T) {
 	if info.EngineVersion != EngineVersion || info.CLIVersion != CLIVersion {
 		t.Fatalf("implementation compatibility = %+v", info)
 	}
-	if info.SpecificationRevision != "13" || info.EngineVersion != "0.1.0-rc.6" || info.CLIVersion != "0.1.0-rc.6" {
-		t.Fatalf("rc.6 release candidate compatibility = %+v", info)
+	if info.SpecificationRevision != "13" || info.EngineVersion != "0.1.0-rc.7" || info.CLIVersion != "0.1.0-rc.7" {
+		t.Fatalf("rc.7 release candidate compatibility = %+v", info)
 	}
 }
 

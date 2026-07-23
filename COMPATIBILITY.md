@@ -14,30 +14,34 @@ consumers should import:
 import "github.com/L1UUUU/Documentation-OS-Specification/engine"
 ```
 
-## v0.1.0-rc.6 candidate matrix
+## v0.1.0-rc.7 candidate matrix
 
 | Dimension | Supported value |
 | --- | --- |
 | Specification | 1.0 Draft, revision 13 |
 | Repository Profile | Single Repository Profile 1.0 |
-| Engine | 0.1.0-rc.6 |
-| CLI | 0.1.0-rc.6 |
+| Engine | 0.1.0-rc.7 |
+| CLI | 0.1.0-rc.7 |
 | Target conformance | Level 2 preview |
 | Go | 1.22 or newer |
 | CI platforms | Linux, Windows, macOS |
 
-This matrix describes the locally prepared rc.6 candidate. It becomes a
-published compatibility claim only after the `engine/v0.1.0-rc.6` tag is
+This matrix describes the locally prepared rc.7 candidate. It becomes a
+published compatibility claim only after the `engine/v0.1.0-rc.7` tag is
 pushed and its three-platform tag workflow succeeds. Until then rc.5 remains
-the latest externally resolvable RC. rc.6 is intended for Kanban consumer
+the latest GitHub prerelease. rc.7 is intended for Kanban consumer
 validation; it does not claim complete Level 3 conformance and is not the
 stable `v0.1.0` release.
+
+The `engine/v0.1.0-rc.6` tag exists, but no GitHub Release was created for it.
+Its tag workflow did not exercise the `documentation_conformance` build on all
+supported platforms, so rc.6 was superseded by rc.7 rather than promoted.
 
 Consumers should call `Engine.Version()` or `dos --json version` and compare
 all independent dimensions. A matching specification number without a
 matching status and revision is not a compatibility guarantee.
 
-## v0.1.0-rc.6 candidate contract
+## v0.1.0-rc.7 candidate contract
 
 - `BeginWork(BeginInput)` atomically creates caller-defined core Work assets.
   An identical active retry returns the persisted result without writing;
@@ -72,9 +76,11 @@ matching status and revision is not a compatibility guarantee.
   `dos issue create <work-slug> <issue-slug> --title TITLE --status STATUS --body-file PATH`.
 
 Consumers pinned to the published rc.5 can use `CreateIssueContext` and the
-bounded Windows lock-wait behavior, but must wait for a published rc.6 to use
-`ValidateContext`. The public-import smoke remains pinned to rc.5 while rc.6 is
-only a source candidate.
+bounded Windows lock-wait behavior, but must wait for a published rc.7 to use
+`ValidateContext`. rc.6 has a module tag but no GitHub Release and is
+superseded because its tag workflow lacked multi-platform tagged-conformance
+evidence. The public-import smoke remains pinned to rc.5 while rc.7 is only a
+candidate; tag workflows resolve and smoke-test their exact tag instead.
 
 Repository construction is not a lifecycle stage. `New` classifies a missing
 or non-directory root as `invalid-repository` while retaining the underlying

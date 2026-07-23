@@ -1,8 +1,27 @@
-# Documentation Engine v0.1.0-rc.6 release candidate
+# Documentation Engine v0.1.0-rc.7 release candidate
 
 This candidate implements Documentation OS 1.0 Draft revision 13. It is not a
-published release until the `engine/v0.1.0-rc.6` tag is pushed and its Linux,
+published release until the `engine/v0.1.0-rc.7` tag is pushed and its Linux,
 Windows, and macOS tag workflow succeeds.
+
+- Release CI now compiles and executes both normal and
+  `documentation_conformance` Engine builds on Linux, Windows, and macOS.
+- Release CI vets both build variants, compiles both CLI variants, and runs
+  normal plus tagged Engine race suites on Linux.
+- Added a workflow contract test that fails if any tagged matrix command, tag
+  version selection, or external no-`replace` smoke command is removed.
+- The tag workflow continues to derive the external consumer version from the
+  current `engine/v*` tag, so rc.7 validates the downloadable rc.7 module.
+
+The `engine/v0.1.0-rc.6` tag remains intact, but rc.6 has no GitHub Release.
+Its workflow passed the normal three-platform and race suites but did not run
+the build-tag-only conformance surface on every platform. rc.7 supersedes it
+instead of rewriting the published tag.
+
+# Documentation Engine v0.1.0-rc.6 (tag only; no GitHub Release)
+
+This candidate introduced the following source contract, now carried forward
+by rc.7:
 
 - Added `ValidateContext(context.Context)` with the same validation report and
   stable lifecycle failure contract as `Validate`; `Validate` remains the
@@ -14,15 +33,15 @@ Windows, and macOS tag workflow succeeds.
 - Normal Engine and CLI builds expose neither a fault constructor nor an
   environment/configuration trigger. The conformance seam is dependency
   injection for controlled consumer validation, not a production capability.
-- The published external-consumer smoke now defaults to rc.5. It deliberately
-  does not try to resolve the unpublished rc.6 candidate.
+- The published external-consumer smoke defaults to rc.5 outside tag workflows.
 
 The smoke test validates what an external consumer can download, not
 unpublished branch contents. A candidate version cannot pass this remote,
 no-`replace` check before its `engine/v*` tag exists upstream. Therefore tag
 validation runs after the tag is pushed; a successful tag workflow is required
 before creating the corresponding GitHub prerelease or promoting the version
-to the branch default. Until then rc.5 remains the latest published RC.
+to the branch default. rc.6 did not satisfy the tagged-conformance evidence
+gate and therefore has no GitHub Release.
 
 # Documentation Engine v0.1.0-rc.5
 
