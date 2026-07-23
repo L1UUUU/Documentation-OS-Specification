@@ -304,12 +304,16 @@ The following scenarios SHALL be covered by the conformance tests required in th
 - Expected state: the Work directory is located under `.scratch/completed/<slug>/` (not `active/`); the PRD declares a legal `outcome`; Core Runtime Assets are preserved.
 - Expected diagnostics: Validation passes; the Runtime location-presence check confirms the Completed terminal state.
 
-## Scenario 8 — Active Work declaring an `outcome` is invalid
+## Scenario 8 — Active Work with a legal durable `outcome` is recoverable
 
-- Initial state: an active Work whose PRD front matter declares `outcome: succeeded`.
-- Operation: run Validation.
-- Expected state: repository unchanged (Validation is read-only).
-- Expected diagnostics: Failure — an active Work SHALL NOT declare an `outcome`.
+- Initial state: Complete durably wrote `outcome: succeeded` to an active Work
+  and the process stopped before moving the directory.
+- Operation: restart the pipeline and run Synchronization, Validation, then
+  Complete with the same outcome.
+- Expected state: Validation accepts the recovery marker; Complete moves the
+  existing Work and Cleanup regenerates INDEX without duplicate entries.
+- Expected diagnostics: Success for the same outcome. A different outcome
+  returns Conflict and does not change the persisted marker.
 
 ## Scenario 9 — `outcome=succeeded` with a non-terminal Issue fails Complete preflight
 

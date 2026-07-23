@@ -100,8 +100,8 @@ func (e *Engine) complete(slug, outcome string) (CompleteResult, error) {
 		if err := writeAtomic(prdPath, updatedPRD, 0o644); err != nil {
 			return CompleteResult{}, fmt.Errorf("record Work outcome: %w", err)
 		}
-		if e.afterOutcomePersisted != nil {
-			if err := e.afterOutcomePersisted(); err != nil {
+		if e.conformance != nil {
+			if err := e.conformance.AfterOutcomePersisted(slug); err != nil {
 				return CompleteResult{}, fmt.Errorf("Complete interrupted after persisting Work outcome: %w", err)
 			}
 		}
@@ -115,6 +115,11 @@ func (e *Engine) complete(slug, outcome string) (CompleteResult, error) {
 		return CompleteResult{}, fmt.Errorf("Complete stage move %s to %s: %w", e.relativePath(activePath), e.relativePath(completedPath), err)
 	}
 	result := CompleteResult{Slug: slug, Completed: true, Outcome: outcome}
+	if e.conformance != nil {
+		if err := e.conformance.AfterWorkMoved(slug); err != nil {
+			return result, withLifecycleStage(LifecycleStageCleanup, fmt.Errorf("Complete stage succeeded; Cleanup interrupted for %q, retry Complete to regenerate INDEX: %w", slug, err))
+		}
+	}
 	if _, err := e.GenerateIndex(); err != nil {
 		return result, withLifecycleStage(LifecycleStageCleanup, fmt.Errorf("Complete stage succeeded; Cleanup failed for %q, retry Complete to regenerate INDEX: %w", slug, err))
 	}

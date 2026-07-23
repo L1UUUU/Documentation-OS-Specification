@@ -8,6 +8,161 @@ import (
 	"sync"
 )
 
+// ConformanceFaultPoint names a durable lifecycle boundary. The closed set is
+// deliberately narrow so tagged consumers cannot inject arbitrary callbacks.
+type ConformanceFaultPoint string
+
+const (
+	ConformanceFaultAfterOutcomePersisted ConformanceFaultPoint = "after-outcome-persisted"
+	ConformanceFaultAfterWorkMoved        ConformanceFaultPoint = "after-work-moved"
+)
+
+type ConformanceFaultEventKind string
+
+const (
+	ConformanceFaultActivated    ConformanceFaultEventKind = "activated"
+	ConformanceFaultNotTriggered ConformanceFaultEventKind = "not-triggered"
+	ConformanceFaultTriggered    ConformanceFaultEventKind = "triggered"
+	ConformanceFaultExhausted    ConformanceFaultEventKind = "exhausted"
+)
+
+// ConformanceFaultSpec identifies one bounded, targeted fault sequence.
+type ConformanceFaultSpec struct {
+	Point        ConformanceFaultPoint
+	WorkSlug     string
+	FirstAttempt uint64
+	Count        uint64
+}
+
+// ConformanceFaultEvent contains stable audit dimensions only. It never
+// exposes repository paths, injected error text, secrets, or unknown values.
+type ConformanceFaultEvent struct {
+	Kind      ConformanceFaultEventKind
+	Point     ConformanceFaultPoint
+	WorkSlug  string
+	Attempt   uint64
+	Remaining uint64
+}
+
+type ConformanceFaultObserver func(ConformanceFaultEvent)
+
+// ConformanceFaultPlan is safe for concurrent calls and consumes faults only
+// for a live, matching point and Work slug.
+type ConformanceFaultPlan struct {
+	mu               sync.Mutex
+	spec             ConformanceFaultSpec
+	observer         ConformanceFaultObserver
+	attempts         uint64
+	remaining        uint64
+	exhaustedEmitted bool
+}
+
+type ConformanceFaultSnapshot struct {
+	Point     ConformanceFaultPoint
+	WorkSlug  string
+	Attempts  uint64
+	Remaining uint64
+	Exhausted bool
+}
+
+func NewConformanceFaultPlan(spec ConformanceFaultSpec, observer ConformanceFaultObserver) (*ConformanceFaultPlan, error) {
+	if spec.Point != ConformanceFaultAfterOutcomePersisted && spec.Point != ConformanceFaultAfterWorkMoved {
+		return nil, fmt.Errorf("%w: unsupported conformance fault point", ErrInvalidInput)
+	}
+	if err := validateSlug(spec.WorkSlug); err != nil {
+		return nil, fmt.Errorf("%w: conformance fault Work slug: %v", ErrInvalidInput, err)
+	}
+	if spec.FirstAttempt == 0 || spec.Count == 0 {
+		return nil, fmt.Errorf("%w: conformance fault first attempt and count must be positive", ErrInvalidInput)
+	}
+	plan := &ConformanceFaultPlan{spec: spec, observer: observer, remaining: spec.Count}
+	plan.emit(ConformanceFaultEvent{
+		Kind: ConformanceFaultActivated, Point: spec.Point, WorkSlug: spec.WorkSlug, Remaining: spec.Count,
+	})
+	return plan, nil
+}
+
+func (p *ConformanceFaultPlan) Trigger(ctx context.Context, point ConformanceFaultPoint, workSlug string) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	p.mu.Lock()
+	if point != p.spec.Point || workSlug != p.spec.WorkSlug {
+		event := ConformanceFaultEvent{
+			Kind: ConformanceFaultNotTriggered, Point: point, WorkSlug: workSlug, Remaining: p.remaining,
+		}
+		p.mu.Unlock()
+		p.emit(event)
+		return nil
+	}
+	p.attempts++
+	attempt := p.attempts
+	if attempt < p.spec.FirstAttempt || p.remaining == 0 {
+		p.mu.Unlock()
+		return nil
+	}
+	p.remaining--
+	remaining := p.remaining
+	emitExhausted := remaining == 0 && !p.exhaustedEmitted
+	if emitExhausted {
+		p.exhaustedEmitted = true
+	}
+	p.mu.Unlock()
+	p.emit(ConformanceFaultEvent{
+		Kind: ConformanceFaultTriggered, Point: point, WorkSlug: workSlug, Attempt: attempt, Remaining: remaining,
+	})
+	if emitExhausted {
+		p.emit(ConformanceFaultEvent{
+			Kind: ConformanceFaultExhausted, Point: point, WorkSlug: workSlug, Attempt: attempt,
+		})
+	}
+	return fmt.Errorf("%w: conformance lifecycle fault triggered", ErrInvalidRepository)
+}
+
+func (p *ConformanceFaultPlan) Snapshot() ConformanceFaultSnapshot {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return ConformanceFaultSnapshot{
+		Point: p.spec.Point, WorkSlug: p.spec.WorkSlug, Attempts: p.attempts,
+		Remaining: p.remaining, Exhausted: p.remaining == 0,
+	}
+}
+
+func (p *ConformanceFaultPlan) emit(event ConformanceFaultEvent) {
+	if p.observer != nil {
+		p.observer(event)
+	}
+}
+
+type conformanceLifecycleHooks struct {
+	plan *ConformanceFaultPlan
+}
+
+func (*conformanceLifecycleHooks) AfterSynchronize() {}
+func (*conformanceLifecycleHooks) BeforeValidate(context.Context) error {
+	return nil
+}
+func (h *conformanceLifecycleHooks) AfterOutcomePersisted(workSlug string) error {
+	return h.plan.Trigger(context.Background(), ConformanceFaultAfterOutcomePersisted, workSlug)
+}
+func (h *conformanceLifecycleHooks) AfterWorkMoved(workSlug string) error {
+	return h.plan.Trigger(context.Background(), ConformanceFaultAfterWorkMoved, workSlug)
+}
+
+// NewConformanceWithFaultPlan constructs the real Engine with a tagged,
+// lifecycle-bound fault plan. This symbol is absent from normal builds.
+func NewConformanceWithFaultPlan(root string, plan *ConformanceFaultPlan) (*Engine, error) {
+	if plan == nil {
+		return nil, fmt.Errorf("%w: conformance fault plan is required", ErrInvalidInput)
+	}
+	instance, err := New(root)
+	if err != nil {
+		return nil, err
+	}
+	instance.conformance = &conformanceLifecycleHooks{plan: plan}
+	return instance, nil
+}
+
 // ValidationFaultInjector is the narrow conformance-only interface installed
 // at the Engine validation seam. It is absent from normal Engine builds.
 type ValidationFaultInjector interface {
@@ -123,6 +278,9 @@ type conformanceValidationHooks struct {
 	workSlug string
 	injector ValidationFaultInjector
 }
+
+func (h *conformanceValidationHooks) AfterOutcomePersisted(string) error { return nil }
+func (h *conformanceValidationHooks) AfterWorkMoved(string) error        { return nil }
 
 func (h *conformanceValidationHooks) AfterSynchronize() {
 	h.mu.Lock()

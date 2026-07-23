@@ -154,7 +154,14 @@ Deterministic actions:
 4. Atomically move active/<workstream-slug>/ → completed/<workstream-slug>/;
 5. Preserve Core Runtime Assets unchanged — apart from the deterministic addition of the terminal `outcome` to PRD front matter in step 2, Core Runtime Assets SHALL remain unchanged (immutable business content; generated INDEX.md MAY be regenerated).
 
-Steps 2–4 form a single transaction: if the directory movement fails, the `outcome` write and the Ephemeral cleanup SHALL be rolled back so that the Work remains valid under `active/` (an active Work SHALL NOT carry an `outcome`).
+Steps 2–4 form a single transaction for returned filesystem failures: if the
+directory movement fails, the `outcome` write and the Ephemeral cleanup SHALL
+be rolled back so that the Work remains valid under `active/`. If a process
+stops after the atomic `outcome` write returns but before movement begins, the
+legal `outcome` on Active Work is a durable recovery marker. Validation SHALL
+accept that marker so a restarted pipeline can repeat Synchronization and
+Validation; Complete SHALL resume only for the same outcome and SHALL return
+conflict for a different outcome without changing the marker.
 
 Note: HANDOFF.md is generated at Work creation (DOS-2004) and is therefore always present; preflight verifies integrity rather than first-time presence. For a non-`succeeded` Work, the recorded `outcome` truthfully reflects that the implementation objectives were not achieved; repository consistency verification SHALL NOT be bypassed regardless of outcome.
 

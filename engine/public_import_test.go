@@ -16,8 +16,8 @@ func TestPublishedImportPathExposesEngine(t *testing.T) {
 	if got := engine.DefaultProfile().Name; got != engine.ProfileName {
 		t.Fatalf("DefaultProfile().Name = %q, want %q", got, engine.ProfileName)
 	}
-	if engine.EngineVersion != "0.1.0-rc.7" || engine.CLIVersion != "0.1.0-rc.7" {
-		t.Fatalf("public implementation versions = engine %q, CLI %q, want rc.7 candidate", engine.EngineVersion, engine.CLIVersion)
+	if engine.EngineVersion != "0.1.0-rc.8" || engine.CLIVersion != "0.1.0-rc.8" {
+		t.Fatalf("public implementation versions = engine %q, CLI %q, want rc.8 candidate", engine.EngineVersion, engine.CLIVersion)
 	}
 }
 

@@ -1,8 +1,27 @@
-# Documentation Engine v0.1.0-rc.7 release candidate
+# Documentation Engine v0.1.0-rc.8 release candidate
 
 This candidate implements Documentation OS 1.0 Draft revision 13. It is not a
-published release until the `engine/v0.1.0-rc.7` tag is pushed and its Linux,
+published release until the `engine/v0.1.0-rc.8` tag is pushed and its Linux,
 Windows, and macOS tag workflow succeeds.
+
+- Deepened the existing `documentation_conformance` module with two bounded
+  Complete fault points: after durable outcome persistence but before moving
+  Active Work, and after moving Work to Completed but before INDEX Cleanup.
+- Both points use one concurrency-safe plan contract with target Work slug,
+  first attempt, count, cancellation-before-consumption, and stable
+  activated/not-triggered/triggered/exhausted audit events.
+- Added restart recovery conformance for same-outcome retries, stable conflict
+  for different outcomes, exact pre-Cleanup disk state, and non-duplication of
+  Work, Issue, Knowledge, and INDEX entries.
+- Validation now recognizes a legal outcome on Active Work as the durable
+  Complete recovery marker already written by the crash-recovery algorithm,
+  allowing a restarted Close pipeline to re-run Synchronize and Validate.
+- Normal builds still expose no fault constructor or configuration path.
+
+# Documentation Engine v0.1.0-rc.7
+
+This prerelease implements Documentation OS 1.0 Draft revision 13. The
+`engine/v0.1.0-rc.7` tag and GitHub prerelease are published.
 
 - Release CI now compiles and executes both normal and
   `documentation_conformance` Engine builds on Linux, Windows, and macOS.

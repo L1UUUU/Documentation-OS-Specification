@@ -615,13 +615,14 @@ func TestVersionReportsCompatibilityMatrix(t *testing.T) {
 	if info.EngineVersion != EngineVersion || info.CLIVersion != CLIVersion {
 		t.Fatalf("implementation compatibility = %+v", info)
 	}
-	if info.SpecificationRevision != "13" || info.EngineVersion != "0.1.0-rc.7" || info.CLIVersion != "0.1.0-rc.7" {
-		t.Fatalf("rc.7 release candidate compatibility = %+v", info)
+	if info.SpecificationRevision != "13" || info.EngineVersion != "0.1.0-rc.8" || info.CLIVersion != "0.1.0-rc.8" {
+		t.Fatalf("rc.8 release candidate compatibility = %+v", info)
 	}
 }
 
-// TestValidateRejectsActiveOutcome verifies the observable lifecycle invariant.
-func TestValidateRejectsActiveOutcome(t *testing.T) {
+// TestValidateAcceptsDurableActiveOutcomeRecoveryMarker verifies that a
+// restarted caller can run Synchronize and Validate before retrying Complete.
+func TestValidateAcceptsDurableActiveOutcomeRecoveryMarker(t *testing.T) {
 	engine := newTestEngine(t)
 	work, err := engine.GenerateWork("invalid-active-outcome")
 	if err != nil {
@@ -638,11 +639,8 @@ func TestValidateRejectsActiveOutcome(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Validate() error = %v", err)
 	}
-	if report.Passed() {
-		t.Fatal("Validate() should reject an active Work declaring outcome")
-	}
-	if !strings.Contains(report.String(), "active Work SHALL NOT declare an outcome") {
-		t.Fatalf("validation report does not explain the failure:\n%s", report)
+	if !report.Passed() {
+		t.Fatalf("Validate() rejected durable Complete recovery marker:\n%s", report)
 	}
 }
 

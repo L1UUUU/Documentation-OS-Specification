@@ -257,8 +257,8 @@ func (e *Engine) validateWork(report *ValidationReport, rootRelative, slug, stat
 			report.add(ValidationIssue{Category: "Lifecycle", Artifact: e.relativePath(prdPath), Rule: "prd-front-matter", Reason: parseErr.Error(), Recovery: "repair PRD front matter"})
 		} else {
 			prd = front
-			if state == "active" && frontMatterFieldPresent(front, "outcome") {
-				report.add(ValidationIssue{Category: "Lifecycle", Artifact: e.relativePath(prdPath), Rule: "active-no-outcome", Reason: "active Work SHALL NOT declare an outcome", Recovery: "remove outcome until Complete is invoked"})
+			if state == "active" && frontMatterFieldPresent(front, "outcome") && !validOutcome(front.Outcome) {
+				report.add(ValidationIssue{Category: "Lifecycle", Artifact: e.relativePath(prdPath), Rule: "active-outcome", Reason: "active Work recovery marker must declare a legal outcome", Recovery: "record succeeded, cancelled, superseded, or failed, or remove the invalid outcome"})
 			}
 			if state == "completed" {
 				if !front.Present || !frontMatterFieldPresent(front, "outcome") || !validOutcome(front.Outcome) {
